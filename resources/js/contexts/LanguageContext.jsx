@@ -68,6 +68,28 @@ const translations = {
         // Error messages
         registrationFailed: 'Registration failed. Please try again.',
         networkError: 'Network error. Please check your connection.',
+        
+        // Admin Dashboard
+        adminDashboard: 'Admin Dashboard',
+        manageRegistrations: 'Manage registrations and statistics',
+        totalRegistrations: 'Total Registrations',
+        todayRegistrations: 'Today\'s Registrations',
+        registrations: 'Registrations',
+        search: 'Search...',
+        allTypes: 'All Types',
+        adminName: 'Name',
+        adminEmail: 'Email',
+        adminType: 'Type',
+        adminDate: 'Date',
+        adminStatus: 'Status',
+        active: 'Active',
+        showing: 'Showing',
+        to: 'to',
+        of: 'of',
+        results: 'results',
+        previous: 'Previous',
+        next: 'Next',
+        lastUpdated: 'Last updated:',
     },
     ar: {
         // Navigation
@@ -126,6 +148,28 @@ const translations = {
         // Error messages
         registrationFailed: 'فشل في التسجيل. يرجى المحاولة مرة أخرى.',
         networkError: 'خطأ في الشبكة. يرجى التحقق من اتصالك.',
+        
+        // Admin Dashboard
+        adminDashboard: 'لوحة تحكم الإدمن',
+        manageRegistrations: 'إدارة التسجيلات والإحصائيات',
+        totalRegistrations: 'إجمالي التسجيلات',
+        todayRegistrations: 'تسجيلات اليوم',
+        registrations: 'التسجيلات',
+        search: 'البحث...',
+        allTypes: 'جميع الأنواع',
+        adminName: 'الاسم',
+        adminEmail: 'البريد الإلكتروني',
+        adminType: 'النوع',
+        adminDate: 'التاريخ',
+        adminStatus: 'الحالة',
+        active: 'نشط',
+        showing: 'عرض',
+        to: 'إلى',
+        of: 'من',
+        results: 'نتيجة',
+        previous: 'السابق',
+        next: 'التالي',
+        lastUpdated: 'آخر تحديث:',
     }
 };
 

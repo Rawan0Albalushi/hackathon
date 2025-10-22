@@ -9,6 +9,7 @@ import HackathonRegistration from './pages/HackathonRegistration.jsx';
 import WorkshopRegistration from './pages/WorkshopRegistration.jsx';
 import ConferenceRegistration from './pages/ConferenceRegistration.jsx';
 import Success from './pages/Success.jsx';
+import AdminDashboardMain from './pages/admin/AdminDashboardMain.jsx';
 
 // Import components
 import Layout from './components/Layout.jsx';
@@ -25,6 +26,7 @@ const App = () => {
                         <Route path="/workshop" element={<WorkshopRegistration />} />
                         <Route path="/conference" element={<ConferenceRegistration />} />
                         <Route path="/success" element={<Success />} />
+                        <Route path="/admin" element={<AdminDashboardMain />} />
                     </Routes>
                 </Layout>
             </Router>

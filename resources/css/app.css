@@ -1,4 +1,5 @@
 @import 'tailwindcss';
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@100;200;300;400;500;600;700&display=swap');
 
 @source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
 @source '../../storage/framework/views/*.php';
@@ -6,12 +7,12 @@
 @source '../**/*.js';
 
 @theme {
-    --font-sans: 'Calibri', 'Candara', 'Segoe', 'Segoe UI', 'Optima', 'Arial', 'sans-serif';
+    --font-sans: 'IBM Plex Sans Arabic', 'Calibri', 'Candara', 'Segoe', 'Segoe UI', 'Optima', 'Arial', 'sans-serif';
 }
 
-/* Apply Calibri font to entire website */
+/* Apply IBM Plex Sans Arabic font to entire website */
 * {
-    font-family: 'Calibri', 'Candara', 'Segoe', 'Segoe UI', 'Optima', 'Arial', sans-serif !important;
+    font-family: 'IBM Plex Sans Arabic', 'Calibri', 'Candara', 'Segoe', 'Segoe UI', 'Optima', 'Arial', sans-serif !important;
 }
 
 /* Custom styles for RTL support */
