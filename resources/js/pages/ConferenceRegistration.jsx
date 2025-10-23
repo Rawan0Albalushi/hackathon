@@ -76,7 +76,7 @@ const ConferenceRegistration = () => {
     return (
         <div className="min-h-screen bg-gradient-to-br from-green-50 to-teal-50">
             {/* Hero Section */}
-            <div className="relative bg-gradient-to-br from-green-600 to-teal-600 text-white overflow-hidden">
+            <div className="relative text-white overflow-hidden" style={{background: 'linear-gradient(135deg, #003C72 0%, #096289 100%)'}}>
                 <div className="absolute inset-0 bg-black opacity-20"></div>
                 <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
                     <div className="text-center">
@@ -88,7 +88,7 @@ const ConferenceRegistration = () => {
                         <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 leading-tight">
                             {language === 'ar' ? 'ملتقى الابتكار 2025' : 'Innovation Forum 2025'}
                         </h1>
-                        <p className="text-xl md:text-2xl text-green-100 mb-8 max-w-4xl mx-auto">
+                        <p className="text-xl md:text-2xl mb-8 max-w-4xl mx-auto" style={{color: '#F4A321'}}>
                             {language === 'ar' 
                                 ? 'المؤتمر الصحفي - النسخة الثالثة من ملتقى الابتكار'
                                 : 'Press Conference - Third Edition of Innovation Forum'
@@ -109,16 +109,16 @@ const ConferenceRegistration = () => {
                 </div>
                 
                 {/* Floating Elements */}
-                <div className="absolute top-20 left-10 w-16 h-16 bg-teal-400 rounded-full opacity-30 animate-pulse"></div>
-                <div className="absolute bottom-20 right-10 w-24 h-24 bg-green-400 rounded-full opacity-30 animate-pulse delay-1000"></div>
-                <div className="absolute top-1/2 left-1/4 w-12 h-12 bg-emerald-400 rounded-full opacity-30 animate-pulse delay-500"></div>
+                <div className="absolute top-20 left-10 w-16 h-16 rounded-full opacity-30 animate-pulse" style={{background: '#003C72'}}></div>
+                <div className="absolute bottom-20 right-10 w-24 h-24 rounded-full opacity-30 animate-pulse delay-1000" style={{background: '#096289'}}></div>
+                <div className="absolute top-1/2 left-1/4 w-12 h-12 rounded-full opacity-30 animate-pulse delay-500" style={{background: '#D85584'}}></div>
             </div>
 
             {/* Form Section */}
             <div className="py-16">
                 <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="bg-white rounded-3xl shadow-2xl overflow-hidden">
-                        <div className="bg-gradient-to-r from-green-500 to-teal-500 h-2"></div>
+                        <div className="h-2" style={{background: 'linear-gradient(90deg, #F4A321 0%, #D85584 50%, #096289 100%)'}}></div>
                         <div className="p-8 md:p-12">
                             <div className="text-center mb-8">
                                 <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">

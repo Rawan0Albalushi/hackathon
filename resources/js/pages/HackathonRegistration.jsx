@@ -106,9 +106,9 @@ const HackathonRegistration = () => {
     };
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-purple-50 to-pink-50">
+        <div className="min-h-screen bg-gradient-to-br from-orange-50 to-pink-50">
             {/* Hero Section */}
-            <div className="relative bg-gradient-to-br from-purple-600 to-pink-600 text-white overflow-hidden">
+            <div className="relative text-white overflow-hidden" style={{background: 'linear-gradient(135deg, #F4A321 0%, #D85584 100%)'}}>
                 <div className="absolute inset-0 bg-black opacity-20"></div>
                 <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
                     <div className="text-center">
@@ -120,7 +120,7 @@ const HackathonRegistration = () => {
                         <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 leading-tight">
                             {language === 'ar' ? 'هاكاثون "ابتكر من الدقم"' : 'Hackathon "Innovate from Duqm"'}
                         </h1>
-                        <p className="text-xl md:text-2xl text-purple-100 mb-8 max-w-4xl mx-auto">
+                        <p className="text-xl md:text-2xl mb-8 max-w-4xl mx-auto" style={{color: '#F4A321'}}>
                             {language === 'ar' 
                                 ? 'منصة إبداعية تجمع المبرمجين والمصممين ورواد الأعمال لتطوير حلول حقيقية'
                                 : 'Creative platform bringing together programmers, designers and entrepreneurs to develop real solutions'
@@ -141,9 +141,9 @@ const HackathonRegistration = () => {
                 </div>
                 
                 {/* Floating Elements */}
-                <div className="absolute top-20 left-10 w-16 h-16 bg-pink-400 rounded-full opacity-30 animate-pulse"></div>
-                <div className="absolute bottom-20 right-10 w-24 h-24 bg-purple-400 rounded-full opacity-30 animate-pulse delay-1000"></div>
-                <div className="absolute top-1/2 left-1/4 w-12 h-12 bg-cyan-400 rounded-full opacity-30 animate-pulse delay-500"></div>
+                <div className="absolute top-20 left-10 w-16 h-16 rounded-full opacity-30 animate-pulse" style={{background: '#D85584'}}></div>
+                <div className="absolute bottom-20 right-10 w-24 h-24 rounded-full opacity-30 animate-pulse delay-1000" style={{background: '#F4A321'}}></div>
+                <div className="absolute top-1/2 left-1/4 w-12 h-12 rounded-full opacity-30 animate-pulse delay-500" style={{background: '#096289'}}></div>
             </div>
 
             {/* Form Section */}

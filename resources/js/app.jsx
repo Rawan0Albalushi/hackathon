@@ -10,7 +10,6 @@ import WorkshopRegistration from './pages/WorkshopRegistration.jsx';
 import ConferenceRegistration from './pages/ConferenceRegistration.jsx';
 import Success from './pages/Success.jsx';
 import AdminDashboardMain from './pages/admin/AdminDashboardMain.jsx';
-import AnimationDemo from './pages/AnimationDemo.jsx';
 import Login from './pages/Login.jsx';
 import Register from './pages/Register.jsx';
 import AdminPortal from './pages/AdminPortal.jsx';
@@ -62,13 +61,6 @@ const App = () => {
                             <ProtectedRoute>
                                 <Layout>
                                     <Success />
-                                </Layout>
-                            </ProtectedRoute>
-                        } />
-                        <Route path="/animations" element={
-                            <ProtectedRoute>
-                                <Layout>
-                                    <AnimationDemo />
                                 </Layout>
                             </ProtectedRoute>
                         } />

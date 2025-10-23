@@ -57,8 +57,7 @@ const Layout = ({ children }) => {
         { path: '/', label: t('home') },
         { path: '/hackathon', label: t('hackathon') },
         { path: '/workshop', label: t('workshop') },
-        { path: '/conference', label: t('conference') },
-        { path: '/animations', label: 'Animations' }
+        { path: '/conference', label: t('conference') }
     ];
 
     // Add admin portal if user is admin
@@ -71,21 +70,22 @@ const Layout = ({ children }) => {
             <ScrollToTop />
             {/* Modern Navigation - Hidden for Admin */}
             {!location.pathname.startsWith('/admin') && (
-                <nav className="bg-white/95 backdrop-blur-md shadow-xl sticky top-0 z-50 border-b border-gray-200/50 nav-slide-down">
+                <nav className="bg-white/95 backdrop-blur-md shadow-xl sticky top-0 z-50 border-b border-gray-200/50 nav-slide-down hover:shadow-2xl transition-all duration-500 nav-glass">
                     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                         <div className="flex justify-between items-center h-20">
-                            {/* Logo with gradient */}
-                            <div className="flex items-center animate-fade-in-left">
+                            {/* Logo with gradient bar design */}
+                            <div className="flex items-center animate-fade-in-left logo-container">
                                 <Link to="/" className="flex-shrink-0 group ripple-effect" onClick={handleLinkClick}>
-                                    <div className="flex items-center space-x-3 rtl:space-x-reverse">
-                                        <div className="w-12 h-12 bg-gradient-to-br from-indigo-600 to-purple-600 rounded-xl flex items-center justify-center shadow-lg group-hover:shadow-xl transition-all duration-300 transform group-hover:scale-105 hover-pulse-glow">
-                                            <span className="text-white font-bold text-xl animate-bounce">I</span>
+                                    <div className="flex items-center space-x-4 rtl:space-x-reverse group-hover:scale-105 transition-transform duration-300">
+                                        {/* Square icon with gradient */}
+                                        <div className="w-10 h-10 rounded-xl flex items-center justify-center shadow-lg logo-icon-enhanced">
+                                            <div className="w-1 h-6 bg-white rounded-full"></div>
                                         </div>
                                         <div>
-                                            <h1 className="text-xl lg:text-2xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent gradient-text">
+                                            <h1 className="text-xl lg:text-2xl font-bold logo-title">
                                                 {language === 'ar' ? 'ملتقى الابتكار 2025' : 'Innovation Forum 2025'}
                                             </h1>
-                                            <p className="text-xs text-gray-500 font-medium animate-fade-in-up animate-delay-200">
+                                            <p className="text-xs font-medium animate-fade-in-up animate-delay-200 logo-subtitle">
                                                 {language === 'ar' ? 'منصة إبداعية' : 'Creative Platform'}
                                             </p>
                                         </div>
@@ -94,18 +94,18 @@ const Layout = ({ children }) => {
                             </div>
                             
                             {/* Desktop Navigation */}
-                            <div className="hidden lg:flex items-center space-x-1 rtl:space-x-reverse animate-fade-in-right">
+                            <div className="hidden lg:flex items-center space-x-2 rtl:space-x-reverse animate-fade-in-right">
                                 {navigationItems.map((item, index) => (
                                     <Link
                                         key={item.path}
                                         to={item.path}
                                         onClick={handleLinkClick}
-                                        className={`ripple-effect relative px-4 py-2 rounded-xl text-sm font-semibold transition-all duration-300 transform hover:scale-105 animate-fade-in-up ${
+                                        className={`ripple-effect relative px-5 py-3 rounded-2xl text-sm font-semibold transition-all duration-300 transform hover:scale-105 animate-fade-in-up nav-item-hover nav-link-glow ${
                                             isActive(item.path) 
-                                                ? 'bg-gradient-to-r from-indigo-500 to-purple-500 text-white shadow-lg hover-pulse-glow' 
-                                                : 'text-gray-700 hover:text-indigo-600 hover:bg-gradient-to-r hover:from-indigo-50 hover:to-purple-50 hover-float'
+                                                ? 'text-white shadow-lg hover-pulse-glow hover:shadow-xl' 
+                                                : 'text-gray-700 hover:text-orange-600 hover:bg-gradient-to-r hover:from-orange-50 hover:to-pink-50 hover-float hover:shadow-md'
                                         }`}
-                                        style={{animationDelay: `${index * 100}ms`}}
+                                        style={isActive(item.path) ? {background: 'linear-gradient(135deg, #F4A321 0%, #D85584 100%)', animationDelay: `${index * 100}ms`} : {animationDelay: `${index * 100}ms`}}
                                     >
                                         {item.label}
                                         {isActive(item.path) && (
@@ -114,7 +114,7 @@ const Layout = ({ children }) => {
                                     </Link>
                                 ))}
                                 
-                                <div className="mx-2 h-6 w-px bg-gray-300 animate-fade-in-up animate-delay-500"></div>
+                                <div className="mx-4 h-8 w-px bg-gradient-to-b from-transparent via-gray-300 to-transparent animate-fade-in-up animate-delay-500"></div>
                                 
                                 {/* User Info */}
                                 {user && (
@@ -145,7 +145,8 @@ const Layout = ({ children }) => {
                                         handleButtonClick(e);
                                         toggleLanguage();
                                     }}
-                                    className="ripple-effect button-press px-4 py-2 rounded-xl text-sm font-semibold bg-gradient-to-r from-indigo-500 to-purple-500 text-white hover:from-indigo-600 hover:to-purple-600 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl hover-pulse-glow animate-fade-in-up animate-delay-800"
+                                    className="ripple-effect button-press px-4 py-2 rounded-xl text-sm font-semibold text-white transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl hover-pulse-glow animate-fade-in-up animate-delay-800"
+                                    style={{background: 'linear-gradient(135deg, #F4A321 0%, #D85584 100%)'}}
                                 >
                                     {language === 'ar' ? 'EN' : 'عربي'}
                                 </button>
@@ -160,9 +161,10 @@ const Layout = ({ children }) => {
                                         onClick={handleLinkClick}
                                         className={`px-3 py-2 rounded-lg text-sm font-medium transition-all duration-300 ${
                                             isActive(item.path) 
-                                                ? 'bg-gradient-to-r from-indigo-500 to-purple-500 text-white' 
-                                                : 'text-gray-700 hover:text-indigo-600 hover:bg-gray-100'
+                                                ? 'text-white' 
+                                                : 'text-gray-700 hover:text-orange-600 hover:bg-gray-100'
                                         }`}
+                                        style={isActive(item.path) ? {background: 'linear-gradient(135deg, #F4A321 0%, #D85584 100%)'} : {}}
                                     >
                                         {item.label}
                                     </Link>
@@ -170,7 +172,8 @@ const Layout = ({ children }) => {
                                 
                                 <button
                                     onClick={toggleLanguage}
-                                    className="px-3 py-2 rounded-lg text-sm font-medium bg-gradient-to-r from-indigo-500 to-purple-500 text-white hover:from-indigo-600 hover:to-purple-600 transition-all duration-300"
+                                    className="px-3 py-2 rounded-lg text-sm font-medium text-white transition-all duration-300"
+                                    style={{background: 'linear-gradient(135deg, #F4A321 0%, #D85584 100%)'}}
                                 >
                                     {language === 'ar' ? 'EN' : 'عربي'}
                                 </button>
@@ -189,14 +192,15 @@ const Layout = ({ children }) => {
                             <div className="md:hidden flex items-center space-x-2 rtl:space-x-reverse">
                                 <button
                                     onClick={toggleLanguage}
-                                    className="px-3 py-2 rounded-lg text-xs font-semibold bg-gradient-to-r from-indigo-500 to-purple-500 text-white hover:from-indigo-600 hover:to-purple-600 transition-all duration-300"
+                                    className="px-3 py-2 rounded-lg text-xs font-semibold text-white transition-all duration-300"
+                                    style={{background: 'linear-gradient(135deg, #F4A321 0%, #D85584 100%)'}}
                                 >
                                     {language === 'ar' ? 'EN' : 'عربي'}
                                 </button>
                                 
                                 <button
                                     onClick={toggleMobileMenu}
-                                    className="inline-flex items-center justify-center p-2 rounded-lg text-gray-700 hover:text-indigo-600 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all duration-300"
+                                    className="inline-flex items-center justify-center p-2 rounded-lg text-gray-700 hover:text-orange-600 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-orange-500 transition-all duration-300"
                                     aria-expanded="false"
                                 >
                                     <span className="sr-only">{language === 'ar' ? 'فتح القائمة الرئيسية' : 'Open main menu'}</span>
@@ -214,21 +218,21 @@ const Layout = ({ children }) => {
 
                             {/* Mobile Navigation Menu */}
                         <div className={`${isMobileMenuOpen ? 'block' : 'hidden'} md:hidden transition-all duration-300 ease-in-out animate-slide-in-top`}>
-                            <div className="px-4 pt-4 pb-6 space-y-2 bg-gradient-to-br from-gray-50 to-indigo-50 rounded-2xl mt-4 mb-4 shadow-lg border border-gray-200/50 glass">
+                            <div className="px-4 pt-4 pb-6 space-y-2 bg-gradient-to-br from-gray-50 to-orange-50 rounded-3xl mt-4 mb-4 shadow-xl border border-gray-200/50 glass backdrop-blur-lg">
                                 {navigationItems.map((item, index) => (
                                     <Link
                                         key={item.path}
                                         to={item.path}
                                         onClick={handleLinkClick}
-                                        className={`ripple-effect flex items-center px-4 py-3 rounded-xl text-base font-semibold transition-all duration-300 transform hover:scale-105 animate-fade-in-up ${
+                                        className={`ripple-effect flex items-center px-5 py-4 rounded-2xl text-base font-semibold transition-all duration-300 transform hover:scale-105 animate-fade-in-up ${
                                             isActive(item.path) 
-                                                ? 'bg-gradient-to-r from-indigo-500 to-purple-500 text-white shadow-lg hover-pulse-glow' 
-                                                : 'text-gray-700 hover:text-indigo-600 hover:bg-white hover:shadow-md hover-float'
+                                                ? 'text-white shadow-lg hover-pulse-glow hover:shadow-xl' 
+                                                : 'text-gray-700 hover:text-orange-600 hover:bg-white hover:shadow-md hover-float hover:shadow-lg'
                                         }`}
-                                        style={{ animationDelay: `${index * 100}ms` }}
+                                        style={isActive(item.path) ? {background: 'linear-gradient(135deg, #F4A321 0%, #D85584 100%)', animationDelay: `${index * 100}ms`} : {animationDelay: `${index * 100}ms`}}
                                     >
                                         <div className={`w-2 h-2 rounded-full mr-3 rtl:mr-0 rtl:ml-3 animate-pulse ${
-                                            isActive(item.path) ? 'bg-white' : 'bg-indigo-500'
+                                            isActive(item.path) ? 'bg-white' : 'bg-orange-500'
                                         }`}></div>
                                         {item.label}
                                     </Link>
@@ -237,7 +241,7 @@ const Layout = ({ children }) => {
                                 {/* User Info in Mobile Menu */}
                                 {user && (
                                     <div className="pt-4 border-t border-gray-200 animate-fade-in-up animate-delay-500">
-                                        <div className="flex items-center space-x-3 rtl:space-x-reverse px-4 py-3 bg-gradient-to-r from-indigo-50 to-purple-50 rounded-xl">
+                                        <div className="flex items-center space-x-3 rtl:space-x-reverse px-4 py-3 bg-gradient-to-r from-orange-50 to-pink-50 rounded-xl">
                                             <div className="w-10 h-10 bg-gradient-to-br from-green-400 to-blue-500 rounded-full flex items-center justify-center">
                                                 <span className="text-white font-bold">
                                                     {user.name.charAt(0).toUpperCase()}

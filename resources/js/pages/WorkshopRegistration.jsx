@@ -90,7 +90,7 @@ const WorkshopRegistration = () => {
     return (
         <div className="min-h-screen bg-gradient-to-br from-blue-50 to-cyan-50">
             {/* Hero Section */}
-            <div className="relative bg-gradient-to-br from-blue-600 to-cyan-600 text-white overflow-hidden">
+            <div className="relative text-white overflow-hidden" style={{background: 'linear-gradient(135deg, #096289 0%, #003C72 100%)'}}>
                 <div className="absolute inset-0 bg-black opacity-20"></div>
                 <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
                     <div className="text-center">
@@ -102,7 +102,7 @@ const WorkshopRegistration = () => {
                         <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 leading-tight">
                             {language === 'ar' ? 'الورش التدريبية' : 'Training Workshops'}
                         </h1>
-                        <p className="text-xl md:text-2xl text-blue-100 mb-8 max-w-4xl mx-auto">
+                        <p className="text-xl md:text-2xl mb-8 max-w-4xl mx-auto" style={{color: '#F4A321'}}>
                             {language === 'ar' 
                                 ? 'ورش تأهيلية تسبق الهاكثون لصقل المهارات وتطوير الحلول'
                                 : 'Preparatory workshops before the hackathon to hone skills and develop solutions'
@@ -123,9 +123,9 @@ const WorkshopRegistration = () => {
                 </div>
                 
                 {/* Floating Elements */}
-                <div className="absolute top-20 left-10 w-16 h-16 bg-cyan-400 rounded-full opacity-30 animate-pulse"></div>
-                <div className="absolute bottom-20 right-10 w-24 h-24 bg-blue-400 rounded-full opacity-30 animate-pulse delay-1000"></div>
-                <div className="absolute top-1/2 left-1/4 w-12 h-12 bg-teal-400 rounded-full opacity-30 animate-pulse delay-500"></div>
+                <div className="absolute top-20 left-10 w-16 h-16 rounded-full opacity-30 animate-pulse" style={{background: '#096289'}}></div>
+                <div className="absolute bottom-20 right-10 w-24 h-24 rounded-full opacity-30 animate-pulse delay-1000" style={{background: '#003C72'}}></div>
+                <div className="absolute top-1/2 left-1/4 w-12 h-12 rounded-full opacity-30 animate-pulse delay-500" style={{background: '#D85584'}}></div>
             </div>
 
             {/* Form Section */}
