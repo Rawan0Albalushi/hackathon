@@ -106,7 +106,7 @@ const AdminConferenceRegistrations = () => {
     };
 
     const formatDate = (dateString) => {
-        return new Date(dateString).toLocaleDateString('ar-SA', {
+        return new Date(dateString).toLocaleDateString('en-US', {
             year: 'numeric',
             month: 'long',
             day: 'numeric',
@@ -166,7 +166,7 @@ const AdminConferenceRegistrations = () => {
                     )}
 
                     {/* Registrations Table */}
-                    <div className="admin-table-container" dir="rtl">
+                    <div className="admin-table-container" data-table="conference" dir="rtl">
                         <div className="table-wrapper">
                             <table className="table-fade-in">
                             <thead className="bg-gray-50">
@@ -222,7 +222,7 @@ const AdminConferenceRegistrations = () => {
                                             {formatDate(registration.created_at)}
                                         </td>
                                         <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                                            <div className="table-action-buttons">
+                                            <div className="admin-btn-container">
                                                 <button
                                                     type="button"
                                                     onClick={(e) => {
@@ -232,9 +232,9 @@ const AdminConferenceRegistrations = () => {
                                                         setSelectedRegistration(registration);
                                                         setShowViewModal(true);
                                                     }}
-                                                    className="table-action-button view"
+                                                    className="admin-btn-view"
                                                 >
-                                                    <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
                                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
                                                     </svg>
@@ -250,9 +250,9 @@ const AdminConferenceRegistrations = () => {
                                                         setNewStatus(registration.status);
                                                         setShowStatusModal(true);
                                                     }}
-                                                    className="table-action-button edit"
+                                                    className="admin-btn-update"
                                                 >
-                                                    <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
                                                     </svg>
                                                     تحديث
@@ -304,46 +304,70 @@ const AdminConferenceRegistrations = () => {
 
             {/* Status Update Modal */}
             {showStatusModal && (
-                <div className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
-                    <div className="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
-                        <div className="mt-3">
-                            <h3 className="text-lg font-medium text-gray-900 mb-4">تحديث حالة التسجيل</h3>
-                            <div className="space-y-4">
-                                <div>
-                                    <label className="block text-sm font-medium text-gray-700 mb-2">الحالة الجديدة</label>
-                                    <select
-                                        value={newStatus}
-                                        onChange={(e) => setNewStatus(e.target.value)}
-                                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                    >
-                                        <option value="pending">قيد المراجعة</option>
-                                        <option value="approved">مقبول</option>
-                                        <option value="rejected">مرفوض</option>
-                                    </select>
-                                </div>
-                                {newStatus === 'rejected' && (
-                                    <div>
-                                        <label className="block text-sm font-medium text-gray-700 mb-2">سبب الرفض (اختياري)</label>
-                                        <textarea
-                                            value={rejectionReason}
-                                            onChange={(e) => setRejectionReason(e.target.value)}
-                                            rows={3}
-                                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                            placeholder="أدخل سبب الرفض..."
-                                        />
+                <div className="absolute inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
+                    <div className="bg-white rounded-lg shadow-lg w-full max-w-md mx-auto max-h-[80vh] overflow-y-auto">
+                        <div className="px-6 py-4 border-b border-gray-200 bg-gradient-to-r from-orange-50 to-pink-50">
+                            <div className="flex items-center justify-between">
+                                <div className="flex items-center space-x-3 rtl:space-x-reverse">
+                                    <div className="w-10 h-10 bg-gradient-to-br from-orange-500 to-pink-500 rounded-lg flex items-center justify-center shadow-lg">
+                                        <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                                        </svg>
                                     </div>
-                                )}
-                            </div>
-                            <div className="flex justify-end space-x-3 mt-6">
+                                    <div>
+                                        <h3 className="text-lg font-semibold bg-gradient-to-r from-orange-600 to-pink-600 bg-clip-text text-transparent">
+                                            تحديث حالة التسجيل
+                                        </h3>
+                                        <p className="text-sm text-gray-600">تحديث حالة تسجيل المؤتمر</p>
+                                    </div>
+                                </div>
                                 <button
                                     onClick={() => setShowStatusModal(false)}
-                                    className="px-4 py-2 bg-gray-300 text-gray-700 rounded-md hover:bg-gray-400"
+                                    className="p-2 text-gray-400 hover:text-pink-500 hover:bg-pink-50 rounded-lg transition-colors duration-200"
+                                >
+                                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+                        <div className="px-6 py-4 space-y-4">
+                            <div className="space-y-2">
+                                <label className="block text-sm font-medium text-gray-700">الحالة الجديدة</label>
+                                <select
+                                    value={newStatus}
+                                    onChange={(e) => setNewStatus(e.target.value)}
+                                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-colors duration-200"
+                                >
+                                    <option value="pending">قيد المراجعة</option>
+                                    <option value="approved">مقبول</option>
+                                    <option value="rejected">مرفوض</option>
+                                </select>
+                            </div>
+                            {newStatus === 'rejected' && (
+                                <div className="space-y-2">
+                                    <label className="block text-sm font-medium text-gray-700">سبب الرفض (اختياري)</label>
+                                    <textarea
+                                        value={rejectionReason}
+                                        onChange={(e) => setRejectionReason(e.target.value)}
+                                        rows={3}
+                                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-pink-500 resize-none transition-colors duration-200"
+                                        placeholder="أدخل سبب الرفض..."
+                                    />
+                                </div>
+                            )}
+                        </div>
+                        <div className="px-6 py-4 border-t border-gray-200 bg-gradient-to-r from-gray-50 to-orange-50">
+                            <div className="flex justify-end space-x-3 rtl:space-x-reverse">
+                                <button
+                                    onClick={() => setShowStatusModal(false)}
+                                    className="px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 transition-colors duration-200"
                                 >
                                     إلغاء
                                 </button>
                                 <button
                                     onClick={handleStatusUpdate}
-                                    className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
+                                    className="px-4 py-2 bg-gradient-to-r from-orange-500 to-pink-500 text-white rounded-md hover:from-orange-600 hover:to-pink-600 transition-all duration-200 shadow-lg hover:shadow-xl"
                                 >
                                     تحديث
                                 </button>
@@ -355,52 +379,94 @@ const AdminConferenceRegistrations = () => {
 
             {/* View Modal */}
             {showViewModal && selectedRegistration && (
-                <div className="view-modal" dir="rtl">
-                    <div className="view-modal-content">
-                        <div className="view-modal-header">
-                            <h3 className="view-modal-title">تفاصيل تسجيل المؤتمر</h3>
-                            <button
-                                onClick={() => setShowViewModal(false)}
-                                className="view-modal-close"
-                            >
-                                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                                </svg>
-                            </button>
+                <div className="absolute inset-0 bg-black/50 z-50 flex items-center justify-center p-4" dir="rtl">
+                    <div className="bg-white rounded-lg shadow-lg w-full max-w-2xl mx-auto max-h-[80vh] overflow-y-auto">
+                        <div className="px-6 py-4 border-b border-gray-200 bg-gradient-to-r from-teal-50 to-navy-50">
+                            <div className="flex items-center justify-between">
+                                <div className="flex items-center space-x-3 rtl:space-x-reverse">
+                                    <div className="w-10 h-10 bg-gradient-to-br from-teal-500 to-navy-500 rounded-lg flex items-center justify-center shadow-lg">
+                                        <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                                        </svg>
+                                    </div>
+                                    <div>
+                                        <h3 className="text-lg font-semibold bg-gradient-to-r from-teal-600 to-navy-600 bg-clip-text text-transparent">
+                                            تفاصيل تسجيل المؤتمر
+                                        </h3>
+                                        <p className="text-sm text-gray-600">معلومات شاملة عن المتسجل</p>
+                                    </div>
+                                </div>
+                                <button
+                                    onClick={() => setShowViewModal(false)}
+                                    className="p-2 text-gray-400 hover:text-teal-500 hover:bg-teal-50 rounded-lg transition-colors duration-200"
+                                >
+                                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                                    </svg>
+                                </button>
+                            </div>
                         </div>
-                        <div className="view-modal-body">
-                            <div className="view-modal-field">
-                                <label className="view-modal-label">الاسم</label>
-                                <div className="view-modal-value">{selectedRegistration.full_name}</div>
-                            </div>
-                            <div className="view-modal-field">
-                                <label className="view-modal-label">البريد الإلكتروني</label>
-                                <div className="view-modal-value">{selectedRegistration.email}</div>
-                            </div>
-                            <div className="view-modal-field">
-                                <label className="view-modal-label">الهاتف</label>
-                                <div className="view-modal-value">{selectedRegistration.phone}</div>
-                            </div>
-                            <div className="view-modal-field">
-                                <label className="view-modal-label">المؤسسة</label>
-                                <div className="view-modal-value">{selectedRegistration.organization || 'غير محدد'}</div>
-                            </div>
-                            <div className="view-modal-field">
-                                <label className="view-modal-label">الجلسة المختارة</label>
-                                <div className="view-modal-value">{getSessionText(selectedRegistration.session_choice)}</div>
-                            </div>
-                            <div className="view-modal-field">
-                                <label className="view-modal-label">الحالة</label>
-                                <div className="view-modal-value">
-                                    <span className={`view-modal-status ${selectedRegistration.status}`}>
-                                        {selectedRegistration.status === 'pending' ? 'قيد المراجعة' :
-                                         selectedRegistration.status === 'approved' ? 'مقبول' : 'مرفوض'}
-                                    </span>
+                        <div className="px-6 py-4 space-y-4">
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div className="space-y-2">
+                                    <label className="block text-sm font-medium text-gray-700">الاسم</label>
+                                    <div className="p-3 bg-gray-50 rounded-md border border-gray-200">
+                                        {selectedRegistration.full_name}
+                                    </div>
+                                </div>
+                                <div className="space-y-2">
+                                    <label className="block text-sm font-medium text-gray-700">البريد الإلكتروني</label>
+                                    <div className="p-3 bg-gray-50 rounded-md border border-gray-200">
+                                        {selectedRegistration.email}
+                                    </div>
+                                </div>
+                                <div className="space-y-2">
+                                    <label className="block text-sm font-medium text-gray-700">الهاتف</label>
+                                    <div className="p-3 bg-gray-50 rounded-md border border-gray-200">
+                                        {selectedRegistration.phone}
+                                    </div>
+                                </div>
+                                <div className="space-y-2">
+                                    <label className="block text-sm font-medium text-gray-700">المؤسسة</label>
+                                    <div className="p-3 bg-gray-50 rounded-md border border-gray-200">
+                                        {selectedRegistration.organization || 'غير محدد'}
+                                    </div>
+                                </div>
+                                <div className="space-y-2">
+                                    <label className="block text-sm font-medium text-gray-700">الجلسة المختارة</label>
+                                    <div className="p-3 bg-gray-50 rounded-md border border-gray-200">
+                                        {getSessionText(selectedRegistration.session_choice)}
+                                    </div>
+                                </div>
+                                <div className="space-y-2">
+                                    <label className="block text-sm font-medium text-gray-700">الحالة</label>
+                                    <div className="p-3 bg-gray-50 rounded-md border border-gray-200">
+                                        <span className={`px-3 py-1 text-sm font-medium rounded-full ${
+                                            selectedRegistration.status === 'pending' ? 'bg-gradient-to-r from-yellow-100 to-orange-100 text-yellow-800 border border-yellow-300' :
+                                            selectedRegistration.status === 'approved' ? 'bg-gradient-to-r from-green-100 to-teal-100 text-green-800 border border-green-300' :
+                                            'bg-gradient-to-r from-red-100 to-pink-100 text-red-800 border border-red-300'
+                                        }`}>
+                                            {selectedRegistration.status === 'pending' ? 'قيد المراجعة' :
+                                             selectedRegistration.status === 'approved' ? 'مقبول' : 'مرفوض'}
+                                        </span>
+                                    </div>
+                                </div>
+                                <div className="space-y-2">
+                                    <label className="block text-sm font-medium text-gray-700">تاريخ التسجيل</label>
+                                    <div className="p-3 bg-gray-50 rounded-md border border-gray-200">
+                                        {formatDate(selectedRegistration.created_at)}
+                                    </div>
                                 </div>
                             </div>
-                            <div className="view-modal-field">
-                                <label className="view-modal-label">تاريخ التسجيل</label>
-                                <div className="view-modal-value">{formatDate(selectedRegistration.created_at)}</div>
+                        </div>
+                        <div className="px-6 py-4 border-t border-gray-200 bg-gradient-to-r from-gray-50 to-teal-50">
+                            <div className="flex justify-end">
+                                <button
+                                    onClick={() => setShowViewModal(false)}
+                                    className="px-4 py-2 bg-gradient-to-r from-teal-500 to-navy-500 text-white rounded-md hover:from-teal-600 hover:to-navy-600 transition-all duration-200 shadow-lg hover:shadow-xl"
+                                >
+                                    إغلاق
+                                </button>
                             </div>
                         </div>
                     </div>

@@ -27,6 +27,149 @@
     font-family: 'IBM Plex Sans Arabic', 'Calibri', 'Candara', 'Segoe', 'Segoe UI', 'Optima', 'Arial', sans-serif !important;
 }
 
+/* Enhanced Modal Animations */
+@keyframes fade-in {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes scale-in {
+    from {
+        opacity: 0;
+        transform: scale(0.9);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+@keyframes fade-in-down {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes slide-in-right {
+    from {
+        opacity: 0;
+        transform: translateX(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+.animate-fade-in {
+    animation: fade-in 0.3s ease-out;
+}
+
+.animate-scale-in {
+    animation: scale-in 0.3s ease-out;
+}
+
+.animate-fade-in-down {
+    animation: fade-in-down 0.4s ease-out;
+}
+
+.animate-slide-in-right {
+    animation: slide-in-right 0.4s ease-out;
+}
+
+/* Enhanced Modal Styles */
+.modal-enhanced {
+    backdrop-filter: blur(12px);
+    background: rgba(0, 0, 0, 0.6);
+}
+
+.modal-content-enhanced {
+    backdrop-filter: blur(20px);
+    background: rgba(255, 255, 255, 0.95);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+}
+
+/* Enhanced Button Styles */
+.btn-enhanced {
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+.btn-enhanced::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.5s ease;
+}
+
+.btn-enhanced:hover::before {
+    left: 100%;
+}
+
+/* Enhanced Status Badge */
+.status-badge-enhanced {
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+.status-badge-enhanced::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+    transition: left 0.6s ease;
+}
+
+.status-badge-enhanced:hover::before {
+    left: 100%;
+}
+
+/* Enhanced Skill Tags */
+.skill-tag-enhanced {
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+.skill-tag-enhanced:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+.skill-tag-enhanced::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+    transition: left 0.5s ease;
+}
+
+.skill-tag-enhanced:hover::after {
+    left: 100%;
+}
+
 /* Custom styles for RTL support */
 [dir="rtl"] {
     text-align: right;
@@ -2058,13 +2201,15 @@
 /* Fix table layout issues */
 .admin-table-container {
     width: 100%;
-    overflow: hidden;
+    overflow: visible;
     border-radius: 0.75rem;
     background: white;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
     transition: all 0.3s ease;
-    min-height: 200px;
+    min-height: 600px;
+    height: 70vh;
     position: relative;
+    z-index: 1;
 }
 
 /* RTL Support for Tables */
@@ -2486,15 +2631,15 @@ button.table-action-button {
     max-height: none !important;
 }
 
-/* View Modal Styling */
+/* View Modal Styling - Constrained to Table Container */
 .view-modal {
-    position: fixed !important;
+    position: absolute !important;
     top: 0 !important;
     left: 0 !important;
     right: 0 !important;
     bottom: 0 !important;
-    width: 100vw !important;
-    height: 100vh !important;
+    width: 100% !important;
+    height: 100% !important;
     background: rgba(0, 0, 0, 0.5);
     display: flex;
     align-items: center;
@@ -2503,56 +2648,81 @@ button.table-action-button {
     padding: 1rem;
     margin: 0 !important;
     overflow: auto;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    box-sizing: border-box;
 }
 
-/* Enhanced Modal Overlay - Force Full Screen */
+/* Enhanced Modal Overlay - Constrained to Table Container */
 .modal-backdrop-enhanced {
-    position: fixed !important;
+    position: absolute !important;
     top: 0 !important;
     left: 0 !important;
     right: 0 !important;
     bottom: 0 !important;
-    width: 100vw !important;
-    height: 100vh !important;
+    width: 100% !important;
+    height: 100% !important;
     z-index: 9999 !important;
-    margin: 0 !important;
-    padding: 0 !important;
-    overflow: auto !important;
-}
-
-/* Modal Content Container */
-.modal-content-enhanced {
-    position: relative !important;
-    z-index: 10000 !important;
-    max-height: 90vh !important;
-    overflow-y: auto !important;
-    margin: auto !important;
-}
-
-/* Force Modal to Break Out of Any Container */
-.admin-table-container .modal-backdrop-enhanced,
-.admin-table-container .view-modal,
-.admin-table-container .modal-content-enhanced {
-    position: fixed !important;
-    top: 0 !important;
-    left: 0 !important;
-    right: 0 !important;
-    bottom: 0 !important;
-    width: 100vw !important;
-    height: 100vh !important;
-    z-index: 9999 !important;
-    transform: none !important;
     margin: 0 !important;
     padding: 1rem !important;
+    overflow: auto !important;
+    background: rgba(0, 0, 0, 0.5) !important;
+    backdrop-filter: blur(8px) !important;
+    -webkit-backdrop-filter: blur(8px) !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    box-sizing: border-box !important;
 }
 
-/* Ensure Modal Content is Not Constrained */
+/* Modal Content Container - Constrained to Table */
 .modal-content-enhanced {
-    max-width: 90vw !important;
-    max-height: 90vh !important;
+    position: relative !important;
+    z-index: 10000 !important;
+    max-height: 80vh !important;
+    max-width: 90% !important;
+    width: 100% !important;
+    overflow-y: auto !important;
+    margin: auto !important;
+    background: white !important;
+    border-radius: 1rem !important;
+    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15) !important;
+}
+
+/* Modal Positioning Within Table Container */
+.admin-table-container .modal-backdrop-enhanced,
+.admin-table-container .view-modal {
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    z-index: 9999 !important;
+    margin: 0 !important;
+    padding: 1rem !important;
+    background: rgba(0, 0, 0, 0.5) !important;
+    backdrop-filter: blur(8px) !important;
+    -webkit-backdrop-filter: blur(8px) !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    box-sizing: border-box !important;
+}
+
+/* Modal Content Sizing Within Table Container */
+.admin-table-container .modal-content-enhanced {
+    max-width: 90% !important;
+    max-height: 80vh !important;
+    width: 100% !important;
     overflow-y: auto !important;
     position: relative !important;
     z-index: 10000 !important;
+    background: white !important;
+    border-radius: 1rem !important;
+    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15) !important;
+    margin: 0 !important;
 }
 
 /* Override Any Container Constraints */
@@ -3210,7 +3380,7 @@ html, body {
 
 .admin-table-container table {
     width: 100%;
-    table-layout: fixed;
+    table-layout: auto;
     border-collapse: collapse;
     min-width: 100%;
 }
@@ -3227,9 +3397,12 @@ html, body {
     padding: 0.75rem 1rem;
     text-align: left;
     border-bottom: 1px solid #e5e7eb;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    white-space: normal;
+    overflow: visible;
+    word-wrap: break-word;
+    min-height: 50px;
+    vertical-align: middle;
+    max-width: none;
 }
 
 .admin-table-container th {
@@ -3242,10 +3415,13 @@ html, body {
 
 .admin-table-container tbody tr {
     transition: all 0.2s ease;
+    height: 60px;
 }
 
 .admin-table-container tbody tr:hover {
     background-color: #f9fafb;
+    transform: translateY(-1px);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
 /* Fix table animation issues */
@@ -3293,12 +3469,15 @@ html, body {
 /* Ensure proper table dimensions */
 .table-wrapper {
     width: 100%;
+    height: 100%;
     overflow-x: auto;
+    overflow-y: auto;
     border-radius: 0.75rem;
     background: white;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
     position: relative;
     display: block;
+    max-height: 65vh;
 }
 
 /* Force table to maintain proper dimensions */
@@ -3334,21 +3513,24 @@ html, body {
 }
 
 .table-wrapper::-webkit-scrollbar {
-    height: 6px;
+    height: 8px;
+    width: 8px;
 }
 
 .table-wrapper::-webkit-scrollbar-track {
     background: #f1f5f9;
-    border-radius: 3px;
+    border-radius: 4px;
 }
 
 .table-wrapper::-webkit-scrollbar-thumb {
-    background: #cbd5e1;
-    border-radius: 3px;
+    background: linear-gradient(135deg, #F4A321 0%, #D85584 100%);
+    border-radius: 4px;
+    transition: all 0.3s ease;
 }
 
 .table-wrapper::-webkit-scrollbar-thumb:hover {
-    background: #94a3b8;
+    background: linear-gradient(135deg, #D85584 0%, #096289 100%);
+    transform: scale(1.1);
 }
 
 /* Fix table loading state */
@@ -3985,4 +4167,603 @@ html, body {
     .user-card-enhanced {
         padding: 0.5rem 0.75rem;
     }
+}
+
+/* ===== APPLICATION COLOR THEMED MODALS ===== */
+
+/* Modal Colors Matching Application Theme */
+.modal-header-orange-pink {
+    background: linear-gradient(135deg, rgba(244, 163, 33, 0.1) 0%, rgba(216, 85, 132, 0.1) 100%);
+    border-bottom: 2px solid rgba(244, 163, 33, 0.2);
+}
+
+.modal-header-teal-navy {
+    background: linear-gradient(135deg, rgba(9, 98, 137, 0.1) 0%, rgba(0, 60, 114, 0.1) 100%);
+    border-bottom: 2px solid rgba(9, 98, 137, 0.2);
+}
+
+.modal-icon-orange-pink {
+    background: linear-gradient(135deg, #F4A321 0%, #D85584 100%);
+    box-shadow: 0 4px 12px rgba(244, 163, 33, 0.3);
+}
+
+.modal-icon-teal-navy {
+    background: linear-gradient(135deg, #096289 0%, #003C72 100%);
+    box-shadow: 0 4px 12px rgba(9, 98, 137, 0.3);
+}
+
+.modal-title-gradient-orange-pink {
+    background: linear-gradient(135deg, #F4A321 0%, #D85584 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.modal-title-gradient-teal-navy {
+    background: linear-gradient(135deg, #096289 0%, #003C72 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.modal-button-primary {
+    background: linear-gradient(135deg, #F4A321 0%, #D85584 100%);
+    color: white;
+    border: none;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(244, 163, 33, 0.3);
+}
+
+.modal-button-primary:hover {
+    background: linear-gradient(135deg, #E6941A 0%, #C74A73 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(244, 163, 33, 0.4);
+}
+
+.modal-button-secondary {
+    background: linear-gradient(135deg, #096289 0%, #003C72 100%);
+    color: white;
+    border: none;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(9, 98, 137, 0.3);
+}
+
+.modal-button-secondary:hover {
+    background: linear-gradient(135deg, #087A9B 0%, #00325A 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(9, 98, 137, 0.4);
+}
+
+.modal-input-focus-orange:focus {
+    border-color: #F4A321;
+    box-shadow: 0 0 0 3px rgba(244, 163, 33, 0.1);
+}
+
+.modal-input-focus-pink:focus {
+    border-color: #D85584;
+    box-shadow: 0 0 0 3px rgba(216, 85, 132, 0.1);
+}
+
+.modal-input-focus-teal:focus {
+    border-color: #096289;
+    box-shadow: 0 0 0 3px rgba(9, 98, 137, 0.1);
+}
+
+.modal-status-preview {
+    background: linear-gradient(135deg, rgba(244, 163, 33, 0.1) 0%, rgba(216, 85, 132, 0.1) 100%);
+    border: 1px solid rgba(244, 163, 33, 0.2);
+}
+
+.modal-status-badge-pending {
+    background: linear-gradient(135deg, #FEF3C7 0%, #FDE68A 100%);
+    color: #92400E;
+    border: 1px solid #F59E0B;
+}
+
+.modal-status-badge-approved {
+    background: linear-gradient(135deg, #D1FAE5 0%, #A7F3D0 100%);
+    color: #065F46;
+    border: 1px solid #10B981;
+}
+
+.modal-status-badge-rejected {
+    background: linear-gradient(135deg, #FEE2E2 0%, #FECACA 100%);
+    color: #991B1B;
+    border: 1px solid #EF4444;
+}
+
+/* Simple Modal Animations */
+.modal-simple {
+    transition: all 0.2s ease-in-out;
+}
+
+.modal-simple:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* Simple Button Styles */
+.btn-simple {
+    transition: all 0.2s ease-in-out;
+}
+
+.btn-simple:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.btn-simple:active {
+    transform: translateY(0);
+}
+
+/* ===== UNIFIED ADMIN BUTTON STYLES ===== */
+
+/* Unified View Button */
+.admin-btn-view {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 0.375rem !important;
+    padding: 0.375rem 0.75rem !important;
+    background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%) !important;
+    color: white !important;
+    border: none !important;
+    border-radius: 0.375rem !important;
+    font-size: 0.8125rem !important;
+    font-weight: 500 !important;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    cursor: pointer !important;
+    position: relative !important;
+    overflow: hidden !important;
+    box-shadow: 0 1px 3px rgba(59, 130, 246, 0.2) !important;
+    text-decoration: none !important;
+    outline: none !important;
+    z-index: 10 !important;
+    pointer-events: auto !important;
+    user-select: none !important;
+    -webkit-user-select: none !important;
+    -moz-user-select: none !important;
+    -ms-user-select: none !important;
+    min-width: 4rem !important;
+    height: 2rem !important;
+}
+
+.admin-btn-view::before {
+    content: '' !important;
+    position: absolute !important;
+    top: 0 !important;
+    left: -100% !important;
+    width: 100% !important;
+    height: 100% !important;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent) !important;
+    transition: left 0.5s ease !important;
+}
+
+.admin-btn-view:hover {
+    background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%) !important;
+    transform: translateY(-1px) !important;
+    box-shadow: 0 2px 8px rgba(59, 130, 246, 0.3) !important;
+}
+
+.admin-btn-view:hover::before {
+    left: 100% !important;
+}
+
+.admin-btn-view:active {
+    transform: translateY(0) scale(0.98) !important;
+}
+
+.admin-btn-view:focus {
+    outline: 2px solid #3b82f6 !important;
+    outline-offset: 2px !important;
+}
+
+/* Unified Update Button */
+.admin-btn-update {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 0.375rem !important;
+    padding: 0.375rem 0.75rem !important;
+    background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%) !important;
+    color: white !important;
+    border: none !important;
+    border-radius: 0.375rem !important;
+    font-size: 0.8125rem !important;
+    font-weight: 500 !important;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    cursor: pointer !important;
+    position: relative !important;
+    overflow: hidden !important;
+    box-shadow: 0 1px 3px rgba(245, 158, 11, 0.2) !important;
+    text-decoration: none !important;
+    outline: none !important;
+    z-index: 10 !important;
+    pointer-events: auto !important;
+    user-select: none !important;
+    -webkit-user-select: none !important;
+    -moz-user-select: none !important;
+    -ms-user-select: none !important;
+    min-width: 4rem !important;
+    height: 2rem !important;
+}
+
+.admin-btn-update::before {
+    content: '' !important;
+    position: absolute !important;
+    top: 0 !important;
+    left: -100% !important;
+    width: 100% !important;
+    height: 100% !important;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent) !important;
+    transition: left 0.5s ease !important;
+}
+
+.admin-btn-update:hover {
+    background: linear-gradient(135deg, #d97706 0%, #b45309 100%) !important;
+    transform: translateY(-1px) !important;
+    box-shadow: 0 2px 8px rgba(245, 158, 11, 0.3) !important;
+}
+
+.admin-btn-update:hover::before {
+    left: 100% !important;
+}
+
+.admin-btn-update:active {
+    transform: translateY(0) scale(0.98) !important;
+}
+
+.admin-btn-update:focus {
+    outline: 2px solid #f59e0b !important;
+    outline-offset: 2px !important;
+}
+
+/* Unified Button Container */
+.admin-btn-container {
+    display: flex !important;
+    gap: 0.375rem !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
+    flex-wrap: nowrap !important;
+}
+
+/* RTL Support for Buttons */
+[dir="rtl"] .admin-btn-container {
+    flex-direction: row-reverse !important;
+    justify-content: flex-end !important;
+}
+
+[dir="rtl"] .admin-btn-view,
+[dir="rtl"] .admin-btn-update {
+    flex-direction: row-reverse !important;
+}
+
+[dir="rtl"] .admin-btn-view svg,
+[dir="rtl"] .admin-btn-update svg {
+    margin-left: 0.5rem !important;
+    margin-right: 0 !important;
+}
+
+/* Button Icons */
+.admin-btn-view svg,
+.admin-btn-update svg {
+    width: 0.875rem !important;
+    height: 0.875rem !important;
+    flex-shrink: 0 !important;
+    pointer-events: none !important;
+}
+
+/* Responsive Button Styles */
+@media (max-width: 768px) {
+    .admin-btn-view,
+    .admin-btn-update {
+        padding: 0.25rem 0.5rem !important;
+        font-size: 0.75rem !important;
+        gap: 0.25rem !important;
+        min-width: 3.5rem !important;
+        height: 1.75rem !important;
+    }
+    
+    .admin-btn-view svg,
+    .admin-btn-update svg {
+        width: 0.75rem !important;
+        height: 0.75rem !important;
+    }
+    
+    .admin-btn-container {
+        gap: 0.25rem !important;
+    }
+}
+
+/* Button Loading States */
+.admin-btn-view.loading,
+.admin-btn-update.loading {
+    position: relative !important;
+    color: transparent !important;
+}
+
+.admin-btn-view.loading::after,
+.admin-btn-update.loading::after {
+    content: '' !important;
+    position: absolute !important;
+    top: 50% !important;
+    left: 50% !important;
+    width: 1rem !important;
+    height: 1rem !important;
+    margin: -0.5rem 0 0 -0.5rem !important;
+    border: 2px solid transparent !important;
+    border-top: 2px solid currentColor !important;
+    border-radius: 50% !important;
+    animation: spin 1s linear infinite !important;
+}
+
+/* Button Disabled States */
+.admin-btn-view:disabled,
+.admin-btn-update:disabled {
+    opacity: 0.5 !important;
+    cursor: not-allowed !important;
+    pointer-events: none !important;
+    transform: none !important;
+    box-shadow: none !important;
+}
+
+/* Button Focus Ring */
+.admin-btn-view:focus-visible,
+.admin-btn-update:focus-visible {
+    outline: 2px solid currentColor !important;
+    outline-offset: 2px !important;
+}
+
+/* Compact Button Layout for Tables */
+.admin-table-container .admin-btn-container {
+    gap: 0.25rem !important;
+    flex-wrap: nowrap !important;
+    justify-content: center !important;
+}
+
+.admin-table-container .admin-btn-view,
+.admin-table-container .admin-btn-update {
+    min-width: 3.5rem !important;
+    height: 1.875rem !important;
+    padding: 0.25rem 0.5rem !important;
+    font-size: 0.75rem !important;
+    gap: 0.25rem !important;
+}
+
+.admin-table-container .admin-btn-view svg,
+.admin-table-container .admin-btn-update svg {
+    width: 0.75rem !important;
+    height: 0.75rem !important;
+}
+
+/* Column-specific widths for better layout */
+.admin-table-container th:nth-child(1),
+.admin-table-container td:nth-child(1) {
+    width: 15%;
+    min-width: 120px;
+}
+
+.admin-table-container th:nth-child(2),
+.admin-table-container td:nth-child(2) {
+    width: 20%;
+    min-width: 150px;
+}
+
+.admin-table-container th:nth-child(3),
+.admin-table-container td:nth-child(3) {
+    width: 15%;
+    min-width: 120px;
+}
+
+.admin-table-container th:nth-child(4),
+.admin-table-container td:nth-child(4) {
+    width: 15%;
+    min-width: 120px;
+}
+
+.admin-table-container th:nth-child(5),
+.admin-table-container td:nth-child(5) {
+    width: 15%;
+    min-width: 120px;
+}
+
+.admin-table-container th:nth-child(6),
+.admin-table-container td:nth-child(6) {
+    width: 10%;
+    min-width: 100px;
+}
+
+.admin-table-container th:nth-child(7),
+.admin-table-container td:nth-child(7) {
+    width: 10%;
+    min-width: 100px;
+}
+
+/* Actions column */
+.admin-table-container th:last-child,
+.admin-table-container td:last-child {
+    width: 15%;
+    min-width: 140px;
+    white-space: nowrap !important;
+    vertical-align: middle !important;
+}
+
+.admin-table-container .admin-btn-container {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+}
+
+/* Skills column specific styling */
+.admin-table-container td:nth-child(5) {
+    white-space: normal;
+    word-break: break-word;
+}
+
+/* Email column specific styling */
+.admin-table-container td:nth-child(2) {
+    word-break: break-all;
+    max-width: 200px;
+}
+
+/* Phone column specific styling */
+.admin-table-container td:nth-child(3) {
+    white-space: nowrap;
+    font-family: monospace;
+}
+
+/* Hackathon table specific styling */
+.admin-table-container[data-table="hackathon"] th:nth-child(4),
+.admin-table-container[data-table="hackathon"] td:nth-child(4) {
+    width: 20%;
+    min-width: 150px;
+}
+
+.admin-table-container[data-table="hackathon"] th:nth-child(5),
+.admin-table-container[data-table="hackathon"] td:nth-child(5) {
+    width: 10%;
+    min-width: 100px;
+}
+
+/* Workshop table specific styling */
+.admin-table-container[data-table="workshop"] th:nth-child(4),
+.admin-table-container[data-table="workshop"] td:nth-child(4) {
+    width: 18%;
+    min-width: 140px;
+}
+
+.admin-table-container[data-table="workshop"] th:nth-child(5),
+.admin-table-container[data-table="workshop"] td:nth-child(5) {
+    width: 15%;
+    min-width: 120px;
+}
+
+/* Conference table specific styling */
+.admin-table-container[data-table="conference"] th:nth-child(4),
+.admin-table-container[data-table="conference"] td:nth-child(4) {
+    width: 18%;
+    min-width: 140px;
+}
+
+.admin-table-container[data-table="conference"] th:nth-child(5),
+.admin-table-container[data-table="conference"] td:nth-child(5) {
+    width: 15%;
+    min-width: 120px;
+}
+
+/* Status column styling */
+.admin-table-container td:nth-child(6) {
+    text-align: center;
+}
+
+/* Date column styling */
+.admin-table-container td:nth-child(7) {
+    font-size: 0.875rem;
+    color: #6b7280;
+}
+
+/* Responsive table adjustments */
+@media (max-width: 1024px) {
+    .admin-table-container th,
+    .admin-table-container td {
+        padding: 0.5rem 0.75rem;
+        font-size: 0.875rem;
+    }
+    
+    .admin-table-container th:nth-child(1),
+    .admin-table-container td:nth-child(1) {
+        width: 20%;
+        min-width: 100px;
+    }
+    
+    .admin-table-container th:nth-child(2),
+    .admin-table-container td:nth-child(2) {
+        width: 25%;
+        min-width: 120px;
+    }
+}
+
+@media (max-width: 768px) {
+    .admin-table-container th,
+    .admin-table-container td {
+        padding: 0.375rem 0.5rem;
+        font-size: 0.8125rem;
+    }
+    
+    .admin-table-container th:nth-child(1),
+    .admin-table-container td:nth-child(1) {
+        width: 25%;
+        min-width: 80px;
+    }
+    
+    .admin-table-container th:nth-child(2),
+    .admin-table-container td:nth-child(2) {
+        width: 30%;
+        min-width: 100px;
+    }
+    
+    .admin-table-container th:last-child,
+    .admin-table-container td:last-child {
+        width: 20%;
+        min-width: 120px;
+    }
+}
+
+/* ===== MODAL CONTAINMENT FIXES ===== */
+
+/* View Modal Sizing Within Table Container */
+.admin-table-container .view-modal .modal-content-enhanced {
+    max-width: 90% !important;
+    width: 100% !important;
+    max-height: 80vh !important;
+    background: white !important;
+    border-radius: 1rem !important;
+    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15) !important;
+}
+
+/* Status Update Modal Sizing Within Table Container */
+.admin-table-container .modal-backdrop-enhanced .modal-content-enhanced {
+    max-width: 90% !important;
+    width: 100% !important;
+    max-height: 75vh !important;
+    background: white !important;
+    border-radius: 1rem !important;
+    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15) !important;
+}
+
+/* Force Modal Containment Within Table */
+.space-y-6.relative {
+    position: relative !important;
+    overflow: visible !important;
+}
+
+.space-y-6.relative .absolute.inset-0 {
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    z-index: 50 !important;
+    background: rgba(0, 0, 0, 0.5) !important;
+    backdrop-filter: blur(8px) !important;
+    -webkit-backdrop-filter: blur(8px) !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    padding: 1rem !important;
+    box-sizing: border-box !important;
+}
+
+/* Modal Content Sizing */
+.space-y-6.relative .absolute.inset-0 .bg-white {
+    max-width: 90% !important;
+    width: 100% !important;
+    max-height: 80vh !important;
+    overflow-y: auto !important;
+    background: white !important;
+    border-radius: 1rem !important;
+    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15) !important;
+    margin: 0 !important;
 }

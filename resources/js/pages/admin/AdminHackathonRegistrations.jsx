@@ -25,7 +25,7 @@ const AdminHackathonRegistrations = () => {
             setLoading(true);
             const params = new URLSearchParams({
                 page: currentPage,
-                per_page: 10,
+                per_page: 20,
                 ...(searchTerm && { search: searchTerm }),
                 ...(statusFilter && { status: statusFilter })
             });
@@ -99,7 +99,7 @@ const AdminHackathonRegistrations = () => {
     };
 
     const formatDate = (dateString) => {
-        return new Date(dateString).toLocaleDateString('ar-SA', {
+        return new Date(dateString).toLocaleDateString('en-US', {
             year: 'numeric',
             month: 'long',
             day: 'numeric',
@@ -120,7 +120,7 @@ const AdminHackathonRegistrations = () => {
     }
 
     return (
-        <div className="space-y-6" dir={language === 'ar' ? 'rtl' : 'ltr'}>
+        <div className="space-y-6 relative" dir={language === 'ar' ? 'rtl' : 'ltr'}>
             <div className="bg-white/90 backdrop-blur-lg shadow-xl rounded-2xl border border-gray-200/50">
                 <div className="px-6 py-6 border-b border-gray-200/50">
                     <div className="flex items-center space-x-3 rtl:space-x-reverse">
@@ -175,7 +175,7 @@ const AdminHackathonRegistrations = () => {
                     )}
 
                     {/* Registrations Table */}
-                    <div className="admin-table-container" dir="rtl">
+                    <div className="admin-table-container" data-table="hackathon" dir="rtl">
                         <div className="table-wrapper">
                             <table className="table-fade-in">
                             <thead className="bg-gray-50">
@@ -216,7 +216,12 @@ const AdminHackathonRegistrations = () => {
                                             {registration.phone}
                                         </td>
                                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                            {registration.skills?.join(', ')}
+                                            {(() => {
+                                                const skillsText = registration.skills?.join(', ') || '';
+                                                return skillsText.length > 20 
+                                                    ? skillsText.substring(0, 20) + '...'
+                                                    : skillsText;
+                                            })()}
                                         </td>
                                         <td className="px-6 py-4 whitespace-nowrap">
                                             {getStatusBadge(registration.status)}
@@ -225,7 +230,7 @@ const AdminHackathonRegistrations = () => {
                                             {formatDate(registration.created_at)}
                                         </td>
                                         <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                                            <div className="table-action-buttons">
+                                            <div className="admin-btn-container">
                                                 <button
                                                     type="button"
                                                     onClick={(e) => {
@@ -235,9 +240,9 @@ const AdminHackathonRegistrations = () => {
                                                         setSelectedRegistration(registration);
                                                         setShowViewModal(true);
                                                     }}
-                                                    className="table-action-button view"
+                                                    className="admin-btn-view"
                                                 >
-                                                    <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
                                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
                                                     </svg>
@@ -253,9 +258,9 @@ const AdminHackathonRegistrations = () => {
                                                         setNewStatus(registration.status);
                                                         setShowStatusModal(true);
                                                     }}
-                                                    className="table-action-button edit"
+                                                    className="admin-btn-update"
                                                 >
-                                                    <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
                                                     </svg>
                                                     تحديث
@@ -305,21 +310,21 @@ const AdminHackathonRegistrations = () => {
                 </div>
             </div>
 
-            {/* Enhanced Status Update Modal */}
+            {/* Simple Status Update Modal */}
             {showStatusModal && (
-                <div className="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-                    <div className="bg-white rounded-2xl shadow-2xl border border-white/20 w-full max-w-md max-h-[90vh] overflow-y-auto">
+                <div className="absolute inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
+                    <div className="bg-white rounded-lg shadow-lg w-full max-w-md mx-auto max-h-[80vh] overflow-y-auto">
                         {/* Modal Header */}
-                        <div className="px-6 py-4 border-b border-gray-200/50 bg-gradient-to-r from-pink-500/10 to-orange-500/10 modal-header-enhanced">
+                        <div className="px-6 py-4 border-b border-gray-200 bg-gradient-to-r from-orange-50 to-pink-50">
                             <div className="flex items-center justify-between">
                                 <div className="flex items-center space-x-3 rtl:space-x-reverse">
-                                    <div className="w-10 h-10 bg-gradient-to-br from-pink-500 to-orange-500 rounded-xl flex items-center justify-center">
+                                    <div className="w-10 h-10 bg-gradient-to-br from-orange-500 to-pink-500 rounded-lg flex items-center justify-center shadow-lg">
                                         <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
                                         </svg>
                                     </div>
-                                <div>
-                                        <h3 className="text-xl font-bold bg-gradient-to-r from-pink-500 to-orange-500 bg-clip-text text-transparent">
+                                    <div>
+                                        <h3 className="text-lg font-semibold bg-gradient-to-r from-orange-600 to-pink-600 bg-clip-text text-transparent">
                                             تحديث حالة التسجيل
                                         </h3>
                                         <p className="text-sm text-gray-600">تحديث حالة تسجيل الهاكثون</p>
@@ -327,7 +332,7 @@ const AdminHackathonRegistrations = () => {
                                 </div>
                                 <button
                                     onClick={() => setShowStatusModal(false)}
-                                    className="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-lg transition-all duration-200 modal-close-enhanced"
+                                    className="p-2 text-gray-400 hover:text-pink-500 hover:bg-pink-50 rounded-lg transition-colors duration-200"
                                 >
                                     <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -337,51 +342,47 @@ const AdminHackathonRegistrations = () => {
                         </div>
 
                         {/* Modal Body */}
-                        <div className="p-6 space-y-6 modal-body-enhanced">
+                        <div className="px-6 py-4 space-y-4">
                             {/* Status Selection */}
-                            <div className="space-y-3 modal-field-enter">
-                                <label className="block text-sm font-semibold text-gray-700">الحالة الجديدة</label>
-                                <div className="relative">
-                                    <select
-                                        value={newStatus}
-                                        onChange={(e) => setNewStatus(e.target.value)}
-                                        className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-transparent transition-all duration-300 bg-white appearance-none cursor-pointer modal-input-enhanced"
-                                    >
-                                        <option value="pending">قيد المراجعة</option>
-                                        <option value="approved">مقبول</option>
-                                        <option value="rejected">مرفوض</option>
-                                    </select>
-                                    <div className="absolute inset-y-0 left-0 rtl:left-auto rtl:right-0 flex items-center px-3 pointer-events-none">
-                                        <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                                        </svg>
-                                    </div>
-                                </div>
+                            <div className="space-y-2">
+                                <label className="block text-sm font-medium text-gray-700">
+                                    الحالة الجديدة
+                                </label>
+                                <select
+                                    value={newStatus}
+                                    onChange={(e) => setNewStatus(e.target.value)}
+                                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-colors duration-200"
+                                >
+                                    <option value="pending">قيد المراجعة</option>
+                                    <option value="approved">مقبول</option>
+                                    <option value="rejected">مرفوض</option>
+                                </select>
                             </div>
 
                             {/* Rejection Reason */}
-                                {newStatus === 'rejected' && (
-                                <div className="space-y-3 animate-fade-in-down modal-field-enter">
-                                    <label className="block text-sm font-semibold text-gray-700">سبب الرفض (اختياري)</label>
-                                        <textarea
-                                            value={rejectionReason}
-                                            onChange={(e) => setRejectionReason(e.target.value)}
-                                        rows={4}
-                                        className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-transparent transition-all duration-300 resize-none modal-input-enhanced"
-                                            placeholder="أدخل سبب الرفض..."
-                                        />
-                                    </div>
-                                )}
+                            {newStatus === 'rejected' && (
+                                <div className="space-y-2">
+                                    <label className="block text-sm font-medium text-gray-700">
+                                        سبب الرفض (اختياري)
+                                    </label>
+                                    <textarea
+                                        value={rejectionReason}
+                                        onChange={(e) => setRejectionReason(e.target.value)}
+                                        rows={3}
+                                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-pink-500 resize-none transition-colors duration-200"
+                                        placeholder="أدخل سبب الرفض..."
+                                    />
+                                </div>
+                            )}
 
                             {/* Status Preview */}
-                            <div className="bg-gray-50 rounded-xl p-4 border border-gray-200 modal-field-enter">
-                                <div className="flex items-center space-x-3 rtl:space-x-reverse">
-                                    <div className="w-3 h-3 bg-gradient-to-r from-pink-500 to-orange-500 rounded-full animate-pulse"></div>
+                            <div className="bg-gradient-to-r from-orange-50 to-pink-50 rounded-md p-3 border border-orange-200">
+                                <div className="flex items-center space-x-2 rtl:space-x-reverse">
                                     <span className="text-sm font-medium text-gray-700">معاينة الحالة:</span>
-                                    <span className={`px-3 py-1 rounded-full text-xs font-semibold status-badge-animated ${
-                                        newStatus === 'pending' ? 'bg-yellow-100 text-yellow-800' :
-                                        newStatus === 'approved' ? 'bg-green-100 text-green-800' :
-                                        'bg-red-100 text-red-800'
+                                    <span className={`px-3 py-1 rounded-full text-xs font-medium ${
+                                        newStatus === 'pending' ? 'bg-gradient-to-r from-yellow-100 to-orange-100 text-yellow-800 border border-yellow-300' :
+                                        newStatus === 'approved' ? 'bg-gradient-to-r from-green-100 to-teal-100 text-green-800 border border-green-300' :
+                                        'bg-gradient-to-r from-red-100 to-pink-100 text-red-800 border border-red-300'
                                     }`}>
                                         {newStatus === 'pending' ? 'قيد المراجعة' :
                                          newStatus === 'approved' ? 'مقبول' : 'مرفوض'}
@@ -391,17 +392,17 @@ const AdminHackathonRegistrations = () => {
                         </div>
 
                         {/* Modal Footer */}
-                        <div className="px-6 py-4 border-t border-gray-200/50 bg-gray-50/50 rounded-b-2xl modal-footer-enhanced">
+                        <div className="px-6 py-4 border-t border-gray-200 bg-gradient-to-r from-gray-50 to-orange-50">
                             <div className="flex justify-end space-x-3 rtl:space-x-reverse">
                                 <button
                                     onClick={() => setShowStatusModal(false)}
-                                    className="px-6 py-3 bg-gray-100 text-gray-700 rounded-xl hover:bg-gray-200 transition-all duration-200 font-medium modal-button-enhanced"
+                                    className="px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 transition-colors duration-200"
                                 >
                                     إلغاء
                                 </button>
                                 <button
                                     onClick={handleStatusUpdate}
-                                    className="px-6 py-3 bg-gradient-to-r from-pink-500 to-orange-500 text-white rounded-xl hover:from-pink-600 hover:to-orange-600 transition-all duration-200 font-medium shadow-lg hover:shadow-xl transform hover:scale-105 modal-button-enhanced"
+                                    className="px-4 py-2 bg-gradient-to-r from-orange-500 to-pink-500 text-white rounded-md hover:from-orange-600 hover:to-pink-600 transition-all duration-200 shadow-lg hover:shadow-xl"
                                 >
                                     تحديث الحالة
                                 </button>
@@ -411,41 +412,41 @@ const AdminHackathonRegistrations = () => {
                 </div>
             )}
 
-            {/* Enhanced View Modal */}
+            {/* Simple View Modal */}
             {showViewModal && selectedRegistration && (
-                <div className="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm z-50 flex items-center justify-center p-4" dir="rtl">
-                    <div className="bg-white rounded-2xl shadow-2xl border border-white/20 w-full max-w-2xl max-h-[90vh] overflow-y-auto">
+                <div className="absolute inset-0 bg-black/50 z-50 flex items-center justify-center p-4" dir="rtl">
+                    <div className="bg-white rounded-lg shadow-lg w-full max-w-2xl mx-auto max-h-[80vh] overflow-y-auto">
                         {/* Modal Header */}
-                        <div className="px-6 py-4 border-b border-gray-200/50 bg-gradient-to-r from-pink-500/10 to-orange-500/10 sticky top-0 z-10 modal-header-enhanced">
+                        <div className="px-6 py-4 border-b border-gray-200 bg-gradient-to-r from-teal-50 to-navy-50">
                             <div className="flex items-center justify-between">
                                 <div className="flex items-center space-x-3 rtl:space-x-reverse">
-                                    <div className="w-12 h-12 bg-gradient-to-br from-pink-500 to-orange-500 rounded-xl flex items-center justify-center">
-                                        <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <div className="w-10 h-10 bg-gradient-to-br from-teal-500 to-navy-500 rounded-lg flex items-center justify-center shadow-lg">
+                                        <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                                         </svg>
                                     </div>
                                     <div>
-                                        <h3 className="text-xl font-bold bg-gradient-to-r from-pink-500 to-orange-500 bg-clip-text text-transparent">
+                                        <h3 className="text-lg font-semibold bg-gradient-to-r from-teal-600 to-navy-600 bg-clip-text text-transparent">
                                             تفاصيل تسجيل الهاكثون
                                         </h3>
                                         <p className="text-sm text-gray-600">معلومات شاملة عن المتسجل</p>
                                     </div>
                                 </div>
-                            <button
-                                onClick={() => setShowViewModal(false)}
-                                    className="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-lg transition-all duration-200 modal-close-enhanced"
-                            >
-                                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                                </svg>
-                            </button>
-                        </div>
+                                <button
+                                    onClick={() => setShowViewModal(false)}
+                                    className="p-2 text-gray-400 hover:text-teal-500 hover:bg-teal-50 rounded-lg transition-colors duration-200"
+                                >
+                                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                                    </svg>
+                                </button>
+                            </div>
                         </div>
 
                         {/* Modal Body */}
-                        <div className="p-6 space-y-6 modal-body-enhanced">
+                        <div className="px-6 py-4 space-y-4">
                             {/* Personal Information Grid */}
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 {/* Name */}
                                 <div className="space-y-2 modal-field-enter">
                                     <label className="block text-sm font-semibold text-gray-700 flex items-center space-x-2 rtl:space-x-reverse">
@@ -562,11 +563,11 @@ const AdminHackathonRegistrations = () => {
                         </div>
 
                         {/* Modal Footer */}
-                        <div className="px-6 py-4 border-t border-gray-200/50 bg-gray-50/50 rounded-b-2xl modal-footer-enhanced">
+                        <div className="px-6 py-4 border-t border-gray-200 bg-gradient-to-r from-gray-50 to-teal-50">
                             <div className="flex justify-end">
                                 <button
                                     onClick={() => setShowViewModal(false)}
-                                    className="px-6 py-3 bg-gradient-to-r from-pink-500 to-orange-500 text-white rounded-xl hover:from-pink-600 hover:to-orange-600 transition-all duration-200 font-medium shadow-lg hover:shadow-xl transform hover:scale-105 modal-button-enhanced"
+                                    className="px-4 py-2 bg-gradient-to-r from-teal-500 to-navy-500 text-white rounded-md hover:from-teal-600 hover:to-navy-600 transition-all duration-200 shadow-lg hover:shadow-xl"
                                 >
                                     إغلاق
                                 </button>

@@ -31,15 +31,17 @@ export const AuthProvider = ({ children }) => {
                 if (response.ok) {
                     const data = await response.json();
                     setUser(data.data.user);
-                    setToken(token);
+                    setToken('session');
                 } else {
                     setUser(null);
                     setToken(null);
+                    localStorage.removeItem('token');
                 }
             } catch (error) {
                 console.error('Auth initialization error:', error);
                 setUser(null);
                 setToken(null);
+                localStorage.removeItem('token');
             }
             setLoading(false);
         };
@@ -147,6 +149,7 @@ export const AuthProvider = ({ children }) => {
         } finally {
             setToken(null);
             setUser(null);
+            localStorage.removeItem('token');
         }
     };
 
@@ -155,7 +158,7 @@ export const AuthProvider = ({ children }) => {
     };
 
     const isAuthenticated = () => {
-        return !!user && !!token;
+        return !!user && (!!token || token === 'session');
     };
 
     const value = {

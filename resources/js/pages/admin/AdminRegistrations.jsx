@@ -301,16 +301,16 @@ const AdminRegistrations = () => {
                                                 {new Date(registration.date).toLocaleDateString('en-US')}
                                             </td>
                                             <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                                                <div className="table-action-buttons">
+                                                <div className="admin-btn-container">
                                                     <button
                                                         type="button"
                                                         onClick={() => {
                                                             setSelectedRegistration(registration);
                                                             setShowViewModal(true);
                                                         }}
-                                                        className="table-action-button view"
+                                                        className="admin-btn-view"
                                                     >
-                                                        <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
                                                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
                                                         </svg>
@@ -354,87 +354,111 @@ const AdminRegistrations = () => {
 
             {/* View Modal */}
             {showViewModal && selectedRegistration && (
-                <div className="view-modal" dir={language === 'ar' ? 'rtl' : 'ltr'}>
-                    <div className="view-modal-content">
-                        <div className="view-modal-header">
-                            <h3 className="view-modal-title">
-                                {language === 'ar' ? 'تفاصيل التسجيل' : 'Registration Details'}
-                            </h3>
-                            <button
-                                onClick={() => setShowViewModal(false)}
-                                className="view-modal-close"
-                            >
-                                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                                </svg>
-                            </button>
+                <div className="absolute inset-0 bg-black/50 z-50 flex items-center justify-center p-4" dir={language === 'ar' ? 'rtl' : 'ltr'}>
+                    <div className="bg-white rounded-lg shadow-lg w-full max-w-2xl mx-auto max-h-[80vh] overflow-y-auto">
+                        <div className="px-6 py-4 border-b border-gray-200 bg-gradient-to-r from-teal-50 to-navy-50">
+                            <div className="flex items-center justify-between">
+                                <div className="flex items-center space-x-3 rtl:space-x-reverse">
+                                    <div className="w-10 h-10 bg-gradient-to-br from-teal-500 to-navy-500 rounded-lg flex items-center justify-center shadow-lg">
+                                        <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                                        </svg>
+                                    </div>
+                                    <div>
+                                        <h3 className="text-lg font-semibold bg-gradient-to-r from-teal-600 to-navy-600 bg-clip-text text-transparent">
+                                            {language === 'ar' ? 'تفاصيل التسجيل' : 'Registration Details'}
+                                        </h3>
+                                        <p className="text-sm text-gray-600">{language === 'ar' ? 'معلومات شاملة عن المتسجل' : 'Complete registration information'}</p>
+                                    </div>
+                                </div>
+                                <button
+                                    onClick={() => setShowViewModal(false)}
+                                    className="p-2 text-gray-400 hover:text-teal-500 hover:bg-teal-50 rounded-lg transition-colors duration-200"
+                                >
+                                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                                    </svg>
+                                </button>
+                            </div>
                         </div>
-                        <div className="view-modal-body">
-                            <div className="view-modal-field">
-                                <label className="view-modal-label">
-                                    {language === 'ar' ? 'الاسم' : 'Name'}
-                                </label>
-                                <div className="view-modal-value">
-                                    {selectedRegistration.name}
+                        <div className="px-6 py-4 space-y-4">
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div className="space-y-2">
+                                    <label className="block text-sm font-medium text-gray-700">
+                                        {language === 'ar' ? 'الاسم' : 'Name'}
+                                    </label>
+                                    <div className="p-3 bg-gray-50 rounded-md border border-gray-200">
+                                        {selectedRegistration.name}
+                                    </div>
                                 </div>
-                            </div>
-                            <div className="view-modal-field">
-                                <label className="view-modal-label">
-                                    {language === 'ar' ? 'البريد الإلكتروني' : 'Email'}
-                                </label>
-                                <div className="view-modal-value">
-                                    {selectedRegistration.email}
+                                <div className="space-y-2">
+                                    <label className="block text-sm font-medium text-gray-700">
+                                        {language === 'ar' ? 'البريد الإلكتروني' : 'Email'}
+                                    </label>
+                                    <div className="p-3 bg-gray-50 rounded-md border border-gray-200">
+                                        {selectedRegistration.email}
+                                    </div>
                                 </div>
-                            </div>
-                            <div className="view-modal-field">
-                                <label className="view-modal-label">
-                                    {language === 'ar' ? 'الهاتف' : 'Phone'}
-                                </label>
-                                <div className="view-modal-value">
-                                    {selectedRegistration.phone}
+                                <div className="space-y-2">
+                                    <label className="block text-sm font-medium text-gray-700">
+                                        {language === 'ar' ? 'الهاتف' : 'Phone'}
+                                    </label>
+                                    <div className="p-3 bg-gray-50 rounded-md border border-gray-200">
+                                        {selectedRegistration.phone}
+                                    </div>
                                 </div>
-                            </div>
-                            <div className="view-modal-field">
-                                <label className="view-modal-label">
-                                    {language === 'ar' ? 'النوع' : 'Type'}
-                                </label>
-                                <div className="view-modal-value">
-                                    <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
-                                        selectedRegistration.type === 'Hackathon' ? 'bg-indigo-100 text-indigo-800' :
-                                        selectedRegistration.type === 'Workshop' ? 'bg-green-100 text-green-800' :
-                                        'bg-orange-100 text-orange-800'
-                                    }`}>
-                                        {selectedRegistration.type}
-                                    </span>
-                                </div>
-                            </div>
-                            <div className="view-modal-field">
-                                <label className="view-modal-label">
-                                    {language === 'ar' ? 'المهارات' : 'Skills'}
-                                </label>
-                                <div className="view-modal-value">
-                                    {selectedRegistration.skills && selectedRegistration.skills.length > 0 ? (
-                                        <div className="view-modal-skills">
-                                            {selectedRegistration.skills.map((skill, index) => (
-                                                <span key={index} className="view-modal-skill">
-                                                    {skill}
-                                                </span>
-                                            ))}
-                                        </div>
-                                    ) : (
-                                        <span className="text-gray-400">
-                                            {language === 'ar' ? 'لا توجد مهارات' : 'No skills'}
+                                <div className="space-y-2">
+                                    <label className="block text-sm font-medium text-gray-700">
+                                        {language === 'ar' ? 'النوع' : 'Type'}
+                                    </label>
+                                    <div className="p-3 bg-gray-50 rounded-md border border-gray-200">
+                                        <span className={`inline-flex px-3 py-1 text-sm font-medium rounded-full ${
+                                            selectedRegistration.type === 'Hackathon' ? 'bg-gradient-to-r from-pink-100 to-orange-100 text-pink-800 border border-pink-300' :
+                                            selectedRegistration.type === 'Workshop' ? 'bg-gradient-to-r from-teal-100 to-navy-100 text-teal-800 border border-teal-300' :
+                                            'bg-gradient-to-r from-orange-100 to-pink-100 text-orange-800 border border-orange-300'
+                                        }`}>
+                                            {selectedRegistration.type}
                                         </span>
-                                    )}
+                                    </div>
+                                </div>
+                                <div className="space-y-2">
+                                    <label className="block text-sm font-medium text-gray-700">
+                                        {language === 'ar' ? 'المهارات' : 'Skills'}
+                                    </label>
+                                    <div className="p-3 bg-gray-50 rounded-md border border-gray-200">
+                                        {selectedRegistration.skills && selectedRegistration.skills.length > 0 ? (
+                                            <div className="flex flex-wrap gap-2">
+                                                {selectedRegistration.skills.map((skill, index) => (
+                                                    <span key={index} className="px-2 py-1 bg-gradient-to-r from-teal-100 to-navy-100 text-teal-800 text-xs font-medium rounded-full border border-teal-300">
+                                                        {skill}
+                                                    </span>
+                                                ))}
+                                            </div>
+                                        ) : (
+                                            <span className="text-gray-400">
+                                                {language === 'ar' ? 'لا توجد مهارات' : 'No skills'}
+                                            </span>
+                                        )}
+                                    </div>
+                                </div>
+                                <div className="space-y-2">
+                                    <label className="block text-sm font-medium text-gray-700">
+                                        {language === 'ar' ? 'تاريخ التسجيل' : 'Registration Date'}
+                                    </label>
+                                    <div className="p-3 bg-gray-50 rounded-md border border-gray-200">
+                                        {new Date(selectedRegistration.date).toLocaleDateString('en-US')}
+                                    </div>
                                 </div>
                             </div>
-                            <div className="view-modal-field">
-                                <label className="view-modal-label">
-                                    {language === 'ar' ? 'تاريخ التسجيل' : 'Registration Date'}
-                                </label>
-                                <div className="view-modal-value">
-                                    {new Date(selectedRegistration.date).toLocaleDateString('en-US')}
-                                </div>
+                        </div>
+                        <div className="px-6 py-4 border-t border-gray-200 bg-gradient-to-r from-gray-50 to-teal-50">
+                            <div className="flex justify-end">
+                                <button
+                                    onClick={() => setShowViewModal(false)}
+                                    className="px-4 py-2 bg-gradient-to-r from-teal-500 to-navy-500 text-white rounded-md hover:from-teal-600 hover:to-navy-600 transition-all duration-200 shadow-lg hover:shadow-xl"
+                                >
+                                    {language === 'ar' ? 'إغلاق' : 'Close'}
+                                </button>
                             </div>
                         </div>
                     </div>
