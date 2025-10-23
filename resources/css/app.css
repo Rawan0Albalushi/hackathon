@@ -1,5 +1,5 @@
-@import 'tailwindcss';
 @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@100;200;300;400;500;600;700&display=swap');
+@import 'tailwindcss';
 
 @source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
 @source '../../storage/framework/views/*.php';
@@ -2051,6 +2051,1809 @@
 
 .text-hover-clean:hover {
     color: var(--color-orange);
+}
+
+/* ===== ADMIN TABLE FIXES ===== */
+
+/* Fix table layout issues */
+.admin-table-container {
+    width: 100%;
+    overflow: hidden;
+    border-radius: 0.75rem;
+    background: white;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+    transition: all 0.3s ease;
+    min-height: 200px;
+    position: relative;
+}
+
+/* RTL Support for Tables */
+.admin-table-container[dir="rtl"] {
+    direction: rtl;
+}
+
+.admin-table-container[dir="rtl"] table {
+    direction: rtl;
+}
+
+.admin-table-container[dir="rtl"] th,
+.admin-table-container[dir="rtl"] td {
+    text-align: right;
+}
+
+.admin-table-container[dir="rtl"] .table-pagination {
+    direction: rtl;
+}
+
+.admin-table-container[dir="rtl"] .table-pagination-controls {
+    flex-direction: row-reverse;
+}
+
+/* Enhanced RTL table support */
+.admin-table-container[dir="rtl"] .table-wrapper {
+    direction: rtl;
+}
+
+.admin-table-container[dir="rtl"] .table-wrapper table {
+    direction: rtl;
+}
+
+.admin-table-container[dir="rtl"] .table-wrapper th,
+.admin-table-container[dir="rtl"] .table-wrapper td {
+    text-align: right;
+    padding-right: 1.5rem;
+    padding-left: 1.5rem;
+}
+
+/* RTL pagination buttons */
+.admin-table-container[dir="rtl"] .table-pagination-button {
+    margin-left: 0.25rem;
+    margin-right: 0.25rem;
+}
+
+.admin-table-container[dir="rtl"] .table-pagination-button:first-child {
+    margin-right: 0;
+}
+
+.admin-table-container[dir="rtl"] .table-pagination-button:last-child {
+    margin-left: 0;
+}
+
+/* RTL table content alignment */
+.admin-table-container[dir="rtl"] .justify-end {
+    justify-content: flex-start;
+}
+
+.admin-table-container[dir="rtl"] .justify-start {
+    justify-content: flex-end;
+}
+
+/* Action buttons styling */
+.table-action-buttons {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+}
+
+.table-action-button {
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.375rem;
+    font-size: 0.75rem;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    cursor: pointer !important;
+    border: 1px solid transparent;
+    position: relative;
+    z-index: 10;
+    pointer-events: auto !important;
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+}
+
+.table-action-button.view {
+    background-color: #3b82f6;
+    color: white;
+    border-color: #3b82f6;
+}
+
+.table-action-button.view:hover {
+    background-color: #2563eb;
+    border-color: #2563eb;
+    transform: translateY(-1px);
+    box-shadow: 0 2px 4px rgba(59, 130, 246, 0.3);
+}
+
+.table-action-button.edit {
+    background-color: #10b981;
+    color: white;
+    border-color: #10b981;
+}
+
+.table-action-button.edit:hover {
+    background-color: #059669;
+    border-color: #059669;
+    transform: translateY(-1px);
+    box-shadow: 0 2px 4px rgba(16, 185, 129, 0.3);
+}
+
+.table-action-button.delete {
+    background-color: #ef4444;
+    color: white;
+    border-color: #ef4444;
+}
+
+.table-action-button.delete:hover {
+    background-color: #dc2626;
+    border-color: #dc2626;
+    transform: translateY(-1px);
+    box-shadow: 0 2px 4px rgba(239, 68, 68, 0.3);
+}
+
+/* RTL support for action buttons */
+.admin-table-container[dir="rtl"] .table-action-buttons {
+    flex-direction: row-reverse;
+}
+
+/* Fix button clickability issues */
+.table-action-button:active {
+    transform: scale(0.98);
+}
+
+.table-action-button:focus {
+    outline: 2px solid #3b82f6;
+    outline-offset: 2px;
+}
+
+.table-action-button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed !important;
+    pointer-events: none !important;
+}
+
+/* Ensure buttons are clickable */
+.table-action-button * {
+    pointer-events: none;
+}
+
+/* Force button clickability */
+button.table-action-button {
+    cursor: pointer !important;
+    pointer-events: auto !important;
+    position: relative;
+    z-index: 1000;
+}
+
+button.table-action-button:not(:disabled) {
+    cursor: pointer !important;
+    pointer-events: auto !important;
+}
+
+/* Override any conflicting styles */
+.admin-table-container button {
+    cursor: pointer !important;
+    pointer-events: auto !important;
+}
+
+/* Additional button fixes */
+button[type="button"] {
+    cursor: pointer !important;
+    pointer-events: auto !important;
+}
+
+/* Ensure no overlay blocking buttons */
+.admin-table-container td {
+    position: relative;
+    z-index: 1;
+}
+
+.admin-table-container .table-action-buttons {
+    position: relative;
+    z-index: 10;
+}
+
+/* Fix any potential CSS conflicts */
+.table-action-button {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 0.25rem !important;
+}
+
+/* Force button interaction */
+.table-action-button:not(:disabled):not([disabled]) {
+    cursor: pointer !important;
+    pointer-events: auto !important;
+    user-select: none !important;
+    -webkit-user-select: none !important;
+    -moz-user-select: none !important;
+    -ms-user-select: none !important;
+}
+
+/* Remove any potential blocking */
+.table-action-button * {
+    pointer-events: none !important;
+}
+
+/* Ensure buttons are always clickable */
+button.table-action-button {
+    position: relative !important;
+    z-index: 1000 !important;
+    cursor: pointer !important;
+    pointer-events: auto !important;
+}
+
+/* Fix for any potential form submission issues */
+button[type="button"].table-action-button {
+    cursor: pointer !important;
+    pointer-events: auto !important;
+}
+
+/* Specific fixes for admin pages */
+.admin-table-container button {
+    cursor: pointer !important;
+    pointer-events: auto !important;
+    position: relative !important;
+    z-index: 1000 !important;
+}
+
+/* Force button clickability in all admin tables */
+.admin-table-container .table-action-button {
+    cursor: pointer !important;
+    pointer-events: auto !important;
+    position: relative !important;
+    z-index: 1000 !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+}
+
+/* Override any potential blocking */
+.admin-table-container .table-action-button:not(:disabled) {
+    cursor: pointer !important;
+    pointer-events: auto !important;
+    user-select: none !important;
+    -webkit-user-select: none !important;
+    -moz-user-select: none !important;
+    -ms-user-select: none !important;
+}
+
+/* Ensure SVG icons don't block clicks */
+.admin-table-container .table-action-button svg {
+    pointer-events: none !important;
+}
+
+/* Ultimate button fix */
+button.table-action-button,
+button[type="button"].table-action-button,
+.admin-table-container button.table-action-button {
+    cursor: pointer !important;
+    pointer-events: auto !important;
+    position: relative !important;
+    z-index: 1000 !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 0.25rem !important;
+    border: 1px solid transparent !important;
+    outline: none !important;
+    font-family: inherit !important;
+    font-size: 0.75rem !important;
+    line-height: 1.5 !important;
+    text-decoration: none !important;
+    text-align: center !important;
+    vertical-align: middle !important;
+    user-select: none !important;
+    -webkit-user-select: none !important;
+    -moz-user-select: none !important;
+    -ms-user-select: none !important;
+    -webkit-appearance: none !important;
+    -moz-appearance: none !important;
+    appearance: none !important;
+    padding: 0.25rem 0.5rem !important;
+    border-radius: 0.375rem !important;
+    font-weight: 500 !important;
+    transition: all 0.2s ease !important;
+}
+
+/* Force button states */
+button.table-action-button:active,
+button.table-action-button:focus,
+button.table-action-button:hover {
+    cursor: pointer !important;
+    pointer-events: auto !important;
+    outline: none !important;
+}
+
+/* Remove any potential form interference */
+.admin-table-container form {
+    display: contents !important;
+}
+
+.admin-table-container table {
+    position: relative !important;
+    z-index: 1 !important;
+}
+
+.admin-table-container td {
+    position: relative !important;
+    z-index: 1 !important;
+}
+
+.table-action-button:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+/* Button colors */
+.table-action-button.view {
+    background-color: #3b82f6 !important;
+    color: white !important;
+    border-color: #3b82f6 !important;
+}
+
+.table-action-button.view:hover {
+    background-color: #2563eb !important;
+    border-color: #2563eb !important;
+    transform: translateY(-1px);
+    box-shadow: 0 2px 4px rgba(59, 130, 246, 0.3);
+}
+
+.table-action-button.edit {
+    background-color: #10b981 !important;
+    color: white !important;
+    border-color: #10b981 !important;
+}
+
+.table-action-button.edit:hover {
+    background-color: #059669 !important;
+    border-color: #059669 !important;
+    transform: translateY(-1px);
+    box-shadow: 0 2px 4px rgba(16, 185, 129, 0.3);
+}
+
+/* Fix any potential overlay issues */
+.admin-table-container .table-action-buttons {
+    position: relative;
+    z-index: 100;
+    display: flex !important;
+    gap: 0.5rem !important;
+    align-items: center !important;
+}
+
+.admin-table-container .table-action-buttons * {
+    position: relative;
+    z-index: 101;
+}
+
+/* Force button visibility */
+.table-action-button {
+    visibility: visible !important;
+    opacity: 1 !important;
+    display: inline-flex !important;
+    width: auto !important;
+    height: auto !important;
+    min-width: auto !important;
+    min-height: auto !important;
+}
+
+/* Ensure buttons are not hidden */
+.admin-table-container .table-action-button {
+    visibility: visible !important;
+    opacity: 1 !important;
+    display: inline-flex !important;
+    width: auto !important;
+    height: auto !important;
+    min-width: auto !important;
+    min-height: auto !important;
+}
+
+/* Override any potential hiding */
+.admin-table-container button {
+    display: inline-flex !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+}
+
+/* Force button display */
+button.table-action-button {
+    display: inline-flex !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    width: auto !important;
+    height: auto !important;
+    min-width: auto !important;
+    min-height: auto !important;
+    max-width: none !important;
+    max-height: none !important;
+}
+
+/* Remove any potential CSS that might hide buttons */
+.admin-table-container * {
+    box-sizing: border-box !important;
+}
+
+.admin-table-container .table-action-buttons button {
+    display: inline-flex !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    width: auto !important;
+    height: auto !important;
+    min-width: auto !important;
+    min-height: auto !important;
+    max-width: none !important;
+    max-height: none !important;
+}
+
+/* View Modal Styling */
+.view-modal {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    width: 100vw !important;
+    height: 100vh !important;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999 !important;
+    padding: 1rem;
+    margin: 0 !important;
+    overflow: auto;
+}
+
+/* Enhanced Modal Overlay - Force Full Screen */
+.modal-backdrop-enhanced {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    width: 100vw !important;
+    height: 100vh !important;
+    z-index: 9999 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    overflow: auto !important;
+}
+
+/* Modal Content Container */
+.modal-content-enhanced {
+    position: relative !important;
+    z-index: 10000 !important;
+    max-height: 90vh !important;
+    overflow-y: auto !important;
+    margin: auto !important;
+}
+
+/* Force Modal to Break Out of Any Container */
+.admin-table-container .modal-backdrop-enhanced,
+.admin-table-container .view-modal,
+.admin-table-container .modal-content-enhanced {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    width: 100vw !important;
+    height: 100vh !important;
+    z-index: 9999 !important;
+    transform: none !important;
+    margin: 0 !important;
+    padding: 1rem !important;
+}
+
+/* Ensure Modal Content is Not Constrained */
+.modal-content-enhanced {
+    max-width: 90vw !important;
+    max-height: 90vh !important;
+    overflow-y: auto !important;
+    position: relative !important;
+    z-index: 10000 !important;
+}
+
+/* Override Any Container Constraints */
+.admin-table-container {
+    overflow: visible !important;
+    position: relative !important;
+}
+
+.admin-table-container .table-wrapper {
+    overflow: visible !important;
+}
+
+/* Force Modal to Appear Above Everything */
+.modal-backdrop-enhanced,
+.view-modal {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    width: 100vw !important;
+    height: 100vh !important;
+    z-index: 99999 !important;
+    background: rgba(0, 0, 0, 0.5) !important;
+    backdrop-filter: blur(8px) !important;
+    -webkit-backdrop-filter: blur(8px) !important;
+    margin: 0 !important;
+    padding: 1rem !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+}
+
+/* Modal Content Positioning */
+.modal-content-enhanced {
+    position: relative !important;
+    z-index: 100000 !important;
+    max-width: 90vw !important;
+    max-height: 90vh !important;
+    overflow-y: auto !important;
+    margin: 0 !important;
+    transform: none !important;
+}
+
+/* Mobile Responsive Modal */
+@media (max-width: 768px) {
+    .modal-backdrop-enhanced,
+    .view-modal {
+        padding: 0.5rem !important;
+    }
+    
+    .modal-content-enhanced {
+        max-width: 95vw !important;
+        max-height: 90vh !important;
+        width: 95vw !important;
+    }
+    
+    .view-modal .modal-content-enhanced {
+        max-width: 95vw !important;
+        width: 95vw !important;
+        max-height: 90vh !important;
+    }
+    
+    .modal-backdrop-enhanced .modal-content-enhanced {
+        max-width: 95vw !important;
+        width: 95vw !important;
+        max-height: 85vh !important;
+    }
+}
+
+/* Tablet Responsive Modal */
+@media (min-width: 769px) and (max-width: 1024px) {
+    .modal-content-enhanced {
+        max-width: 80vw !important;
+        width: 80vw !important;
+        max-height: 85vh !important;
+    }
+    
+    .view-modal .modal-content-enhanced {
+        max-width: 85vw !important;
+        width: 85vw !important;
+        max-height: 90vh !important;
+    }
+    
+    .modal-backdrop-enhanced .modal-content-enhanced {
+        max-width: 70vw !important;
+        width: 70vw !important;
+        max-height: 80vh !important;
+    }
+}
+
+/* Ultimate Modal Fix - Break Out of Any Container */
+.modal-backdrop-enhanced,
+.view-modal {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    width: 100vw !important;
+    height: 100vh !important;
+    max-width: 100vw !important;
+    max-height: 100vh !important;
+    z-index: 999999 !important;
+    background: rgba(0, 0, 0, 0.5) !important;
+    backdrop-filter: blur(8px) !important;
+    -webkit-backdrop-filter: blur(8px) !important;
+    margin: 0 !important;
+    padding: 1rem !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    overflow: hidden !important;
+    box-sizing: border-box !important;
+}
+
+/* Force Modal Content to be Visible */
+.modal-content-enhanced {
+    position: relative !important;
+    z-index: 1000000 !important;
+    max-width: 500px !important;
+    width: 100% !important;
+    max-height: 80vh !important;
+    overflow-y: auto !important;
+    margin: 0 !important;
+    transform: none !important;
+    background: white !important;
+    border-radius: 1rem !important;
+    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15) !important;
+}
+
+/* View Modal Specific Sizing */
+.view-modal .modal-content-enhanced {
+    max-width: 600px !important;
+    width: 100% !important;
+    max-height: 85vh !important;
+}
+
+/* Status Update Modal Specific Sizing */
+.modal-backdrop-enhanced .modal-content-enhanced {
+    max-width: 450px !important;
+    width: 100% !important;
+    max-height: 75vh !important;
+}
+
+/* Override Any Parent Container */
+* {
+    overflow: visible !important;
+}
+
+.admin-table-container,
+.table-wrapper,
+.admin-table-container table {
+    overflow: visible !important;
+    position: relative !important;
+}
+
+/* Ensure Modal is Always on Top */
+.modal-backdrop-enhanced,
+.view-modal {
+    z-index: 999999 !important;
+}
+
+.modal-content-enhanced {
+    z-index: 1000000 !important;
+}
+
+/* Modal Container - Match Table Container */
+.admin-table-container .modal-backdrop-enhanced,
+.admin-table-container .view-modal {
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    z-index: 999999 !important;
+    background: rgba(0, 0, 0, 0.5) !important;
+    backdrop-filter: blur(8px) !important;
+    -webkit-backdrop-filter: blur(8px) !important;
+    margin: 0 !important;
+    padding: 1rem !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    overflow: auto !important;
+}
+
+/* Force Modal to Appear Above Everything - Only when not in table container */
+.modal-backdrop-enhanced:not(.admin-table-container .modal-backdrop-enhanced),
+.view-modal:not(.admin-table-container .view-modal) {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    width: 100vw !important;
+    height: 100vh !important;
+    z-index: 999999 !important;
+    background: rgba(0, 0, 0, 0.5) !important;
+    backdrop-filter: blur(8px) !important;
+    -webkit-backdrop-filter: blur(8px) !important;
+    margin: 0 !important;
+    padding: 1rem !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    overflow: auto !important;
+}
+
+/* Table Container Modal - Match Table Width */
+.admin-table-container {
+    position: relative !important;
+    overflow: visible !important;
+}
+
+.admin-table-container .modal-backdrop-enhanced,
+.admin-table-container .view-modal {
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    z-index: 999999 !important;
+    background: rgba(0, 0, 0, 0.5) !important;
+    backdrop-filter: blur(8px) !important;
+    -webkit-backdrop-filter: blur(8px) !important;
+    margin: 0 !important;
+    padding: 1rem !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    overflow: auto !important;
+}
+
+/* Ensure Modal is Centered and Properly Sized */
+.modal-backdrop-enhanced .modal-content-enhanced,
+.view-modal .modal-content-enhanced {
+    position: relative !important;
+    z-index: 1000000 !important;
+    margin: auto !important;
+    transform: none !important;
+    background: white !important;
+    border-radius: 1rem !important;
+    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15) !important;
+    overflow-y: auto !important;
+}
+
+/* Fix Backdrop Size - Ensure it doesn't exceed screen size */
+.modal-backdrop-enhanced,
+.view-modal {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    width: 100vw !important;
+    height: 100vh !important;
+    max-width: 100vw !important;
+    max-height: 100vh !important;
+    z-index: 999999 !important;
+    background: rgba(0, 0, 0, 0.5) !important;
+    backdrop-filter: blur(8px) !important;
+    -webkit-backdrop-filter: blur(8px) !important;
+    margin: 0 !important;
+    padding: 1rem !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    overflow: hidden !important;
+    box-sizing: border-box !important;
+}
+
+/* Prevent backdrop from expanding beyond viewport */
+html, body {
+    overflow-x: hidden !important;
+    max-width: 100vw !important;
+}
+
+/* Ensure modal backdrop is contained within viewport */
+.modal-backdrop-enhanced *,
+.view-modal * {
+    max-width: 100vw !important;
+    max-height: 100vh !important;
+    box-sizing: border-box !important;
+}
+
+/* Ultimate Backdrop Fix - Prevent Oversized Background */
+.modal-backdrop-enhanced,
+.view-modal {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    width: 100vw !important;
+    height: 100vh !important;
+    max-width: 100vw !important;
+    max-height: 100vh !important;
+    z-index: 999999 !important;
+    background: rgba(0, 0, 0, 0.5) !important;
+    backdrop-filter: blur(8px) !important;
+    -webkit-backdrop-filter: blur(8px) !important;
+    margin: 0 !important;
+    padding: 1rem !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    overflow: hidden !important;
+    box-sizing: border-box !important;
+    contain: layout style paint !important;
+    transform: none !important;
+    scale: 1 !important;
+}
+
+/* Prevent any element from causing backdrop overflow */
+.modal-backdrop-enhanced::before,
+.modal-backdrop-enhanced::after,
+.view-modal::before,
+.view-modal::after {
+    display: none !important;
+}
+
+/* Force backdrop to stay within viewport bounds */
+.modal-backdrop-enhanced,
+.view-modal {
+    clip-path: inset(0) !important;
+    clip: rect(0, 100vw, 100vh, 0) !important;
+}
+
+/* Perfect Modal Centering - Fix Left/Right Asymmetry */
+.modal-backdrop-enhanced,
+.view-modal {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    width: 100vw !important;
+    height: 100vh !important;
+    max-width: 100vw !important;
+    max-height: 100vh !important;
+    z-index: 999999 !important;
+    background: rgba(0, 0, 0, 0.5) !important;
+    backdrop-filter: blur(8px) !important;
+    -webkit-backdrop-filter: blur(8px) !important;
+    margin: 0 !important;
+    padding: 1rem !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    overflow: hidden !important;
+    box-sizing: border-box !important;
+    contain: layout style paint !important;
+    transform: none !important;
+    scale: 1 !important;
+}
+
+/* Ensure Modal Content is Perfectly Centered */
+.modal-content-enhanced {
+    position: relative !important;
+    z-index: 1000000 !important;
+    margin: 0 auto !important;
+    transform: none !important;
+    background: white !important;
+    border-radius: 1rem !important;
+    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15) !important;
+    overflow-y: auto !important;
+    max-width: 90vw !important;
+    max-height: 90vh !important;
+    width: 100% !important;
+    display: block !important;
+    left: 50% !important;
+    top: 50% !important;
+    transform: translate(-50%, -50%) !important;
+}
+
+/* Remove any potential scrollbars */
+html, body {
+    overflow-x: hidden !important;
+    max-width: 100vw !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+/* Ensure no horizontal scroll */
+* {
+    box-sizing: border-box !important;
+}
+
+/* Fix any potential RTL issues */
+[dir="rtl"] .modal-backdrop-enhanced,
+[dir="rtl"] .view-modal {
+    direction: ltr !important;
+}
+
+[dir="rtl"] .modal-content-enhanced {
+    direction: rtl !important;
+}
+
+/* Enhanced Modal Styles - Full Screen Coverage */
+.fixed.inset-0 {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    width: 100vw !important;
+    height: 100vh !important;
+    z-index: 9999 !important;
+    background: rgba(0, 0, 0, 0.5) !important;
+    backdrop-filter: blur(8px) !important;
+    -webkit-backdrop-filter: blur(8px) !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    margin: 0 !important;
+    padding: 1rem !important;
+    overflow: hidden !important;
+    box-sizing: border-box !important;
+}
+
+/* Modal Content Styling */
+.bg-white.rounded-2xl {
+    background: white !important;
+    border-radius: 1rem !important;
+    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15) !important;
+    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+    position: relative !important;
+    z-index: 10000 !important;
+    max-width: 90vw !important;
+    max-height: 90vh !important;
+    overflow-y: auto !important;
+    margin: 0 !important;
+    transform: none !important;
+}
+
+/* Force Modal to Break Out of Any Container */
+.admin-table-container .fixed.inset-0 {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    width: 100vw !important;
+    height: 100vh !important;
+    z-index: 9999 !important;
+    z-index: 9999 !important;
+    background: rgba(0, 0, 0, 0.5) !important;
+    backdrop-filter: blur(8px) !important;
+    -webkit-backdrop-filter: blur(8px) !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    margin: 0 !important;
+    padding: 1rem !important;
+    overflow: hidden !important;
+    box-sizing: border-box !important;
+}
+
+/* Ensure Modal Appears Above Everything */
+.fixed.inset-0 {
+    z-index: 9999 !important;
+}
+
+.bg-white.rounded-2xl {
+    z-index: 10000 !important;
+}
+
+/* Remove any container constraints */
+.admin-table-container {
+    overflow: visible !important;
+    position: relative !important;
+}
+
+.admin-table-container .table-wrapper {
+    overflow: visible !important;
+}
+
+.view-modal {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    width: 100vw !important;
+    height: 100vh !important;
+    margin: 0 !important;
+    padding: 1rem !important;
+    z-index: 999999 !important;
+    background: rgba(0, 0, 0, 0.5) !important;
+    backdrop-filter: blur(8px) !important;
+    -webkit-backdrop-filter: blur(8px) !important;
+    overflow: hidden !important;
+    box-sizing: border-box !important;
+}
+
+/* Modal Content Perfect Centering */
+.modal-content-enhanced {
+    position: relative !important;
+    z-index: 1000000 !important;
+    margin: 0 !important;
+    transform: none !important;
+    background: white !important;
+    border-radius: 1rem !important;
+    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15) !important;
+    overflow-y: auto !important;
+    max-width: 500px !important;
+    width: 100% !important;
+    max-height: 80vh !important;
+    display: block !important;
+}
+
+/* Remove any potential positioning issues */
+.modal-backdrop-enhanced .modal-content-enhanced,
+.view-modal .modal-content-enhanced {
+    position: relative !important;
+    margin: 0 auto !important;
+    transform: none !important;
+    left: auto !important;
+    top: auto !important;
+    right: auto !important;
+    bottom: auto !important;
+}
+
+/* View Modal Specific Sizing */
+.view-modal .modal-content-enhanced {
+    max-width: 600px !important;
+    width: 100% !important;
+    max-height: 85vh !important;
+}
+
+/* Status Update Modal Specific Sizing */
+.modal-backdrop-enhanced .modal-content-enhanced {
+    max-width: 450px !important;
+    width: 100% !important;
+    max-height: 75vh !important;
+}
+
+.view-modal-content {
+    background: white;
+    border-radius: 0.75rem;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    max-width: 600px;
+    width: 100%;
+    max-height: 90vh;
+    overflow-y: auto;
+}
+
+.view-modal-header {
+    padding: 1.5rem;
+    border-bottom: 1px solid #e5e7eb;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.view-modal-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #111827;
+}
+
+.view-modal-close {
+    background: none;
+    border: none;
+    color: #6b7280;
+    cursor: pointer;
+    padding: 0.5rem;
+    border-radius: 0.375rem;
+    transition: all 0.2s ease;
+}
+
+.view-modal-close:hover {
+    background: #f3f4f6;
+    color: #374151;
+}
+
+.view-modal-body {
+    padding: 1.5rem;
+}
+
+.view-modal-field {
+    margin-bottom: 1rem;
+}
+
+.view-modal-label {
+    font-weight: 500;
+    color: #374151;
+    margin-bottom: 0.25rem;
+    display: block;
+}
+
+.view-modal-value {
+    color: #6b7280;
+    background: #f9fafb;
+    padding: 0.5rem 0.75rem;
+    border-radius: 0.375rem;
+    border: 1px solid #e5e7eb;
+}
+
+.view-modal-skills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.view-modal-skill {
+    background: #dbeafe;
+    color: #1e40af;
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.375rem;
+    font-size: 0.75rem;
+    font-weight: 500;
+}
+
+.view-modal-status {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.25rem 0.75rem;
+    border-radius: 9999px;
+    font-size: 0.75rem;
+    font-weight: 500;
+}
+
+.view-modal-status.pending {
+    background: #fef3c7;
+    color: #92400e;
+}
+
+.view-modal-status.approved {
+    background: #d1fae5;
+    color: #065f46;
+}
+
+.view-modal-status.rejected {
+    background: #fee2e2;
+    color: #991b1b;
+}
+
+/* RTL Support for Modal */
+.view-modal[dir="rtl"] .view-modal-header {
+    flex-direction: row-reverse;
+}
+
+.view-modal[dir="rtl"] .view-modal-skills {
+    flex-direction: row-reverse;
+}
+
+.admin-table-container table {
+    width: 100%;
+    table-layout: fixed;
+    border-collapse: collapse;
+    min-width: 100%;
+}
+
+.admin-table-container thead {
+    background: #f8fafc;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+.admin-table-container th,
+.admin-table-container td {
+    padding: 0.75rem 1rem;
+    text-align: left;
+    border-bottom: 1px solid #e5e7eb;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.admin-table-container th {
+    font-weight: 600;
+    font-size: 0.875rem;
+    color: #374151;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.admin-table-container tbody tr {
+    transition: all 0.2s ease;
+}
+
+.admin-table-container tbody tr:hover {
+    background-color: #f9fafb;
+}
+
+/* Fix table animation issues */
+.table-fade-in {
+    opacity: 0;
+    transform: translateY(20px);
+    animation: tableFadeIn 0.4s ease-out forwards;
+    width: 100%;
+    min-width: 100%;
+    table-layout: fixed;
+}
+
+@keyframes tableFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Prevent table distortion during loading */
+.admin-table-container table {
+    width: 100% !important;
+    min-width: 100% !important;
+    table-layout: fixed !important;
+    border-collapse: collapse !important;
+}
+
+/* Ensure proper table dimensions from start */
+.admin-table-container {
+    width: 100% !important;
+    min-width: 100% !important;
+    display: block !important;
+}
+
+.admin-table-container .table-wrapper {
+    width: 100% !important;
+    min-width: 100% !important;
+    display: block !important;
+}
+
+/* Ensure proper table dimensions */
+.table-wrapper {
+    width: 100%;
+    overflow-x: auto;
+    border-radius: 0.75rem;
+    background: white;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    position: relative;
+    display: block;
+}
+
+/* Force table to maintain proper dimensions */
+.table-wrapper table {
+    width: 100% !important;
+    min-width: 100% !important;
+    table-layout: fixed !important;
+    border-collapse: collapse !important;
+    display: table !important;
+}
+
+/* Prevent layout shift during table loading */
+.admin-table-container {
+    position: relative;
+    overflow: hidden;
+}
+
+.admin-table-container::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: white;
+    z-index: 1;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.admin-table-container.loading::before {
+    opacity: 1;
+}
+
+.table-wrapper::-webkit-scrollbar {
+    height: 6px;
+}
+
+.table-wrapper::-webkit-scrollbar-track {
+    background: #f1f5f9;
+    border-radius: 3px;
+}
+
+.table-wrapper::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 3px;
+}
+
+.table-wrapper::-webkit-scrollbar-thumb:hover {
+    background: #94a3b8;
+}
+
+/* Fix table loading state */
+.table-loading {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 200px;
+    background: white;
+    border-radius: 0.75rem;
+}
+
+.table-loading-spinner {
+    width: 2rem;
+    height: 2rem;
+    border: 3px solid #f3f4f6;
+    border-top: 3px solid #3b82f6;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+/* Fix table empty state */
+.table-empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 200px;
+    background: white;
+    border-radius: 0.75rem;
+    color: #6b7280;
+}
+
+.table-empty-icon {
+    width: 3rem;
+    height: 3rem;
+    color: #d1d5db;
+    margin-bottom: 1rem;
+}
+
+/* Responsive table fixes */
+@media (max-width: 768px) {
+    .admin-table-container th,
+    .admin-table-container td {
+        padding: 0.5rem 0.75rem;
+        font-size: 0.875rem;
+    }
+    
+    .admin-table-container th {
+        font-size: 0.75rem;
+    }
+}
+
+/* Fix table pagination */
+.table-pagination {
+    display: flex;
+    align-items: center;
+    justify-content: between;
+    padding: 1rem;
+    background: white;
+    border-top: 1px solid #e5e7eb;
+    border-radius: 0 0 0.75rem 0.75rem;
+}
+
+.table-pagination-info {
+    color: #6b7280;
+    font-size: 0.875rem;
+}
+
+.table-pagination-controls {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.table-pagination-button {
+    padding: 0.5rem 0.75rem;
+    border: 1px solid #d1d5db;
+    background: white;
+    color: #374151;
+    border-radius: 0.375rem;
+    font-size: 0.875rem;
+    transition: all 0.2s ease;
+    cursor: pointer;
+}
+
+.table-pagination-button:hover:not(:disabled) {
+    background: #f9fafb;
+    border-color: #9ca3af;
+}
+
+.table-pagination-button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.table-pagination-button.active {
+    background: #3b82f6;
+    color: white;
+    border-color: #3b82f6;
+}
+
+/* ===== ENHANCED MODAL ANIMATIONS ===== */
+
+/* Modal Entrance Animations */
+@keyframes modalSlideIn {
+    from {
+        opacity: 0;
+        transform: translateY(-50px) scale(0.9);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+@keyframes modalFadeIn {
+    from {
+        opacity: 0;
+        transform: scale(0.8);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+@keyframes modalSlideUp {
+    from {
+        opacity: 0;
+        transform: translateY(50px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes modalBounceIn {
+    0% {
+        opacity: 0;
+        transform: scale(0.3);
+    }
+    50% {
+        opacity: 1;
+        transform: scale(1.05);
+    }
+    70% {
+        transform: scale(0.9);
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+/* Modal Animation Classes */
+.modal-enter {
+    animation: modalSlideIn 0.4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+.modal-fade-enter {
+    animation: modalFadeIn 0.3s ease-out forwards;
+}
+
+.modal-slide-up {
+    animation: modalSlideUp 0.4s ease-out forwards;
+}
+
+.modal-bounce-enter {
+    animation: modalBounceIn 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards;
+}
+
+/* Enhanced Modal Backdrop */
+.modal-backdrop-enhanced {
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    animation: backdropFadeIn 0.3s ease-out forwards;
+}
+
+@keyframes backdropFadeIn {
+    from {
+        opacity: 0;
+        backdrop-filter: blur(0px);
+        -webkit-backdrop-filter: blur(0px);
+    }
+    to {
+        opacity: 1;
+        backdrop-filter: blur(8px);
+        -webkit-backdrop-filter: blur(8px);
+    }
+}
+
+/* Modal Content Enhancements */
+.modal-content-enhanced {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 
+        0 25px 50px rgba(0, 0, 0, 0.15),
+        0 0 0 1px rgba(255, 255, 255, 0.05);
+    position: relative;
+    overflow: hidden;
+}
+
+.modal-content-enhanced::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, #F4A321, #D85584, #096289, #003C72);
+    background-size: 200% 100%;
+    animation: gradientShift 3s ease infinite;
+}
+
+@keyframes gradientShift {
+    0% {
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
+/* Modal Header Enhancements */
+.modal-header-enhanced {
+    background: linear-gradient(135deg, rgba(244, 163, 33, 0.1) 0%, rgba(216, 85, 132, 0.1) 100%);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    position: relative;
+}
+
+.modal-header-enhanced::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(244, 163, 33, 0.3), transparent);
+}
+
+/* Modal Body Enhancements */
+.modal-body-enhanced {
+    position: relative;
+    z-index: 2;
+}
+
+/* Modal Field Animations */
+.modal-field-enter {
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fieldSlideIn 0.4s ease-out forwards;
+}
+
+@keyframes fieldSlideIn {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.modal-field-enter:nth-child(1) { animation-delay: 0.1s; }
+.modal-field-enter:nth-child(2) { animation-delay: 0.2s; }
+.modal-field-enter:nth-child(3) { animation-delay: 0.3s; }
+.modal-field-enter:nth-child(4) { animation-delay: 0.4s; }
+
+/* Enhanced Input Focus Effects */
+.modal-input-enhanced {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+}
+
+.modal-input-enhanced:focus {
+    transform: scale(1.02);
+    box-shadow: 
+        0 0 0 3px rgba(244, 163, 33, 0.1),
+        0 4px 12px rgba(244, 163, 33, 0.15);
+}
+
+.modal-input-enhanced::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(45deg, transparent, rgba(244, 163, 33, 0.05), transparent);
+    border-radius: inherit;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+}
+
+.modal-input-enhanced:focus::before {
+    opacity: 1;
+}
+
+/* Status Badge Animations */
+.status-badge-animated {
+    position: relative;
+    overflow: hidden;
+}
+
+.status-badge-animated::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+    transition: left 0.6s ease;
+}
+
+.status-badge-animated:hover::before {
+    left: 100%;
+}
+
+/* Skills Tag Animations */
+.skill-tag-animated {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+}
+
+.skill-tag-animated:hover {
+    transform: translateY(-2px) scale(1.05);
+    box-shadow: 0 4px 12px rgba(244, 163, 33, 0.2);
+}
+
+.skill-tag-animated::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+    transition: left 0.5s ease;
+}
+
+.skill-tag-animated:hover::before {
+    left: 100%;
+}
+
+/* Modal Button Enhancements */
+.modal-button-enhanced {
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.modal-button-enhanced::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.6s ease;
+}
+
+.modal-button-enhanced:hover::before {
+    left: 100%;
+}
+
+.modal-button-enhanced:hover {
+    transform: translateY(-2px) scale(1.02);
+    box-shadow: 0 8px 25px rgba(244, 163, 33, 0.3);
+}
+
+/* Modal Close Button */
+.modal-close-enhanced {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+}
+
+.modal-close-enhanced::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    background: rgba(239, 68, 68, 0.1);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    transition: width 0.3s ease, height 0.3s ease;
+}
+
+.modal-close-enhanced:hover::before {
+    width: 100%;
+    height: 100%;
+}
+
+.modal-close-enhanced:hover {
+    transform: scale(1.1);
+    color: #ef4444;
+}
+
+/* Modal Footer Enhancements */
+.modal-footer-enhanced {
+    background: linear-gradient(135deg, rgba(248, 250, 252, 0.8) 0%, rgba(241, 245, 249, 0.8) 100%);
+    border-top: 1px solid rgba(255, 255, 255, 0.2);
+    position: relative;
+}
+
+.modal-footer-enhanced::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(244, 163, 33, 0.3), transparent);
+}
+
+/* Responsive Modal Enhancements */
+@media (max-width: 768px) {
+    .modal-content-enhanced {
+        margin: 1rem;
+        max-width: calc(100vw - 2rem);
+        max-height: calc(100vh - 2rem);
+    }
+    
+    .modal-header-enhanced {
+        padding: 1rem;
+    }
+    
+    .modal-body-enhanced {
+        padding: 1rem;
+    }
+    
+    .modal-footer-enhanced {
+        padding: 1rem;
+    }
+}
+
+/* Modal Loading States */
+.modal-loading {
+    position: relative;
+    overflow: hidden;
+}
+
+.modal-loading::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+    animation: loadingShimmer 1.5s infinite;
+}
+
+@keyframes loadingShimmer {
+    0% {
+        left: -100%;
+    }
+    100% {
+        left: 100%;
+    }
+}
+
+/* Modal Success Animation */
+.modal-success {
+    animation: successPulse 0.6s ease-out;
+}
+
+@keyframes successPulse {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.05);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
+/* Modal Error Animation */
+.modal-error {
+    animation: errorShake 0.5s ease-out;
+}
+
+@keyframes errorShake {
+    0%, 100% {
+        transform: translateX(0);
+    }
+    25% {
+        transform: translateX(-5px);
+    }
+    75% {
+        transform: translateX(5px);
+    }
 }
 
 /* ===== ORGANIZED NAVIGATION LAYOUT ===== */

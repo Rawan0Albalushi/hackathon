@@ -10,6 +10,7 @@ const AdminConferenceRegistrations = () => {
     const [totalPages, setTotalPages] = useState(1);
     const [selectedRegistration, setSelectedRegistration] = useState(null);
     const [showStatusModal, setShowStatusModal] = useState(false);
+    const [showViewModal, setShowViewModal] = useState(false);
     const [newStatus, setNewStatus] = useState('');
     const [rejectionReason, setRejectionReason] = useState('');
 
@@ -116,8 +117,11 @@ const AdminConferenceRegistrations = () => {
 
     if (loading) {
         return (
-            <div className="flex items-center justify-center h-64">
-                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+            <div className="admin-table-container">
+                <div className="table-loading">
+                    <div className="table-loading-spinner"></div>
+                    <p className="mt-4 text-gray-600">جاري التحميل...</p>
+                </div>
             </div>
         );
     }
@@ -162,32 +166,33 @@ const AdminConferenceRegistrations = () => {
                     )}
 
                     {/* Registrations Table */}
-                    <div className="overflow-x-auto">
-                        <table className="min-w-full divide-y divide-gray-200">
+                    <div className="admin-table-container" dir="rtl">
+                        <div className="table-wrapper">
+                            <table className="table-fade-in">
                             <thead className="bg-gray-50">
                                 <tr>
-                                    <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    <th className="px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">
                                         الاسم
                                     </th>
-                                    <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    <th className="px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">
                                         البريد الإلكتروني
                                     </th>
-                                    <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    <th className="px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">
                                         الهاتف
                                     </th>
-                                    <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    <th className="px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">
                                         المؤسسة
                                     </th>
-                                    <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    <th className="px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">
                                         الجلسة المختارة
                                     </th>
-                                    <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    <th className="px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">
                                         الحالة
                                     </th>
-                                    <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    <th className="px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">
                                         تاريخ التسجيل
                                     </th>
-                                    <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    <th className="px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">
                                         الإجراءات
                                     </th>
                                 </tr>
@@ -217,57 +222,83 @@ const AdminConferenceRegistrations = () => {
                                             {formatDate(registration.created_at)}
                                         </td>
                                         <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                                            <button
-                                                onClick={() => {
-                                                    setSelectedRegistration(registration);
-                                                    setNewStatus(registration.status);
-                                                    setShowStatusModal(true);
-                                                }}
-                                                className="text-blue-600 hover:text-blue-900"
-                                            >
-                                                تحديث الحالة
-                                            </button>
+                                            <div className="table-action-buttons">
+                                                <button
+                                                    type="button"
+                                                    onClick={(e) => {
+                                                        e.preventDefault();
+                                                        e.stopPropagation();
+                                                        console.log('View button clicked:', registration);
+                                                        setSelectedRegistration(registration);
+                                                        setShowViewModal(true);
+                                                    }}
+                                                    className="table-action-button view"
+                                                >
+                                                    <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                                                    </svg>
+                                                    عرض
+                                                </button>
+                                                <button
+                                                    type="button"
+                                                    onClick={(e) => {
+                                                        e.preventDefault();
+                                                        e.stopPropagation();
+                                                        console.log('Edit button clicked:', registration);
+                                                        setSelectedRegistration(registration);
+                                                        setNewStatus(registration.status);
+                                                        setShowStatusModal(true);
+                                                    }}
+                                                    className="table-action-button edit"
+                                                >
+                                                    <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                                                    </svg>
+                                                    تحديث
+                                                </button>
+                                            </div>
                                         </td>
                                     </tr>
                                 ))}
                             </tbody>
                         </table>
-                    </div>
-
-                    {/* Pagination */}
-                    {totalPages > 1 && (
-                        <div className="mt-6 flex justify-center">
-                            <nav className="relative z-0 inline-flex rounded-md shadow-sm -space-x-px">
-                                <button
-                                    onClick={() => setCurrentPage(Math.max(1, currentPage - 1))}
-                                    disabled={currentPage === 1}
-                                    className="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 disabled:opacity-50"
-                                >
-                                    السابق
-                                </button>
-                                {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
-                                    <button
-                                        key={page}
-                                        onClick={() => setCurrentPage(page)}
-                                        className={`relative inline-flex items-center px-4 py-2 border text-sm font-medium ${
-                                            page === currentPage
-                                                ? 'z-10 bg-blue-50 border-blue-500 text-blue-600'
-                                                : 'bg-white border-gray-300 text-gray-500 hover:bg-gray-50'
-                                        }`}
-                                    >
-                                        {page}
-                                    </button>
-                                ))}
-                                <button
-                                    onClick={() => setCurrentPage(Math.min(totalPages, currentPage + 1))}
-                                    disabled={currentPage === totalPages}
-                                    className="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 disabled:opacity-50"
-                                >
-                                    التالي
-                                </button>
-                            </nav>
                         </div>
-                    )}
+
+                        {/* Pagination */}
+                        {totalPages > 1 && (
+                            <div className="table-pagination">
+                                <div className="table-pagination-info">
+                                    صفحة {currentPage} من {totalPages}
+                                </div>
+                                <div className="table-pagination-controls">
+                                    <button
+                                        onClick={() => setCurrentPage(Math.max(1, currentPage - 1))}
+                                        disabled={currentPage === 1}
+                                        className="table-pagination-button"
+                                    >
+                                        السابق
+                                    </button>
+                                    {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+                                        <button
+                                            key={page}
+                                            onClick={() => setCurrentPage(page)}
+                                            className={`table-pagination-button ${page === currentPage ? 'active' : ''}`}
+                                        >
+                                            {page}
+                                        </button>
+                                    ))}
+                                    <button
+                                        onClick={() => setCurrentPage(Math.min(totalPages, currentPage + 1))}
+                                        disabled={currentPage === totalPages}
+                                        className="table-pagination-button"
+                                    >
+                                        التالي
+                                    </button>
+                                </div>
+                            </div>
+                        )}
+                    </div>
                 </div>
             </div>
 
@@ -316,6 +347,60 @@ const AdminConferenceRegistrations = () => {
                                 >
                                     تحديث
                                 </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {/* View Modal */}
+            {showViewModal && selectedRegistration && (
+                <div className="view-modal" dir="rtl">
+                    <div className="view-modal-content">
+                        <div className="view-modal-header">
+                            <h3 className="view-modal-title">تفاصيل تسجيل المؤتمر</h3>
+                            <button
+                                onClick={() => setShowViewModal(false)}
+                                className="view-modal-close"
+                            >
+                                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                                </svg>
+                            </button>
+                        </div>
+                        <div className="view-modal-body">
+                            <div className="view-modal-field">
+                                <label className="view-modal-label">الاسم</label>
+                                <div className="view-modal-value">{selectedRegistration.full_name}</div>
+                            </div>
+                            <div className="view-modal-field">
+                                <label className="view-modal-label">البريد الإلكتروني</label>
+                                <div className="view-modal-value">{selectedRegistration.email}</div>
+                            </div>
+                            <div className="view-modal-field">
+                                <label className="view-modal-label">الهاتف</label>
+                                <div className="view-modal-value">{selectedRegistration.phone}</div>
+                            </div>
+                            <div className="view-modal-field">
+                                <label className="view-modal-label">المؤسسة</label>
+                                <div className="view-modal-value">{selectedRegistration.organization || 'غير محدد'}</div>
+                            </div>
+                            <div className="view-modal-field">
+                                <label className="view-modal-label">الجلسة المختارة</label>
+                                <div className="view-modal-value">{getSessionText(selectedRegistration.session_choice)}</div>
+                            </div>
+                            <div className="view-modal-field">
+                                <label className="view-modal-label">الحالة</label>
+                                <div className="view-modal-value">
+                                    <span className={`view-modal-status ${selectedRegistration.status}`}>
+                                        {selectedRegistration.status === 'pending' ? 'قيد المراجعة' :
+                                         selectedRegistration.status === 'approved' ? 'مقبول' : 'مرفوض'}
+                                    </span>
+                                </div>
+                            </div>
+                            <div className="view-modal-field">
+                                <label className="view-modal-label">تاريخ التسجيل</label>
+                                <div className="view-modal-value">{formatDate(selectedRegistration.created_at)}</div>
                             </div>
                         </div>
                     </div>

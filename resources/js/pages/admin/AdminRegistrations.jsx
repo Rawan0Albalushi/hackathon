@@ -15,6 +15,8 @@ const AdminRegistrations = () => {
     const [totalPages, setTotalPages] = useState(1);
     const [total, setTotal] = useState(0);
     const perPage = 10;
+    const [selectedRegistration, setSelectedRegistration] = useState(null);
+    const [showViewModal, setShowViewModal] = useState(false);
 
     // Debounce search term
     useEffect(() => {
@@ -102,9 +104,9 @@ const AdminRegistrations = () => {
 
     if (loading && registrations.length === 0) {
         return (
-            <div className="p-6 h-full flex items-center justify-center">
-                <div className="text-center">
-                    <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-500 mx-auto"></div>
+            <div className="admin-table-container">
+                <div className="table-loading">
+                    <div className="table-loading-spinner"></div>
                     <p className="mt-4 text-gray-600">
                         {language === 'ar' ? 'جاري التحميل...' : 'Loading...'}
                     </p>
@@ -115,8 +117,8 @@ const AdminRegistrations = () => {
 
     if (error) {
         return (
-            <div className="p-6 h-full flex items-center justify-center">
-                <div className="text-center">
+            <div className="admin-table-container">
+                <div className="table-empty">
                     <div className="text-red-500 text-lg mb-4">{error}</div>
                     <button 
                         onClick={fetchRegistrations}
@@ -217,13 +219,13 @@ const AdminRegistrations = () => {
             </div>
 
             {/* Registrations Table */}
-            <div className="bg-white rounded-xl shadow-lg border border-gray-200/50 overflow-hidden">
+            <div className="admin-table-container" dir={language === 'ar' ? 'rtl' : 'ltr'}>
                 {registrations.length === 0 && !loading ? (
-                    <div className="text-center py-12">
-                        <svg className="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <div className="table-empty">
+                        <svg className="table-empty-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                         </svg>
-                        <h3 className="mt-2 text-sm font-medium text-gray-900">
+                        <h3 className="text-sm font-medium text-gray-900">
                             {language === 'ar' ? 'لا توجد نتائج' : 'No results found'}
                         </h3>
                         <p className="mt-1 text-sm text-gray-500">
@@ -232,43 +234,46 @@ const AdminRegistrations = () => {
                     </div>
                 ) : (
                     <>
-                        <div className="overflow-x-auto">
-                            <table className="min-w-full divide-y divide-gray-200">
+                        <div className="table-wrapper">
+                            <table className="table-fade-in">
                                 <thead className="bg-gray-50">
                                     <tr>
-                                        <th className={`px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider ${language === 'ar' ? 'text-right' : 'text-left'}`}>
+                                        <th className="px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">
                                             {language === 'ar' ? 'الاسم' : 'Name'}
                                         </th>
-                                        <th className={`px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider ${language === 'ar' ? 'text-right' : 'text-left'}`}>
+                                        <th className="px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">
                                             {language === 'ar' ? 'البريد الإلكتروني' : 'Email'}
                                         </th>
-                                        <th className={`px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider ${language === 'ar' ? 'text-right' : 'text-left'}`}>
+                                        <th className="px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">
                                             {language === 'ar' ? 'الهاتف' : 'Phone'}
                                         </th>
-                                        <th className={`px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider ${language === 'ar' ? 'text-right' : 'text-left'}`}>
+                                        <th className="px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">
                                             {language === 'ar' ? 'النوع' : 'Type'}
                                         </th>
-                                        <th className={`px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider ${language === 'ar' ? 'text-right' : 'text-left'}`}>
+                                        <th className="px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">
                                             {language === 'ar' ? 'المهارات' : 'Skills'}
                                         </th>
-                                        <th className={`px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider ${language === 'ar' ? 'text-right' : 'text-left'}`}>
+                                        <th className="px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">
                                             {language === 'ar' ? 'التاريخ' : 'Date'}
+                                        </th>
+                                        <th className="px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                            {language === 'ar' ? 'الإجراءات' : 'Actions'}
                                         </th>
                                     </tr>
                                 </thead>
                                 <tbody className="bg-white divide-y divide-gray-200">
                                     {registrations.map((registration) => (
                                         <tr key={registration.id} className="hover:bg-gray-50">
-                                            <td className={`px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 ${language === 'ar' ? 'text-right' : 'text-left'}`}>
+                                            <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
                                                 {registration.name}
                                             </td>
-                                            <td className={`px-6 py-4 whitespace-nowrap text-sm text-gray-500 ${language === 'ar' ? 'text-right' : 'text-left'}`}>
+                                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                                                 {registration.email}
                                             </td>
-                                            <td className={`px-6 py-4 whitespace-nowrap text-sm text-gray-500 ${language === 'ar' ? 'text-right' : 'text-left'}`}>
+                                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                                                 {registration.phone}
                                             </td>
-                                            <td className={`px-6 py-4 whitespace-nowrap ${language === 'ar' ? 'text-right' : 'text-left'}`}>
+                                            <td className="px-6 py-4 whitespace-nowrap">
                                                 <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
                                                     registration.type === 'Hackathon' ? 'bg-indigo-100 text-indigo-800' :
                                                     registration.type === 'Workshop' ? 'bg-green-100 text-green-800' :
@@ -277,9 +282,9 @@ const AdminRegistrations = () => {
                                                     {registration.type}
                                                 </span>
                                             </td>
-                                            <td className={`px-6 py-4 whitespace-nowrap text-sm text-gray-500 ${language === 'ar' ? 'text-right' : 'text-left'}`}>
+                                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                                                 {registration.skills ? (
-                                                    <div className="flex flex-wrap gap-1">
+                                                    <div className={`flex flex-wrap gap-1 ${language === 'ar' ? 'justify-end' : 'justify-start'}`}>
                                                         {registration.skills.map((skill, index) => (
                                                             <span key={`${registration.id}-skill-${index}`} className="inline-flex px-2 py-1 text-xs font-medium bg-blue-100 text-blue-800 rounded-full">
                                                                 {skill}
@@ -292,8 +297,26 @@ const AdminRegistrations = () => {
                                                     </span>
                                                 )}
                                             </td>
-                                            <td className={`px-6 py-4 whitespace-nowrap text-sm text-gray-500 ${language === 'ar' ? 'text-right' : 'text-left'}`}>
+                                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                                                 {new Date(registration.date).toLocaleDateString('en-US')}
+                                            </td>
+                                            <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                                                <div className="table-action-buttons">
+                                                    <button
+                                                        type="button"
+                                                        onClick={() => {
+                                                            setSelectedRegistration(registration);
+                                                            setShowViewModal(true);
+                                                        }}
+                                                        className="table-action-button view"
+                                                    >
+                                                        <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                                                        </svg>
+                                                        {language === 'ar' ? 'عرض' : 'View'}
+                                                    </button>
+                                                </div>
                                             </td>
                                         </tr>
                                     ))}
@@ -303,53 +326,120 @@ const AdminRegistrations = () => {
 
                         {/* Pagination */}
                         {totalPages > 1 && (
-                            <div className="bg-white px-4 py-3 flex items-center justify-between border-t border-gray-200 sm:px-6">
-                                <div className="flex-1 flex justify-between sm:hidden">
+                            <div className="table-pagination">
+                                <div className="table-pagination-info">
+                                    {language === 'ar' ? 'عرض' : 'Showing'} <span className="font-medium">{(currentPage - 1) * perPage + 1}</span> {language === 'ar' ? 'إلى' : 'to'} <span className="font-medium">{Math.min(currentPage * perPage, total)}</span> {language === 'ar' ? 'من' : 'of'} <span className="font-medium">{total}</span> {language === 'ar' ? 'نتيجة' : 'results'}
+                                </div>
+                                <div className="table-pagination-controls">
                                     <button
                                         onClick={() => handlePageChange(currentPage - 1)}
                                         disabled={currentPage === 1}
-                                        className="relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+                                        className="table-pagination-button"
                                     >
                                         {language === 'ar' ? 'السابق' : 'Previous'}
                                     </button>
                                     <button
                                         onClick={() => handlePageChange(currentPage + 1)}
                                         disabled={currentPage === totalPages}
-                                        className="ml-3 relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+                                        className="table-pagination-button"
                                     >
                                         {language === 'ar' ? 'التالي' : 'Next'}
                                     </button>
-                                </div>
-                                <div className="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
-                                    <div>
-                                        <p className="text-sm text-gray-700">
-                                            {language === 'ar' ? 'عرض' : 'Showing'} <span className="font-medium">{(currentPage - 1) * perPage + 1}</span> {language === 'ar' ? 'إلى' : 'to'} <span className="font-medium">{Math.min(currentPage * perPage, total)}</span> {language === 'ar' ? 'من' : 'of'} <span className="font-medium">{total}</span> {language === 'ar' ? 'نتيجة' : 'results'}
-                                        </p>
-                                    </div>
-                                    <div>
-                                        <nav className="relative z-0 inline-flex rounded-md shadow-sm -space-x-px">
-                                            <button
-                                                onClick={() => handlePageChange(currentPage - 1)}
-                                                disabled={currentPage === 1}
-                                                className="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
-                                            >
-                                                {language === 'ar' ? 'السابق' : 'Previous'}
-                                            </button>
-                                            <button
-                                                onClick={() => handlePageChange(currentPage + 1)}
-                                                disabled={currentPage === totalPages}
-                                                className="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
-                                            >
-                                                {language === 'ar' ? 'التالي' : 'Next'}
-                                            </button>
-                                        </nav>
-                                    </div>
                                 </div>
                             </div>
                         )}
                     </>
                 )}
             </div>
+
+            {/* View Modal */}
+            {showViewModal && selectedRegistration && (
+                <div className="view-modal" dir={language === 'ar' ? 'rtl' : 'ltr'}>
+                    <div className="view-modal-content">
+                        <div className="view-modal-header">
+                            <h3 className="view-modal-title">
+                                {language === 'ar' ? 'تفاصيل التسجيل' : 'Registration Details'}
+                            </h3>
+                            <button
+                                onClick={() => setShowViewModal(false)}
+                                className="view-modal-close"
+                            >
+                                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                                </svg>
+                            </button>
+                        </div>
+                        <div className="view-modal-body">
+                            <div className="view-modal-field">
+                                <label className="view-modal-label">
+                                    {language === 'ar' ? 'الاسم' : 'Name'}
+                                </label>
+                                <div className="view-modal-value">
+                                    {selectedRegistration.name}
+                                </div>
+                            </div>
+                            <div className="view-modal-field">
+                                <label className="view-modal-label">
+                                    {language === 'ar' ? 'البريد الإلكتروني' : 'Email'}
+                                </label>
+                                <div className="view-modal-value">
+                                    {selectedRegistration.email}
+                                </div>
+                            </div>
+                            <div className="view-modal-field">
+                                <label className="view-modal-label">
+                                    {language === 'ar' ? 'الهاتف' : 'Phone'}
+                                </label>
+                                <div className="view-modal-value">
+                                    {selectedRegistration.phone}
+                                </div>
+                            </div>
+                            <div className="view-modal-field">
+                                <label className="view-modal-label">
+                                    {language === 'ar' ? 'النوع' : 'Type'}
+                                </label>
+                                <div className="view-modal-value">
+                                    <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
+                                        selectedRegistration.type === 'Hackathon' ? 'bg-indigo-100 text-indigo-800' :
+                                        selectedRegistration.type === 'Workshop' ? 'bg-green-100 text-green-800' :
+                                        'bg-orange-100 text-orange-800'
+                                    }`}>
+                                        {selectedRegistration.type}
+                                    </span>
+                                </div>
+                            </div>
+                            <div className="view-modal-field">
+                                <label className="view-modal-label">
+                                    {language === 'ar' ? 'المهارات' : 'Skills'}
+                                </label>
+                                <div className="view-modal-value">
+                                    {selectedRegistration.skills && selectedRegistration.skills.length > 0 ? (
+                                        <div className="view-modal-skills">
+                                            {selectedRegistration.skills.map((skill, index) => (
+                                                <span key={index} className="view-modal-skill">
+                                                    {skill}
+                                                </span>
+                                            ))}
+                                        </div>
+                                    ) : (
+                                        <span className="text-gray-400">
+                                            {language === 'ar' ? 'لا توجد مهارات' : 'No skills'}
+                                        </span>
+                                    )}
+                                </div>
+                            </div>
+                            <div className="view-modal-field">
+                                <label className="view-modal-label">
+                                    {language === 'ar' ? 'تاريخ التسجيل' : 'Registration Date'}
+                                </label>
+                                <div className="view-modal-value">
+                                    {new Date(selectedRegistration.date).toLocaleDateString('en-US')}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     );
 };
