@@ -34,6 +34,7 @@ Route::middleware(['web', 'auth:web'])->group(function () {
     
     // User registration status routes
     Route::get('/user/registrations', [UserRegistrationController::class, 'getMyRegistrations']);
+    Route::get('/user/hackathon-status', [UserRegistrationController::class, 'getHackathonStatus']);
     Route::get('/user/workshops', [UserRegistrationController::class, 'getAvailableWorkshops']);
     
     // Admin API routes (admin only)
@@ -48,6 +49,23 @@ Route::middleware(['web', 'auth:web'])->group(function () {
         
         // Update registration status
         Route::put('/admin/registrations/{type}/{id}/status', [AdminController::class, 'updateRegistrationStatus']);
+        
+        // Alternative POST route for testing
+        Route::post('/admin/registrations/{type}/{id}/status', [AdminController::class, 'updateRegistrationStatus']);
+        
+        // Test route for debugging
+        Route::get('/admin/test', function() {
+            return response()->json(['success' => true, 'message' => 'Admin test route works']);
+        });
+        
+        // Test PUT route for debugging
+        Route::put('/admin/test-put', function(Request $request) {
+            return response()->json([
+                'success' => true, 
+                'message' => 'Admin PUT test route works',
+                'data' => $request->all()
+            ]);
+        });
         
         // Workshop management
         Route::get('/admin/workshops', [AdminController::class, 'getWorkshops']);

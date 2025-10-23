@@ -17,7 +17,20 @@ class AdminMiddleware
     {
         $user = $request->user();
         
+        \Log::info('Admin middleware check', [
+            'user_id' => $user?->id,
+            'user_role' => $user?->role,
+            'is_admin' => $user?->isAdmin(),
+            'url' => $request->url(),
+            'method' => $request->method()
+        ]);
+        
         if (!$user || !$user->isAdmin()) {
+            \Log::warning('Admin access denied', [
+                'user_id' => $user?->id,
+                'user_role' => $user?->role,
+                'url' => $request->url()
+            ]);
             return response()->json([
                 'success' => false,
                 'message' => 'Access denied. Admin privileges required.'

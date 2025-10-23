@@ -40,6 +40,26 @@ class UserRegistrationController extends Controller
         }
     }
 
+    public function getHackathonStatus(Request $request): JsonResponse
+    {
+        try {
+            $user = $request->user();
+            
+            $hackathonRegistration = HackathonRegistration::where('user_id', $user->id)->first();
+
+            return response()->json([
+                'success' => true,
+                'data' => $hackathonRegistration
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to fetch hackathon status',
+                'error' => $e->getMessage()
+            ], 500);
+        }
+    }
+
     public function getAvailableWorkshops(Request $request): JsonResponse
     {
         try {

@@ -354,8 +354,29 @@ class AdminController extends Controller
     public function updateRegistrationStatus(Request $request, $type, $id): JsonResponse
     {
         try {
+            \Log::info('Admin status update request', [
+                'type' => $type,
+                'id' => $id,
+                'status' => $request->input('status'),
+                'rejection_reason' => $request->input('rejection_reason'),
+                'user_id' => auth()->id(),
+                'user_role' => auth()->user()?->role,
+                'method' => $request->method(),
+                'url' => $request->url(),
+                'headers' => $request->headers->all()
+            ]);
+
             $status = $request->input('status');
             $rejection_reason = $request->input('rejection_reason');
+
+            // التحقق من صحة البيانات
+            if (!$status) {
+                \Log::error('No status provided', ['request_data' => $request->all()]);
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Status is required'
+                ], 400);
+            }
 
             $model = null;
             switch ($type) {
@@ -369,11 +390,22 @@ class AdminController extends Controller
                     $model = WorkshopRegistration::findOrFail($id);
                     break;
                 default:
+                    \Log::error('Invalid registration type', ['type' => $type]);
                     return response()->json([
                         'success' => false,
                         'message' => 'Invalid registration type'
                     ], 400);
             }
+
+            if (!$model) {
+                \Log::error('Model not found', ['type' => $type, 'id' => $id]);
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Registration not found'
+                ], 404);
+            }
+
+            \Log::info('Found model', ['model_id' => $model->id, 'current_status' => $model->status]);
 
             $model->status = $status;
             if ($status === 'rejected' && $rejection_reason) {
@@ -381,7 +413,19 @@ class AdminController extends Controller
             } else {
                 $model->rejection_reason = null;
             }
-            $model->save();
+            if (!$model->save()) {
+                \Log::error('Failed to save model', ['model_id' => $model->id]);
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Failed to save registration status'
+                ], 500);
+            }
+
+            \Log::info('Status updated successfully', [
+                'model_id' => $model->id,
+                'new_status' => $model->status,
+                'rejection_reason' => $model->rejection_reason
+            ]);
 
             return response()->json([
                 'success' => true,
@@ -389,6 +433,12 @@ class AdminController extends Controller
                 'data' => $model
             ]);
         } catch (\Exception $e) {
+            \Log::error('Failed to update registration status', [
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString(),
+                'type' => $type,
+                'id' => $id
+            ]);
             return response()->json([
                 'success' => false,
                 'message' => 'Failed to update registration status',

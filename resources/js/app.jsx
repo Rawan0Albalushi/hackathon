@@ -44,6 +44,13 @@ const App = () => {
                                 </Layout>
                             </ProtectedRoute>
                         } />
+                        <Route path="/hackathon-registration" element={
+                            <ProtectedRoute>
+                                <Layout>
+                                    <HackathonRegistration />
+                                </Layout>
+                            </ProtectedRoute>
+                        } />
                         <Route path="/workshop" element={
                             <ProtectedRoute>
                                 <Layout>
@@ -51,7 +58,21 @@ const App = () => {
                                 </Layout>
                             </ProtectedRoute>
                         } />
+                        <Route path="/workshop-registration" element={
+                            <ProtectedRoute>
+                                <Layout>
+                                    <WorkshopRegistration />
+                                </Layout>
+                            </ProtectedRoute>
+                        } />
                         <Route path="/conference" element={
+                            <ProtectedRoute>
+                                <Layout>
+                                    <ConferenceRegistration />
+                                </Layout>
+                            </ProtectedRoute>
+                        } />
+                        <Route path="/conference-registration" element={
                             <ProtectedRoute>
                                 <Layout>
                                     <ConferenceRegistration />

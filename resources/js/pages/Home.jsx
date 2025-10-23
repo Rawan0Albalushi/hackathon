@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useLanguage } from '../contexts/LanguageContext';
 import { useAuth } from '../contexts/AuthContext';
@@ -9,6 +9,12 @@ const Home = () => {
     const { user, isAuthenticated } = useAuth();
     const titleRef = useRef(null);
     const subtitleRef = useRef(null);
+    const [hackathonRegistration, setHackathonRegistration] = useState(null);
+    const [allRegistrations, setAllRegistrations] = useState({
+        hackathon: null,
+        conference: null,
+        workshops: []
+    });
 
     useEffect(() => {
         // Initialize scroll animations
@@ -36,6 +42,56 @@ const Home = () => {
             if (observer) observer.disconnect();
         };
     }, [language]);
+
+    // Check for all registrations
+    useEffect(() => {
+        if (isAuthenticated) {
+            fetchAllRegistrations();
+        }
+    }, [isAuthenticated]);
+
+    const fetchAllRegistrations = async () => {
+        try {
+            const response = await fetch('/api/user/registrations', {
+                credentials: 'include'
+            });
+            const data = await response.json();
+            
+            if (data.success) {
+                setAllRegistrations(data.data);
+                // Keep hackathon registration for backward compatibility
+                setHackathonRegistration(data.data.hackathon);
+            }
+        } catch (error) {
+            console.error('Error fetching registrations:', error);
+        }
+    };
+
+    // Function to determine which registration to track
+    const getRegistrationToTrack = () => {
+        if (allRegistrations.hackathon) {
+            return {
+                type: 'hackathon',
+                text: language === 'ar' ? 'متابعة طلب الهاكثون' : 'Track Hackathon Application',
+                url: '/hackathon-registration'
+            };
+        }
+        if (allRegistrations.conference) {
+            return {
+                type: 'conference',
+                text: language === 'ar' ? 'متابعة طلب المؤتمر' : 'Track Conference Application',
+                url: '/conference-registration'
+            };
+        }
+        if (allRegistrations.workshops && allRegistrations.workshops.length > 0) {
+            return {
+                type: 'workshops',
+                text: language === 'ar' ? 'متابعة طلبات الورش' : 'Track Workshop Applications',
+                url: '/dashboard'
+            };
+        }
+        return null;
+    };
 
     const hackathonInfo = {
         title: language === 'ar' ? 'هاكاثون "ابتكر من الدقم"' : 'Hackathon "Innovate from Duqm"',
@@ -116,20 +172,37 @@ const Home = () => {
                                 </>
                             ) : (
                                 <>
-                                    <Link
-                                        to="/hackathon"
-                                        className="ripple-effect button-press text-white px-8 py-4 rounded-full text-lg font-semibold hover:shadow-2xl transition-all duration-300 transform hover:scale-105 hover-pulse-glow"
-                                        style={{background: 'linear-gradient(135deg, #F4A321 0%, #D85584 100%)'}}
-                                    >
-                                        {language === 'ar' ? 'سجل في الهاكثون' : 'Register for Hackathon'}
-                                    </Link>
-                                    <Link
-                                        to="/workshop"
-                                        className="ripple-effect button-press bg-white px-8 py-4 rounded-full text-lg font-semibold hover:shadow-2xl transition-all duration-300 transform hover:scale-105 hover-float"
-                                        style={{color: '#003C72'}}
-                                    >
-                                        {language === 'ar' ? 'سجل في الورشة' : 'Register for Workshop'}
-                                    </Link>
+                                    {(() => {
+                                        const registrationToTrack = getRegistrationToTrack();
+                                        return (
+                                            <>
+                                                {registrationToTrack ? (
+                                                    <Link
+                                                        to={registrationToTrack.url}
+                                                        className="ripple-effect button-press text-white px-8 py-4 rounded-full text-lg font-semibold hover:shadow-2xl transition-all duration-300 transform hover:scale-105 hover-pulse-glow"
+                                                        style={{background: 'linear-gradient(135deg, #F4A321 0%, #D85584 100%)'}}
+                                                    >
+                                                        {registrationToTrack.text}
+                                                    </Link>
+                                                ) : (
+                                                    <Link
+                                                        to="/hackathon"
+                                                        className="ripple-effect button-press text-white px-8 py-4 rounded-full text-lg font-semibold hover:shadow-2xl transition-all duration-300 transform hover:scale-105 hover-pulse-glow"
+                                                        style={{background: 'linear-gradient(135deg, #F4A321 0%, #D85584 100%)'}}
+                                                    >
+                                                        {language === 'ar' ? 'سجل في الهاكثون' : 'Register for Hackathon'}
+                                                    </Link>
+                                                )}
+                                                <Link
+                                                    to="/workshop"
+                                                    className="ripple-effect button-press bg-white px-8 py-4 rounded-full text-lg font-semibold hover:shadow-2xl transition-all duration-300 transform hover:scale-105 hover-float"
+                                                    style={{color: '#003C72'}}
+                                                >
+                                                    {language === 'ar' ? 'سجل في الورشة' : 'Register for Workshop'}
+                                                </Link>
+                                            </>
+                                        );
+                                    })()}
                                 </>
                             )}
                         </div>
@@ -170,13 +243,21 @@ const Home = () => {
                                 ))}
                             </div>
                             
-                            <Link
-                                to="/hackathon"
-                                className="ripple-effect button-press inline-block text-white px-8 py-4 rounded-full text-lg font-semibold hover:shadow-xl transition-all duration-300 transform hover:scale-105 hover-pulse-glow animate-fade-in-up animate-delay-700"
-                                style={{background: 'linear-gradient(135deg, #F4A321 0%, #D85584 100%)'}}
-                            >
-                                {language === 'ar' ? 'سجل الآن في الهاكثون' : 'Register Now for Hackathon'}
-                            </Link>
+                            {(() => {
+                                const registrationToTrack = getRegistrationToTrack();
+                                return (
+                                    <Link
+                                        to={registrationToTrack ? registrationToTrack.url : "/hackathon"}
+                                        className="ripple-effect button-press inline-block text-white px-8 py-4 rounded-full text-lg font-semibold hover:shadow-xl transition-all duration-300 transform hover:scale-105 hover-pulse-glow animate-fade-in-up animate-delay-700"
+                                        style={{background: 'linear-gradient(135deg, #F4A321 0%, #D85584 100%)'}}
+                                    >
+                                        {registrationToTrack 
+                                            ? registrationToTrack.text
+                                            : (language === 'ar' ? 'سجل الآن في الهاكثون' : 'Register Now for Hackathon')
+                                        }
+                                    </Link>
+                                );
+                            })()}
                         </div>
                         
                         <div className="relative animate-fade-in-right">
@@ -435,13 +516,21 @@ const Home = () => {
                                 >
                                     {language === 'ar' ? 'لوحة التحكم' : 'Dashboard'}
                                 </Link>
-                                <Link
-                                    to="/hackathon"
-                                    className="ripple-effect button-press bg-white px-8 py-4 rounded-full text-lg font-semibold hover:shadow-2xl transition-all duration-300 transform hover:scale-105 hover-float"
-                                    style={{color: '#003C72'}}
-                                >
-                                    {language === 'ar' ? 'سجل في الهاكثون' : 'Register for Hackathon'}
-                                </Link>
+                                {(() => {
+                                    const registrationToTrack = getRegistrationToTrack();
+                                    return (
+                                        <Link
+                                            to={registrationToTrack ? registrationToTrack.url : "/hackathon"}
+                                            className="ripple-effect button-press bg-white px-8 py-4 rounded-full text-lg font-semibold hover:shadow-2xl transition-all duration-300 transform hover:scale-105 hover-float"
+                                            style={{color: '#003C72'}}
+                                        >
+                                            {registrationToTrack 
+                                                ? registrationToTrack.text
+                                                : (language === 'ar' ? 'سجل في الهاكثون' : 'Register for Hackathon')
+                                            }
+                                        </Link>
+                                    );
+                                })()}
                                 <Link
                                     to="/workshop"
                                     className="ripple-effect button-press bg-white px-8 py-4 rounded-full text-lg font-semibold hover:shadow-2xl transition-all duration-300 transform hover:scale-105 hover-float"

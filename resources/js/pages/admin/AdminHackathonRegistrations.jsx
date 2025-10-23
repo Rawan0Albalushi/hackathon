@@ -30,10 +30,29 @@ const AdminHackathonRegistrations = () => {
                 ...(statusFilter && { status: statusFilter })
             });
 
+            console.log('Fetching registrations with params:', params.toString());
+            
+            // الحصول على رمز CSRF
+            const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
+            
+            if (!csrfToken) {
+                console.error('CSRF token not found');
+                setError('رمز CSRF غير موجود - يرجى تحديث الصفحة');
+                return;
+            }
+            
             const response = await fetch(`/api/admin/hackathon-registrations?${params}`, {
+                headers: {
+                    'X-CSRF-TOKEN': csrfToken,
+                },
                 credentials: 'include'
             });
+            
+            console.log('Fetch response status:', response.status);
+            console.log('Fetch response headers:', response.headers);
+            
             const data = await response.json();
+            console.log('Fetch response data:', data);
             
             if (data.success) {
                 setRegistrations(data.data.data);
@@ -42,6 +61,7 @@ const AdminHackathonRegistrations = () => {
                 setError(data.message);
             }
         } catch (err) {
+            console.error('Error fetching registrations:', err);
             setError('فشل في تحميل بيانات التسجيل');
         } finally {
             setLoading(false);
@@ -50,31 +70,151 @@ const AdminHackathonRegistrations = () => {
 
     const handleStatusUpdate = async () => {
         try {
-            const response = await fetch(`/api/admin/registrations/hackathon/${selectedRegistration.id}/status`, {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                credentials: 'include',
-                body: JSON.stringify({
-                    status: newStatus,
-                    rejection_reason: newStatus === 'rejected' ? rejectionReason : null
-                })
+            // التحقق من صحة البيانات
+            if (!selectedRegistration || !selectedRegistration.id) {
+                console.error('No registration selected');
+                setError('لم يتم اختيار تسجيل للتحديث');
+                return;
+            }
+            
+            if (!newStatus) {
+                console.error('No status selected');
+                setError('يرجى اختيار حالة جديدة');
+                return;
+            }
+            
+            console.log('Updating status for registration:', selectedRegistration.id);
+            console.log('New status:', newStatus);
+            console.log('Rejection reason:', rejectionReason);
+            
+            // إضافة loading state
+            setLoading(true);
+            setError(null);
+            
+            const url = `/api/admin/registrations/hackathon/${selectedRegistration.id}/status`;
+            console.log('Request URL:', url);
+            console.log('Request method: PUT');
+            console.log('Request body:', {
+                status: newStatus,
+                rejection_reason: newStatus === 'rejected' ? rejectionReason : null
             });
+            
+            // الحصول على رمز CSRF
+            const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
+            console.log('CSRF Token:', csrfToken);
+            
+            if (!csrfToken) {
+                console.error('CSRF token not found for update request');
+                setError('رمز CSRF غير موجود - يرجى تحديث الصفحة');
+                setLoading(false);
+                return;
+            }
+            
+            // جرب PUT أولاً، ثم POST إذا فشل
+            let response;
+            try {
+                response = await fetch(url, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-Requested-With': 'XMLHttpRequest',
+                        'X-CSRF-TOKEN': csrfToken,
+                    },
+                    credentials: 'include',
+                    body: JSON.stringify({
+                        status: newStatus,
+                        rejection_reason: newStatus === 'rejected' ? rejectionReason : null
+                    })
+                });
+            } catch (putError) {
+                console.log('PUT failed, trying POST:', putError);
+                response = await fetch(url, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-Requested-With': 'XMLHttpRequest',
+                        'X-CSRF-TOKEN': csrfToken,
+                    },
+                    credentials: 'include',
+                    body: JSON.stringify({
+                        status: newStatus,
+                        rejection_reason: newStatus === 'rejected' ? rejectionReason : null
+                    })
+                });
+            }
 
-            const data = await response.json();
+            console.log('Response status:', response.status);
+            console.log('Response headers:', response.headers);
+            
+            // التحقق من حالة الاستجابة
+            if (!response.ok) {
+                const errorText = await response.text();
+                console.error('HTTP Error Response:', errorText);
+                throw new Error(`HTTP error! status: ${response.status} - ${errorText}`);
+            }
+            
+            // التحقق من نوع الاستجابة
+            const contentType = response.headers.get('content-type');
+            console.log('Content-Type:', contentType);
+            
+            let data;
+            if (contentType && contentType.includes('application/json')) {
+                data = await response.json();
+            } else {
+                // إذا لم تكن JSON، احصل على النص
+                const text = await response.text();
+                console.log('Non-JSON response:', text);
+                throw new Error('الخادم لم يعد استجابة JSON صحيحة');
+            }
+            
+            console.log('Response data:', data);
             
             if (data.success) {
+                console.log('Status updated successfully');
                 setShowStatusModal(false);
                 setSelectedRegistration(null);
                 setNewStatus('');
                 setRejectionReason('');
                 fetchRegistrations();
             } else {
-                setError(data.message);
+                console.error('Update failed:', data.message);
+                setError(data.message || 'فشل في تحديث حالة التسجيل');
             }
         } catch (err) {
-            setError('فشل في تحديث حالة التسجيل');
+            console.error('Error updating status:', err);
+            if (err.message.includes('JSON')) {
+                setError('خطأ في استجابة الخادم - يرجى المحاولة مرة أخرى');
+            } else if (err.message.includes('Network')) {
+                setError('خطأ في الاتصال بالخادم - تحقق من اتصال الإنترنت');
+            } else if (err.message.includes('HTTP error')) {
+                if (err.message.includes('404')) {
+                    setError('التسجيل غير موجود - يرجى تحديث الصفحة');
+                } else if (err.message.includes('403')) {
+                    setError('ليس لديك صلاحية لتحديث هذا التسجيل');
+                } else if (err.message.includes('500')) {
+                    setError('خطأ في الخادم - يرجى المحاولة مرة أخرى');
+                } else {
+                    setError('خطأ في الخادم - يرجى المحاولة مرة أخرى');
+                }
+            } else if (err.message.includes('Unexpected token')) {
+                setError('خطأ في استجابة الخادم - يرجى المحاولة مرة أخرى');
+            } else if (err.message.includes('<!DOCTYPE')) {
+                setError('خطأ في استجابة الخادم - يرجى المحاولة مرة أخرى');
+            } else if (err.message.includes('Method Not Allowed')) {
+                setError('خطأ في الطريقة - يرجى المحاولة مرة أخرى');
+            } else if (err.message.includes('CSRF')) {
+                setError('خطأ في الأمان - يرجى تحديث الصفحة والمحاولة مرة أخرى');
+            } else if (err.message.includes('419')) {
+                setError('انتهت صلاحية الجلسة - يرجى تحديث الصفحة');
+            } else if (err.message.includes('رمز CSRF غير موجود')) {
+                setError('رمز CSRF غير موجود - يرجى تحديث الصفحة');
+            } else if (err.message.includes('token mismatch')) {
+                setError('خطأ في رمز الأمان - يرجى تحديث الصفحة');
+            } else {
+                setError('فشل في تحديث حالة التسجيل: ' + err.message);
+            }
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -343,6 +483,18 @@ const AdminHackathonRegistrations = () => {
 
                         {/* Modal Body */}
                         <div className="px-6 py-4 space-y-4">
+                            {/* Error Display */}
+                            {error && (
+                                <div className="bg-red-50 border border-red-200 rounded-md p-3">
+                                    <div className="flex items-center space-x-2 rtl:space-x-reverse">
+                                        <svg className="w-4 h-4 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                        </svg>
+                                        <p className="text-sm text-red-800">{error}</p>
+                                    </div>
+                                </div>
+                            )}
+                            
                             {/* Status Selection */}
                             <div className="space-y-2">
                                 <label className="block text-sm font-medium text-gray-700">
@@ -351,8 +503,10 @@ const AdminHackathonRegistrations = () => {
                                 <select
                                     value={newStatus}
                                     onChange={(e) => setNewStatus(e.target.value)}
-                                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-colors duration-200"
+                                    disabled={loading}
+                                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-colors duration-200 disabled:bg-gray-100 disabled:cursor-not-allowed"
                                 >
+                                    <option value="">اختر الحالة</option>
                                     <option value="pending">قيد المراجعة</option>
                                     <option value="approved">مقبول</option>
                                     <option value="rejected">مرفوض</option>
@@ -368,8 +522,9 @@ const AdminHackathonRegistrations = () => {
                                     <textarea
                                         value={rejectionReason}
                                         onChange={(e) => setRejectionReason(e.target.value)}
+                                        disabled={loading}
                                         rows={3}
-                                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-pink-500 resize-none transition-colors duration-200"
+                                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-pink-500 resize-none transition-colors duration-200 disabled:bg-gray-100 disabled:cursor-not-allowed"
                                         placeholder="أدخل سبب الرفض..."
                                     />
                                 </div>
@@ -402,9 +557,21 @@ const AdminHackathonRegistrations = () => {
                                 </button>
                                 <button
                                     onClick={handleStatusUpdate}
-                                    className="px-4 py-2 bg-gradient-to-r from-orange-500 to-pink-500 text-white rounded-md hover:from-orange-600 hover:to-pink-600 transition-all duration-200 shadow-lg hover:shadow-xl"
+                                    disabled={loading}
+                                    className={`px-4 py-2 rounded-md transition-all duration-200 shadow-lg ${
+                                        loading 
+                                            ? 'bg-gray-400 text-gray-200 cursor-not-allowed' 
+                                            : 'bg-gradient-to-r from-orange-500 to-pink-500 text-white hover:from-orange-600 hover:to-pink-600 hover:shadow-xl'
+                                    }`}
                                 >
-                                    تحديث الحالة
+                                    {loading ? (
+                                        <div className="flex items-center space-x-2 rtl:space-x-reverse">
+                                            <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                                            <span>جاري التحديث...</span>
+                                        </div>
+                                    ) : (
+                                        'تحديث الحالة'
+                                    )}
                                 </button>
                             </div>
                         </div>
