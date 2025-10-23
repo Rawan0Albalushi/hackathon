@@ -77,7 +77,10 @@ const Home = () => {
     };
 
     return (
-        <div className="min-h-screen">
+        <div className="min-h-screen relative">
+            {/* Unified Background Gradient */}
+            <div className="absolute inset-0" style={{background: 'linear-gradient(to bottom, #FFF5EB 0%, #FFE5F0 25%, #E8F4F8 50%, #F0E8F5 75%, #FFF5EB 100%)'}}></div>
+            
             {/* Hero Section */}
             <div className="relative text-white overflow-hidden animate-gradient rounded-3xl mx-4 mt-4" style={{background: 'linear-gradient(135deg, #003C72 0%, #096289 50%, #D85584 100%)'}}>
                 <div className="absolute inset-0 bg-black opacity-20"></div>
@@ -142,7 +145,7 @@ const Home = () => {
             </div>
 
             {/* Hackathon Section */}
-            <section className="py-20 bg-gradient-to-br from-orange-50 to-pink-50 scroll-animate">
+            <section className="py-20 relative scroll-animate">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="grid lg:grid-cols-2 gap-12 items-center">
                         <div className="space-y-6 animate-fade-in-left">
@@ -231,7 +234,7 @@ const Home = () => {
             </section>
 
             {/* Workshop Section */}
-            <section className="py-20 bg-gradient-to-br from-blue-50 to-cyan-50 scroll-animate">
+            <section className="py-20 relative scroll-animate">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="grid lg:grid-cols-2 gap-12 items-center">
                         <div className="relative order-2 lg:order-1 animate-fade-in-left">
@@ -320,7 +323,7 @@ const Home = () => {
             </section>
 
             {/* Conference Section */}
-            <section className="py-20 bg-gradient-to-br from-green-50 to-teal-50 scroll-animate">
+            <section className="py-20 relative scroll-animate">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="grid lg:grid-cols-2 gap-12 items-center">
                         <div className="space-y-6 animate-fade-in-left">
@@ -411,7 +414,7 @@ const Home = () => {
             </section>
 
             {/* Call to Action */}
-            <section className="py-20 text-white animate-gradient scroll-animate rounded-3xl mx-4 mb-4" style={{background: 'linear-gradient(135deg, #003C72 0%, #096289 50%, #D85584 100%)'}}>
+            <section className="py-20 text-white relative scroll-animate rounded-3xl mx-4 mb-4">
                 <div className="max-w-4xl mx-auto text-center px-4 sm:px-6 lg:px-8">
                     <h2 className="text-4xl md:text-5xl font-bold mb-6 animate-fade-in-down gradient-text">
                         {language === 'ar' ? 'انضم إلى رحلة الابتكار' : 'Join the Innovation Journey'}
