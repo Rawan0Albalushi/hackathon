@@ -8,6 +8,8 @@ const AnimatedButton = ({
     size = 'medium', 
     disabled = false,
     loading = false,
+    loadingText = 'Loading...',
+    loadingVariant = 'spinner',
     className = '',
     ...props 
 }) => {
@@ -18,7 +20,7 @@ const AnimatedButton = ({
         }
     };
 
-    const baseClasses = 'ripple-effect button-press font-semibold rounded-full transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed';
+    const baseClasses = 'ripple-effect button-press font-semibold rounded-full transition-all duration-300 transform focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed';
     
     const variantClasses = {
         primary: 'bg-gradient-to-r from-indigo-500 to-purple-600 text-white hover:from-indigo-600 hover:to-purple-700 hover-pulse-glow shadow-lg hover:shadow-xl',
@@ -37,17 +39,19 @@ const AnimatedButton = ({
     };
 
     const loadingSpinner = (
-        <div className="flex items-center justify-center">
-            <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
-            Loading...
+        <div className="flex items-center justify-center space-x-2">
+            <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
+            <span className="text-sm">{loadingText}</span>
         </div>
     );
+
+    const loadingClasses = loading ? 'button-loading opacity-75 cursor-not-allowed' : 'hover:scale-105';
 
     return (
         <button
             onClick={handleClick}
             disabled={disabled || loading}
-            className={`${baseClasses} ${variantClasses[variant]} ${sizeClasses[size]} ${className}`}
+            className={`${baseClasses} ${variantClasses[variant]} ${sizeClasses[size]} ${loadingClasses} ${className}`}
             {...props}
         >
             {loading ? loadingSpinner : children}

@@ -90,6 +90,24 @@ const translations = {
         previous: 'Previous',
         next: 'Next',
         lastUpdated: 'Last updated:',
+        
+        // Login/Register specific
+        loginTitle: 'Login',
+        loginSubtitle: 'Welcome to Innovation Forum 2025',
+        noAccount: 'Don\'t have an account?',
+        createAccount: 'Create New Account',
+        emailPlaceholder: 'Enter your email',
+        passwordPlaceholder: 'Enter your password',
+        loginButton: 'Login',
+        
+        // Register specific
+        registerTitle: 'Create Account',
+        registerSubtitle: 'Join Innovation Forum 2025',
+        haveAccount: 'Already have an account?',
+        loginLink: 'Login',
+        namePlaceholder: 'Enter your full name',
+        confirmPasswordPlaceholder: 'Confirm password',
+        registerButton: 'Create Account',
     },
     ar: {
         // Navigation
@@ -170,6 +188,24 @@ const translations = {
         previous: 'السابق',
         next: 'التالي',
         lastUpdated: 'آخر تحديث:',
+        
+        // Login/Register specific
+        loginTitle: 'تسجيل الدخول',
+        loginSubtitle: 'مرحباً بك في ملتقى الابتكار 2025',
+        noAccount: 'ليس لديك حساب؟',
+        createAccount: 'إنشاء حساب جديد',
+        emailPlaceholder: 'أدخل بريدك الإلكتروني',
+        passwordPlaceholder: 'أدخل كلمة المرور',
+        loginButton: 'تسجيل الدخول',
+        
+        // Register specific
+        registerTitle: 'إنشاء حساب جديد',
+        registerSubtitle: 'انضم إلى ملتقى الابتكار 2025',
+        haveAccount: 'لديك حساب بالفعل؟',
+        loginLink: 'تسجيل الدخول',
+        namePlaceholder: 'أدخل اسمك الكامل',
+        confirmPasswordPlaceholder: 'أكد كلمة المرور',
+        registerButton: 'إنشاء الحساب',
     }
 };
 

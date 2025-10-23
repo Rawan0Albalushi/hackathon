@@ -39,6 +39,8 @@ const Layout = ({ children }) => {
 
     const handleLogout = async () => {
         await logout();
+        // Redirect to home page after logout
+        window.location.href = '/';
     };
 
     useEffect(() => {
@@ -116,28 +118,47 @@ const Layout = ({ children }) => {
                                 
                                 <div className="mx-4 h-8 w-px bg-gradient-to-b from-transparent via-gray-300 to-transparent animate-fade-in-up animate-delay-500"></div>
                                 
-                                {/* User Info */}
+                                {/* User Section - Well Organized */}
                                 {user && (
-                                    <>
-                                        <div className="flex items-center space-x-2 rtl:space-x-reverse animate-fade-in-up animate-delay-600">
-                                            <div className="w-8 h-8 bg-gradient-to-br from-green-400 to-blue-500 rounded-full flex items-center justify-center">
-                                                <span className="text-white text-sm font-bold">
-                                                    {user.name.charAt(0).toUpperCase()}
-                                                </span>
+                                    <div className="nav-organized animate-fade-in-up animate-delay-600">
+                                        {/* User Profile Group */}
+                                        <div className="nav-group">
+                                            {/* User Profile - No Card Background */}
+                                            <div className="flex items-center space-x-8 rtl:space-x-reverse">
+                                                {/* Avatar */}
+                                                <div className="user-avatar-clean">
+                                                    <div className="w-9 h-9 rounded-full flex items-center justify-center text-white text-sm font-bold shadow-md nav-smooth" 
+                                                         style={{background: 'var(--gradient-primary)'}}>
+                                                        {user.name.charAt(0).toUpperCase()}
+                                                    </div>
+                                                </div>
+                                                
+                                                {/* User Details */}
+                                                <div className="text-sm nav-smooth mr-2 rtl:mr-0 rtl:ml-2">
+                                                    <div className="font-semibold text-gray-900 text-hover-clean">
+                                                        {user.name}
+                                                    </div>
+                                                    <div className="text-xs text-gray-500 font-medium">
+                                                        {user.role === 'admin' ? 'مدير' : 'مستخدم'}
+                                                    </div>
+                                                </div>
                                             </div>
-                                            <div className="text-sm">
-                                                <div className="font-medium text-gray-900">{user.name}</div>
-                                                <div className="text-xs text-gray-500">{user.role === 'admin' ? 'مدير' : 'مستخدم'}</div>
-                                            </div>
+                                            
+                                            {/* Logout Button */}
+                                            <button
+                                                onClick={handleLogout}
+                                                className="logout-btn-enhanced ripple-effect flex items-center space-x-2 rtl:space-x-reverse"
+                                            >
+                                                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                                                </svg>
+                                                <span>خروج</span>
+                                            </button>
                                         </div>
-                                        <button
-                                            onClick={handleLogout}
-                                            className="ripple-effect px-3 py-1 rounded-lg text-xs font-medium bg-red-500 text-white hover:bg-red-600 transition-all duration-300 animate-fade-in-up animate-delay-700"
-                                        >
-                                            خروج
-                                        </button>
-                                        <div className="mx-2 h-6 w-px bg-gray-300"></div>
-                                    </>
+                                        
+                                        {/* Separator */}
+                                        <div className="nav-separator-clean"></div>
+                                    </div>
                                 )}
                                 
                                 <button
@@ -145,8 +166,7 @@ const Layout = ({ children }) => {
                                         handleButtonClick(e);
                                         toggleLanguage();
                                     }}
-                                    className="ripple-effect button-press px-4 py-2 rounded-xl text-sm font-semibold text-white transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl hover-pulse-glow animate-fade-in-up animate-delay-800"
-                                    style={{background: 'linear-gradient(135deg, #F4A321 0%, #D85584 100%)'}}
+                                    className="lang-btn-enhanced ripple-effect animate-fade-in-up animate-delay-800"
                                 >
                                     {language === 'ar' ? 'EN' : 'عربي'}
                                 </button>
