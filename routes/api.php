@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\HackathonRegistrationController;
 use App\Http\Controllers\Api\WorkshopRegistrationController;
 use App\Http\Controllers\Api\ConferenceRegistrationController;
+use App\Http\Controllers\Api\UserRegistrationController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\Api\AuthController;
 
@@ -15,14 +16,14 @@ Route::middleware(['web'])->group(function () {
     });
 });
 
-// Authentication routes (with session middleware but no CSRF for API)
-Route::middleware(['web'])->withoutMiddleware([\Illuminate\Foundation\Http\Middleware\VerifyCsrfToken::class])->group(function () {
-Route::post('/auth/register', [AuthController::class, 'register']);
+// Authentication routes (with web middleware for session but no CSRF)
+Route::middleware(['web'])->withoutMiddleware([\App\Http\Middleware\VerifyCsrfToken::class])->group(function () {
+    Route::post('/auth/register', [AuthController::class, 'register']);
     Route::post('/auth/login', [AuthController::class, 'login']);
 });
 
 // Protected routes
-Route::middleware('auth:web')->group(function () {
+Route::middleware(['web', 'auth:web'])->group(function () {
     Route::post('/auth/logout', [AuthController::class, 'logout']);
     Route::get('/auth/me', [AuthController::class, 'me']);
     
@@ -31,9 +32,27 @@ Route::middleware('auth:web')->group(function () {
     Route::post('/register/workshop', [WorkshopRegistrationController::class, 'store']);
     Route::post('/register/conference', [ConferenceRegistrationController::class, 'store']);
     
+    // User registration status routes
+    Route::get('/user/registrations', [UserRegistrationController::class, 'getMyRegistrations']);
+    Route::get('/user/workshops', [UserRegistrationController::class, 'getAvailableWorkshops']);
+    
     // Admin API routes (admin only)
-    Route::middleware('admin')->group(function () {
+    Route::middleware(['web', 'auth:web', 'admin'])->group(function () {
         Route::get('/admin/stats', [AdminController::class, 'getStats']);
         Route::get('/admin/registrations', [AdminController::class, 'getRegistrations']);
+        
+        // Separate admin pages for each registration type
+        Route::get('/admin/hackathon-registrations', [AdminController::class, 'getHackathonRegistrations']);
+        Route::get('/admin/conference-registrations', [AdminController::class, 'getConferenceRegistrations']);
+        Route::get('/admin/workshop-registrations', [AdminController::class, 'getWorkshopRegistrations']);
+        
+        // Update registration status
+        Route::put('/admin/registrations/{type}/{id}/status', [AdminController::class, 'updateRegistrationStatus']);
+        
+        // Workshop management
+        Route::get('/admin/workshops', [AdminController::class, 'getWorkshops']);
+        Route::post('/admin/workshops', [AdminController::class, 'createWorkshop']);
+        Route::put('/admin/workshops/{id}', [AdminController::class, 'updateWorkshop']);
+        Route::delete('/admin/workshops/{id}', [AdminController::class, 'deleteWorkshop']);
     });
 });

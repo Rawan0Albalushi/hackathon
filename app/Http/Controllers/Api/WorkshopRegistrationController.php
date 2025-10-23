@@ -13,6 +13,7 @@ class WorkshopRegistrationController extends Controller
     public function store(Request $request): JsonResponse
     {
         $validator = Validator::make($request->all(), [
+            'workshop_id' => 'required|exists:workshops,id',
             'full_name' => 'required|string|max:255',
             'email' => 'required|email|max:255',
             'phone' => 'required|string|max:20',
@@ -28,9 +29,23 @@ class WorkshopRegistrationController extends Controller
             ], 422);
         }
 
+        // Check if user already has a registration for this specific workshop
+        $existingRegistration = WorkshopRegistration::where('user_id', $request->user()->id)
+            ->where('workshop_id', $request->workshop_id)
+            ->first();
+        
+        if ($existingRegistration) {
+            return response()->json([
+                'success' => false,
+                'message' => 'You have already registered for this workshop',
+                'data' => $existingRegistration
+            ], 409);
+        }
+
         try {
             $registrationData = $request->all();
             $registrationData['user_id'] = $request->user()->id;
+            $registrationData['status'] = 'pending';
             
             $registration = WorkshopRegistration::create($registrationData);
             

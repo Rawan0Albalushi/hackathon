@@ -6,7 +6,7 @@ use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class AdminMiddleware
+class VerifyCsrfToken
 {
     /**
      * Handle an incoming request.
@@ -15,15 +15,11 @@ class AdminMiddleware
      */
     public function handle(Request $request, Closure $next): Response
     {
-        $user = $request->user();
-        
-        if (!$user || !$user->isAdmin()) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Access denied. Admin privileges required.'
-            ], 403);
+        // Skip CSRF verification for API routes
+        if ($request->is('api/*')) {
+            return $next($request);
         }
-
+        
         return $next($request);
     }
 }

@@ -16,7 +16,15 @@ const AdminStats = () => {
     useEffect(() => {
         const fetchStats = async () => {
             try {
-                const response = await fetch('/api/admin/stats');
+                const response = await fetch('/api/admin/stats', {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-Requested-With': 'XMLHttpRequest',
+                        'Accept': 'application/json',
+                    },
+                    credentials: 'include',
+                });
                 const data = await response.json();
                 
                 if (data.success) {
@@ -132,33 +140,35 @@ const AdminStats = () => {
     };
 
     return (
-        <div className="p-6 h-full overflow-y-auto">
+        <div className="p-6 h-full overflow-y-auto" dir={language === 'ar' ? 'rtl' : 'ltr'}>
             <div className="mb-6">
-                <h1 className="text-2xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
+                <h1 className="text-3xl font-bold bg-gradient-to-r from-orange-500 to-pink-500 bg-clip-text text-transparent">
                     {language === 'ar' ? 'الإحصائيات' : 'Statistics'}
                 </h1>
-                <p className="text-gray-600 mt-1">
-                    {language === 'ar' ? 'نظرة شاملة على جميع البيانات' : 'Comprehensive overview of all data'}
+                <p className="text-gray-600 mt-2 text-lg">
+                    {language === 'ar' ? 'نظرة شاملة على جميع البيانات والإحصائيات' : 'Comprehensive overview of all data and statistics'}
                 </p>
             </div>
             
             {/* Statistics Grid */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4 lg:gap-6 mobile-stats-grid">
                 {statCards.map((card, index) => (
                     <div 
                         key={index}
-                        className="bg-white rounded-xl shadow-lg p-6 border border-gray-200/50 hover:shadow-xl transition-all duration-300"
+                        className="bg-white/90 backdrop-blur-lg rounded-2xl shadow-xl p-4 lg:p-6 border border-gray-200/50 hover:shadow-2xl transition-all duration-500 hover:scale-105 hover:-translate-y-2 group mobile-card"
+                        style={{ animationDelay: `${index * 0.1}s` }}
                     >
                         <div className="flex items-center justify-between">
-                            <div>
-                                <p className="text-sm font-medium text-gray-600">
+                            <div className="flex-1">
+                                <p className="text-sm font-medium text-gray-600 mb-2">
                                     {card.title}
                                 </p>
-                                <p className="text-3xl font-bold text-gray-900 mt-2">
+                                <p className="text-2xl lg:text-4xl font-bold bg-gradient-to-r from-gray-800 to-gray-900 bg-clip-text text-transparent">
                                     {card.value}
                                 </p>
+                                <div className="mt-2 h-1 bg-gradient-to-r from-orange-400 to-pink-500 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                             </div>
-                            <div className={`w-16 h-16 bg-gradient-to-br ${card.color} rounded-2xl flex items-center justify-center shadow-lg`}>
+                            <div className={`w-12 h-12 lg:w-16 lg:h-16 bg-gradient-to-br ${card.color} rounded-2xl flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-300`}>
                                 {getIcon(card.icon)}
                             </div>
                         </div>

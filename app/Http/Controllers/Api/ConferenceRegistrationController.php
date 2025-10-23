@@ -12,6 +12,17 @@ class ConferenceRegistrationController extends Controller
 {
     public function store(Request $request): JsonResponse
     {
+        // Check if user already has a conference registration
+        $existingRegistration = ConferenceRegistration::where('user_id', $request->user()->id)->first();
+        
+        if ($existingRegistration) {
+            return response()->json([
+                'success' => false,
+                'message' => 'You have already registered for the conference',
+                'data' => $existingRegistration
+            ], 409);
+        }
+
         $validator = Validator::make($request->all(), [
             'full_name' => 'required|string|max:255',
             'email' => 'required|email|max:255',
@@ -31,6 +42,7 @@ class ConferenceRegistrationController extends Controller
         try {
             $registrationData = $request->all();
             $registrationData['user_id'] = $request->user()->id;
+            $registrationData['status'] = 'pending';
             
             $registration = ConferenceRegistration::create($registrationData);
             

@@ -12,7 +12,9 @@ class ConferenceRegistration extends Model
         'email',
         'phone',
         'organization',
-        'session_choice'
+        'session_choice',
+        'status',
+        'rejection_reason'
     ];
 
     public function user()

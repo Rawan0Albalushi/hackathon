@@ -1,261 +1,232 @@
 import React, { useState, useEffect } from 'react';
 import { useLanguage } from '../../contexts/LanguageContext';
+import { useAuth } from '../../contexts/AuthContext';
 import AdminStats from './AdminStats';
 import AdminRegistrations from './AdminRegistrations';
+import AdminHackathonRegistrations from './AdminHackathonRegistrations';
+import AdminConferenceRegistrations from './AdminConferenceRegistrations';
+import AdminWorkshopRegistrations from './AdminWorkshopRegistrations';
+import AdminWorkshops from './AdminWorkshops';
 
 const AdminDashboardMain = () => {
-    const { language, t } = useLanguage();
-    const [activeTab, setActiveTab] = useState('dashboard');
-    const [stats, setStats] = useState({
-        totalRegistrations: 0,
-        hackathonRegistrations: 0,
-        workshopRegistrations: 0,
-        conferenceRegistrations: 0,
-        todayRegistrations: 0
-    });
-    const [loading, setLoading] = useState(true);
+    const { language, toggleLanguage } = useLanguage();
+    const { user, logout } = useAuth();
+    const [activeTab, setActiveTab] = useState('stats');
+    const [sidebarOpen, setSidebarOpen] = useState(false);
 
-    useEffect(() => {
-        const fetchStats = async () => {
-            try {
-                const response = await fetch('/api/admin/stats');
-                const data = await response.json();
-                
-                if (data.success) {
-                    setStats(data.data);
-                }
-            } catch (err) {
-                console.error('Error fetching stats:', err);
-            } finally {
-                setLoading(false);
-            }
-        };
+    const handleLogout = async () => {
+        await logout();
+    };
 
-        fetchStats();
-    }, []);
-
-    const tabs = [
-        { 
-            id: 'dashboard', 
-            label: language === 'ar' ? 'لوحة التحكم' : 'Dashboard', 
-            icon: 'dashboard'
-        },
-        { 
-            id: 'stats', 
-            label: language === 'ar' ? 'الإحصائيات' : 'Statistics', 
-            icon: 'chart',
-            component: AdminStats
-        },
-        { 
-            id: 'registrations', 
-            label: language === 'ar' ? 'التسجيلات' : 'Registrations', 
-            icon: 'users',
-            component: AdminRegistrations
-        }
-    ];
-
-    const getIcon = (iconName) => {
-        const icons = {
-            dashboard: (
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2H5a2 2 0 00-2-2z" />
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 5a2 2 0 012-2h4a2 2 0 012 2v6H8V5z" />
-                </svg>
-            ),
-            chart: (
+    const navigationItems = [
+        {
+            id: 'stats',
+            label: language === 'ar' ? 'الإحصائيات' : 'Statistics',
+            icon: (
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
                 </svg>
             ),
-            users: (
+            color: 'from-orange-500 to-orange-600'
+        },
+        {
+            id: 'hackathon',
+            label: language === 'ar' ? 'تسجيلات الهاكثون' : 'Hackathon',
+            icon: (
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
                 </svg>
-            )
-        };
-        return icons[iconName] || icons.dashboard;
-    };
-
-    const renderDashboardOverview = () => (
-        <div className="p-6 h-full">
-            <div className="space-y-6 h-full">
-                {/* Quick Stats */}
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                    <div className="bg-white rounded-xl shadow-lg p-6 border border-gray-200/50">
-                        <div className="flex items-center justify-between">
-                            <div>
-                                <p className="text-sm font-medium text-gray-600">
-                                    {language === 'ar' ? 'إجمالي التسجيلات' : 'Total Registrations'}
-                                </p>
-                                <p className="text-2xl font-bold text-gray-900">
-                                    {loading ? (
-                                        <div className="animate-pulse bg-gray-200 h-8 w-16 rounded"></div>
-                                    ) : (
-                                        stats.totalRegistrations
-                                    )}
-                                </p>
-                            </div>
-                            <div className="w-12 h-12 rounded-xl flex items-center justify-center" style={{background: 'linear-gradient(135deg, #F4A321 0%, #D85584 100%)'}}>
-                                <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
-                                </svg>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div className="bg-white rounded-xl shadow-lg p-6 border border-gray-200/50">
-                        <div className="flex items-center justify-between">
-                            <div>
-                                <p className="text-sm font-medium text-gray-600">
-                                    {language === 'ar' ? 'تسجيلات اليوم' : 'Today\'s Registrations'}
-                                </p>
-                                <p className="text-2xl font-bold text-gray-900">
-                                    {loading ? (
-                                        <div className="animate-pulse bg-gray-200 h-8 w-16 rounded"></div>
-                                    ) : (
-                                        stats.todayRegistrations
-                                    )}
-                                </p>
-                            </div>
-                            <div className="w-12 h-12 bg-gradient-to-br from-green-500 to-teal-500 rounded-xl flex items-center justify-center">
-                                <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                </svg>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div className="bg-white rounded-xl shadow-lg p-6 border border-gray-200/50">
-                        <div className="flex items-center justify-between">
-                            <div>
-                                <p className="text-sm font-medium text-gray-600">
-                                    {language === 'ar' ? 'الهاكثون' : 'Hackathon'}
-                                </p>
-                                <p className="text-2xl font-bold text-gray-900">
-                                    {loading ? (
-                                        <div className="animate-pulse bg-gray-200 h-8 w-16 rounded"></div>
-                                    ) : (
-                                        stats.hackathonRegistrations
-                                    )}
-                                </p>
-                            </div>
-                            <div className="w-12 h-12 bg-gradient-to-br from-orange-500 to-red-500 rounded-xl flex items-center justify-center">
-                                <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
-                                </svg>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div className="bg-white rounded-xl shadow-lg p-6 border border-gray-200/50">
-                        <div className="flex items-center justify-between">
-                            <div>
-                                <p className="text-sm font-medium text-gray-600">
-                                    {language === 'ar' ? 'الورشة' : 'Workshop'}
-                                </p>
-                                <p className="text-2xl font-bold text-gray-900">
-                                    {loading ? (
-                                        <div className="animate-pulse bg-gray-200 h-8 w-16 rounded"></div>
-                                    ) : (
-                                        stats.workshopRegistrations
-                                    )}
-                                </p>
-                            </div>
-                            <div className="w-12 h-12 bg-gradient-to-br from-purple-500 to-pink-500 rounded-xl flex items-center justify-center">
-                                <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" />
-                                </svg>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                {/* Recent Activity */}
-                <div className="bg-white rounded-xl shadow-lg border border-gray-200/50 p-6">
-                    <h3 className="text-lg font-semibold text-gray-900 mb-4">
-                        {language === 'ar' ? 'النشاط الأخير' : 'Recent Activity'}
-                    </h3>
-                    <div className="space-y-4">
-                        <div className="text-center text-gray-500 py-8">
-                            <svg className="w-12 h-12 text-gray-400 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
-                            </svg>
-                            <p>{language === 'ar' ? 'لا توجد أنشطة حديثة' : 'No recent activity'}</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    );
-
-    const renderActiveComponent = () => {
-        const activeTabData = tabs.find(tab => tab.id === activeTab);
-        if (activeTabData?.component) {
-            const Component = activeTabData.component;
-            return <Component />;
+            ),
+            color: 'from-pink-500 to-pink-600'
+        },
+        {
+            id: 'conference',
+            label: language === 'ar' ? 'تسجيلات المؤتمر' : 'Conference',
+            icon: (
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                </svg>
+            ),
+            color: 'from-teal-500 to-teal-600'
+        },
+        {
+            id: 'workshop-registrations',
+            label: language === 'ar' ? 'تسجيلات الورش' : 'Workshop Reg',
+            icon: (
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" />
+                </svg>
+            ),
+            color: 'from-navy-500 to-navy-600'
+        },
+        {
+            id: 'workshops',
+            label: language === 'ar' ? 'إدارة الورش' : 'Manage Workshops',
+            icon: (
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                </svg>
+            ),
+            color: 'from-orange-500 to-orange-600'
         }
-        return renderDashboardOverview();
-    };
+    ];
+
+
 
     return (
-        <div className="h-screen bg-gradient-to-br from-gray-50 to-indigo-50 flex flex-col overflow-hidden">
-            {/* Header */}
-            <div className="bg-white/95 backdrop-blur-md shadow-xl border-b border-gray-200/50 flex-shrink-0">
-                <div className="px-6 py-4">
-                    <div className="flex items-center justify-between">
-                        <div className="flex items-center space-x-4 rtl:space-x-reverse">
-                            <div className="w-10 h-10 bg-gradient-to-br from-indigo-600 to-purple-600 rounded-xl flex items-center justify-center">
-                                <span className="text-white font-bold text-lg">A</span>
-                            </div>
-                            <div>
-                                <h1 className="text-xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
-                                    {t('adminDashboard')}
-                                </h1>
-                                <p className="text-sm text-gray-600">
-                                    {t('manageRegistrations')}
-                                </p>
-                            </div>
+        <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 flex" dir={language === 'ar' ? 'rtl' : 'ltr'}>
+            {/* Sidebar */}
+            <div className={`fixed inset-y-0 ${language === 'ar' ? 'right-0' : 'left-0'} z-50 w-64 admin-sidebar transform transition-transform duration-300 ease-in-out ${
+                sidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'
+            }`}>
+                {/* Sidebar Header */}
+                <div className="flex items-center justify-between p-6 border-b border-gray-200/50">
+                    <div className="flex items-center space-x-3 rtl:space-x-reverse">
+                        <div className="w-10 h-10 bg-gradient-to-br from-orange-400 to-pink-500 rounded-xl flex items-center justify-center shadow-lg">
+                            <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
                         </div>
-                        <div className="flex items-center space-x-4 rtl:space-x-reverse">
-                            <div className="text-sm text-gray-500">
-                                {t('lastUpdated')} {new Date().toLocaleString(language === 'ar' ? 'ar-SA' : 'en-US')}
-                            </div>
-                            <div className="w-8 h-8 bg-gradient-to-br from-indigo-500 to-purple-500 rounded-full flex items-center justify-center">
-                                <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                                </svg>
-                            </div>
+                        <div>
+                            <h2 className="text-lg font-bold bg-gradient-to-r from-orange-500 to-pink-500 bg-clip-text text-transparent">
+                                {language === 'ar' ? 'لوحة الإدارة' : 'Admin Panel'}
+                            </h2>
+                            <p className="text-xs text-gray-500">
+                                {language === 'ar' ? 'نظام الإدارة' : 'Management System'}
+                            </p>
                         </div>
+                    </div>
+                    <button
+                        onClick={() => setSidebarOpen(false)}
+                        className="lg:hidden p-2 rounded-lg hover:bg-gray-100 transition-colors"
+                    >
+                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </button>
+                </div>
+
+                {/* Navigation Menu */}
+                <nav className="p-4 space-y-2">
+                    {navigationItems.map((item) => (
+                        <button
+                            key={item.id}
+                            onClick={() => {
+                                setActiveTab(item.id);
+                                setSidebarOpen(false);
+                            }}
+                            className={`w-full flex items-center space-x-3 rtl:space-x-reverse px-4 py-3 rounded-xl text-left transition-all duration-300 group admin-sidebar-item sidebar-button ${
+                                activeTab === item.id
+                                    ? `bg-gradient-to-r ${item.color} text-white shadow-lg transform scale-105 active`
+                                    : 'text-gray-700 hover:bg-gray-100 hover:text-gray-900 hover:shadow-md'
+                            }`}
+                        >
+                            <div className={`p-2 rounded-lg transition-all duration-300 ${
+                                activeTab === item.id 
+                                    ? 'bg-white/20' 
+                                    : 'bg-gray-100 group-hover:bg-white'
+                            }`}>
+                                {item.icon}
+                            </div>
+                            <span className="font-medium">{item.label}</span>
+                            {activeTab === item.id && (
+                                <div className="ml-auto rtl:ml-0 rtl:mr-auto">
+                                    <div className="w-2 h-2 bg-white rounded-full animate-pulse"></div>
+                                </div>
+                            )}
+                        </button>
+                    ))}
+                </nav>
+
+                {/* Sidebar Footer */}
+                <div className="absolute bottom-0 left-0 right-0 p-4 border-t border-gray-200/50 sidebar-footer">
+                    <div className="flex items-center space-x-3 rtl:space-x-reverse mb-4">
+                        <div className="w-8 h-8 bg-gradient-to-br from-teal-500 to-navy-600 rounded-full flex items-center justify-center sidebar-user-avatar">
+                            <span className="text-white text-sm font-bold">
+                                {user?.name?.charAt(0)?.toUpperCase()}
+                            </span>
+                        </div>
+                        <div className="flex-1">
+                            <p className="text-sm font-medium text-gray-900">{user?.name}</p>
+                            <p className="text-xs text-gray-500">
+                                {language === 'ar' ? 'مدير النظام' : 'System Admin'}
+                            </p>
+                        </div>
+                    </div>
+                    <div className="flex space-x-2 rtl:space-x-reverse">
+                        <button
+                            onClick={toggleLanguage}
+                            className="flex-1 bg-gradient-to-r from-teal-500 to-navy-600 text-white px-3 py-2 rounded-lg text-sm font-medium transition-all duration-300 hover:shadow-lg hover:scale-105"
+                        >
+                            {language === 'ar' ? 'English' : 'العربية'}
+                        </button>
+                        <button
+                            onClick={handleLogout}
+                            className="flex-1 bg-gradient-to-r from-red-500 to-red-600 text-white px-3 py-2 rounded-lg text-sm font-medium transition-all duration-300 hover:shadow-lg hover:scale-105"
+                        >
+                            {language === 'ar' ? 'خروج' : 'Logout'}
+                        </button>
                     </div>
                 </div>
             </div>
 
-            {/* Main Content Area */}
-            <div className="flex-1 flex overflow-hidden">
-                {/* Sidebar */}
-                <div className="w-64 bg-white border-r border-gray-200 flex-shrink-0 overflow-y-auto">
-                    <nav className="p-4 space-y-2">
-                        {tabs.map((tab) => (
-                            <button
-                                key={tab.id}
-                                onClick={() => setActiveTab(tab.id)}
-                                className={`w-full flex items-center space-x-3 rtl:space-x-reverse px-4 py-3 rounded-lg text-left transition-all duration-200 ${
-                                    activeTab === tab.id
-                                        ? 'bg-gradient-to-r from-indigo-500 to-purple-500 text-white shadow-lg'
-                                        : 'text-gray-700 hover:bg-gray-100 hover:text-indigo-600'
-                                }`}
-                            >
-                                {getIcon(tab.icon)}
-                                <span className="font-medium">{tab.label}</span>
-                            </button>
-                        ))}
-                    </nav>
-                </div>
+            {/* Mobile Overlay */}
+            {sidebarOpen && (
+                <div 
+                    className="fixed inset-0 bg-black bg-opacity-50 z-40 lg:hidden mobile-sidebar-overlay"
+                    onClick={() => setSidebarOpen(false)}
+                />
+            )}
 
-                {/* Main Content */}
-                <div className="flex-1 overflow-y-auto">
-                    {renderActiveComponent()}
-                </div>
+            {/* Main Content */}
+            <div className={`flex-1 flex flex-col admin-main-content ${language === 'ar' ? 'mr-0 lg:mr-64' : 'ml-0 lg:ml-64'}`}>
+                {/* Top Header */}
+                <header className="bg-white/90 backdrop-blur-lg shadow-lg border-b border-gray-200/50 sticky top-0 z-30">
+                    <div className="px-4 sm:px-6 lg:px-8">
+                        <div className="flex items-center justify-between py-4">
+                            <div className="flex items-center space-x-4 rtl:space-x-reverse">
+                                <button
+                                    onClick={() => setSidebarOpen(true)}
+                                    className="lg:hidden p-2 rounded-lg hover:bg-gray-100 transition-colors"
+                                >
+                                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+                                    </svg>
+                                </button>
+                                <div>
+                                    <h1 className="text-xl lg:text-2xl font-bold bg-gradient-to-r from-orange-500 to-pink-500 bg-clip-text text-transparent">
+                                        {navigationItems.find(item => item.id === activeTab)?.label}
+                                    </h1>
+                                    <p className="text-sm text-gray-600">
+                                        {language === 'ar' ? `مرحباً، ${user?.name}` : `Welcome, ${user?.name}`}
+                                    </p>
+                                </div>
+                            </div>
+                            <div className="flex items-center space-x-2 rtl:space-x-reverse">
+                                <div className="hidden sm:flex items-center space-x-2 rtl:space-x-reverse bg-gray-100 rounded-lg px-3 py-2">
+                                    <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+                                    <span className="text-sm text-gray-600">
+                                        {language === 'ar' ? 'متصل' : 'Online'}
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </header>
+
+                {/* Content Area */}
+                <main className="flex-1 overflow-y-auto">
+                    <div className="p-4 sm:p-6 lg:p-8">
+                        <div className="animate-fade-in-up">
+                            {activeTab === 'stats' && <AdminStats />}
+                            {activeTab === 'registrations' && <AdminRegistrations />}
+                            {activeTab === 'hackathon' && <AdminHackathonRegistrations />}
+                            {activeTab === 'conference' && <AdminConferenceRegistrations />}
+                            {activeTab === 'workshop-registrations' && <AdminWorkshopRegistrations />}
+                            {activeTab === 'workshops' && <AdminWorkshops />}
+                        </div>
+                    </div>
+                </main>
             </div>
         </div>
     );

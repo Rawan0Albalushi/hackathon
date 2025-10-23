@@ -9,6 +9,7 @@ import HackathonRegistration from './pages/HackathonRegistration.jsx';
 import WorkshopRegistration from './pages/WorkshopRegistration.jsx';
 import ConferenceRegistration from './pages/ConferenceRegistration.jsx';
 import Success from './pages/Success.jsx';
+import UserDashboard from './pages/UserDashboard.jsx';
 import AdminDashboardMain from './pages/admin/AdminDashboardMain.jsx';
 import Login from './pages/Login.jsx';
 import Register from './pages/Register.jsx';
@@ -61,6 +62,13 @@ const App = () => {
                             <ProtectedRoute>
                                 <Layout>
                                     <Success />
+                                </Layout>
+                            </ProtectedRoute>
+                        } />
+                        <Route path="/dashboard" element={
+                            <ProtectedRoute>
+                                <Layout>
+                                    <UserDashboard />
                                 </Layout>
                             </ProtectedRoute>
                         } />

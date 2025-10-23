@@ -15,7 +15,9 @@ class HackathonRegistration extends Model
         'city',
         'background',
         'skills',
-        'other_skills'
+        'other_skills',
+        'status',
+        'rejection_reason'
     ];
 
     protected $casts = [

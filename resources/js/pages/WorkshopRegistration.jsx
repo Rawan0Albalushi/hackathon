@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useLanguage } from '../contexts/LanguageContext';
 import Form from '../components/Form';
 import { submitWorkshopRegistration } from '../utils/api';
@@ -7,9 +7,47 @@ import { submitWorkshopRegistration } from '../utils/api';
 const WorkshopRegistration = () => {
     const { t, language } = useLanguage();
     const navigate = useNavigate();
+    const [searchParams] = useSearchParams();
     const [isLoading, setIsLoading] = useState(false);
+    const [workshops, setWorkshops] = useState([]);
+    const [selectedWorkshop, setSelectedWorkshop] = useState(null);
+
+    useEffect(() => {
+        fetchWorkshops();
+        const workshopId = searchParams.get('workshop_id');
+        if (workshopId) {
+            setSelectedWorkshop(workshopId);
+        }
+    }, [searchParams]);
+
+    const fetchWorkshops = async () => {
+        try {
+            const response = await fetch('/api/user/workshops', {
+                credentials: 'include'
+            });
+            const data = await response.json();
+            
+            if (data.success) {
+                setWorkshops(data.data);
+            }
+        } catch (err) {
+            console.error('فشل في تحميل الورش');
+        }
+    };
 
     const fields = [
+        {
+            name: 'workshop_id',
+            label: language === 'ar' ? 'اختر الورشة' : 'Select Workshop',
+            type: 'select',
+            required: true,
+            options: workshops.map(workshop => ({
+                value: workshop.id,
+                label: workshop.title
+            })),
+            value: selectedWorkshop,
+            onChange: (value) => setSelectedWorkshop(value)
+        },
         {
             name: 'full_name',
             label: t('fullName'),
@@ -68,7 +106,13 @@ const WorkshopRegistration = () => {
     const handleSubmit = async (formData) => {
         setIsLoading(true);
         try {
-            const response = await submitWorkshopRegistration(formData);
+            // Add workshop_id to form data
+            const dataWithWorkshop = {
+                ...formData,
+                workshop_id: selectedWorkshop
+            };
+            
+            const response = await submitWorkshopRegistration(dataWithWorkshop);
             if (response.success) {
                 navigate('/success', { 
                     state: { 
@@ -77,7 +121,7 @@ const WorkshopRegistration = () => {
                     } 
                 });
             } else {
-                alert(t('registrationFailed'));
+                alert(response.message || t('registrationFailed'));
             }
         } catch (error) {
             console.error('Registration error:', error);

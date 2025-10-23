@@ -23,14 +23,15 @@ export const AuthProvider = ({ children }) => {
                     headers: {
                         'Content-Type': 'application/json',
                         'X-Requested-With': 'XMLHttpRequest',
+                        'Accept': 'application/json',
                     },
-                    credentials: 'include', // Include cookies for session authentication
+                    credentials: 'include',
                 });
 
                 if (response.ok) {
                     const data = await response.json();
                     setUser(data.data.user);
-                    setToken('session'); // Use session instead of token
+                    setToken(token);
                 } else {
                     setUser(null);
                     setToken(null);
@@ -55,11 +56,19 @@ export const AuthProvider = ({ children }) => {
                 password_confirmation,
             };
             
+            // Get CSRF token
+            const csrfResponse = await fetch('/api/csrf-token', {
+                credentials: 'include',
+            });
+            const csrfData = await csrfResponse.json();
+            
             const response = await fetch('/api/auth/register', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                     'X-Requested-With': 'XMLHttpRequest',
+                    'Accept': 'application/json',
+                    'X-CSRF-TOKEN': csrfData.csrf_token,
                 },
                 credentials: 'include',
                 body: JSON.stringify(requestData),
@@ -87,7 +96,9 @@ export const AuthProvider = ({ children }) => {
     const login = async (email, password) => {
         try {
             // Get CSRF token
-            const csrfResponse = await fetch('/api/csrf-token');
+            const csrfResponse = await fetch('/api/csrf-token', {
+                credentials: 'include',
+            });
             const csrfData = await csrfResponse.json();
             
             const response = await fetch('/api/auth/login', {
@@ -95,6 +106,7 @@ export const AuthProvider = ({ children }) => {
                 headers: {
                     'Content-Type': 'application/json',
                     'X-Requested-With': 'XMLHttpRequest',
+                    'Accept': 'application/json',
                     'X-CSRF-TOKEN': csrfData.csrf_token,
                 },
                 credentials: 'include',
@@ -126,6 +138,7 @@ export const AuthProvider = ({ children }) => {
                 headers: {
                     'Content-Type': 'application/json',
                     'X-Requested-With': 'XMLHttpRequest',
+                    'Accept': 'application/json',
                 },
                 credentials: 'include',
             });

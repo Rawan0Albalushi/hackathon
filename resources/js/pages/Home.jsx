@@ -426,20 +426,48 @@ const Home = () => {
                         }
                     </p>
                     <div className="flex flex-col sm:flex-row gap-4 justify-center animate-fade-in-up animate-delay-400">
-                        <Link
-                            to="/hackathon"
-                            className="ripple-effect button-press text-white px-8 py-4 rounded-full text-lg font-semibold hover:shadow-2xl transition-all duration-300 transform hover:scale-105 hover-pulse-glow"
-                            style={{background: 'linear-gradient(135deg, #F4A321 0%, #D85584 100%)'}}
-                        >
-                            {language === 'ar' ? 'ابدأ رحلتك الآن' : 'Start Your Journey Now'}
-                        </Link>
-                        <Link
-                            to="/workshop"
-                            className="ripple-effect button-press bg-white px-8 py-4 rounded-full text-lg font-semibold hover:shadow-2xl transition-all duration-300 transform hover:scale-105 hover-float"
-                            style={{color: '#003C72'}}
-                        >
-                            {language === 'ar' ? 'تعلم المزيد' : 'Learn More'}
-                        </Link>
+                        {isAuthenticated ? (
+                            <>
+                                <Link
+                                    to="/dashboard"
+                                    className="ripple-effect button-press text-white px-8 py-4 rounded-full text-lg font-semibold hover:shadow-2xl transition-all duration-300 transform hover:scale-105 hover-pulse-glow"
+                                    style={{background: 'linear-gradient(135deg, #F4A321 0%, #D85584 100%)'}}
+                                >
+                                    {language === 'ar' ? 'لوحة التحكم' : 'Dashboard'}
+                                </Link>
+                                <Link
+                                    to="/hackathon"
+                                    className="ripple-effect button-press bg-white px-8 py-4 rounded-full text-lg font-semibold hover:shadow-2xl transition-all duration-300 transform hover:scale-105 hover-float"
+                                    style={{color: '#003C72'}}
+                                >
+                                    {language === 'ar' ? 'سجل في الهاكثون' : 'Register for Hackathon'}
+                                </Link>
+                                <Link
+                                    to="/workshop"
+                                    className="ripple-effect button-press bg-white px-8 py-4 rounded-full text-lg font-semibold hover:shadow-2xl transition-all duration-300 transform hover:scale-105 hover-float"
+                                    style={{color: '#003C72'}}
+                                >
+                                    {language === 'ar' ? 'سجل في الورش' : 'Register for Workshops'}
+                                </Link>
+                            </>
+                        ) : (
+                            <>
+                                <Link
+                                    to="/hackathon"
+                                    className="ripple-effect button-press text-white px-8 py-4 rounded-full text-lg font-semibold hover:shadow-2xl transition-all duration-300 transform hover:scale-105 hover-pulse-glow"
+                                    style={{background: 'linear-gradient(135deg, #F4A321 0%, #D85584 100%)'}}
+                                >
+                                    {language === 'ar' ? 'ابدأ رحلتك الآن' : 'Start Your Journey Now'}
+                                </Link>
+                                <Link
+                                    to="/workshop"
+                                    className="ripple-effect button-press bg-white px-8 py-4 rounded-full text-lg font-semibold hover:shadow-2xl transition-all duration-300 transform hover:scale-105 hover-float"
+                                    style={{color: '#003C72'}}
+                                >
+                                    {language === 'ar' ? 'تعلم المزيد' : 'Learn More'}
+                                </Link>
+                            </>
+                        )}
                     </div>
                 </div>
             </section>
