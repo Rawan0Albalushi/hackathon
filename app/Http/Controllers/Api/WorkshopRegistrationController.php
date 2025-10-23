@@ -29,7 +29,10 @@ class WorkshopRegistrationController extends Controller
         }
 
         try {
-            $registration = WorkshopRegistration::create($request->all());
+            $registrationData = $request->all();
+            $registrationData['user_id'] = $request->user()->id;
+            
+            $registration = WorkshopRegistration::create($registrationData);
             
             return response()->json([
                 'success' => true,

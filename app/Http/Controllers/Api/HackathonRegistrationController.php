@@ -32,7 +32,10 @@ class HackathonRegistrationController extends Controller
         }
 
         try {
-            $registration = HackathonRegistration::create($request->all());
+            $registrationData = $request->all();
+            $registrationData['user_id'] = $request->user()->id;
+            
+            $registration = HackathonRegistration::create($registrationData);
             
             return response()->json([
                 'success' => true,

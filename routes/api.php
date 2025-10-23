@@ -6,16 +6,34 @@ use App\Http\Controllers\Api\HackathonRegistrationController;
 use App\Http\Controllers\Api\WorkshopRegistrationController;
 use App\Http\Controllers\Api\ConferenceRegistrationController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\Api\AuthController;
 
-Route::get('/user', function (Request $request) {
-    return $request->user();
-})->middleware('auth:sanctum');
+// CSRF token route (requires web middleware)
+Route::middleware(['web'])->group(function () {
+    Route::get('/csrf-token', function () {
+        return response()->json(['csrf_token' => csrf_token()]);
+    });
+});
 
-// Registration API routes
-Route::post('/register/hackathon', [HackathonRegistrationController::class, 'store']);
-Route::post('/register/workshop', [WorkshopRegistrationController::class, 'store']);
-Route::post('/register/conference', [ConferenceRegistrationController::class, 'store']);
+// Authentication routes (with session middleware but no CSRF for API)
+Route::middleware(['web'])->withoutMiddleware([\Illuminate\Foundation\Http\Middleware\VerifyCsrfToken::class])->group(function () {
+Route::post('/auth/register', [AuthController::class, 'register']);
+    Route::post('/auth/login', [AuthController::class, 'login']);
+});
 
-// Admin API routes
-Route::get('/admin/stats', [AdminController::class, 'getStats']);
-Route::get('/admin/registrations', [AdminController::class, 'getRegistrations']);
+// Protected routes
+Route::middleware('auth:web')->group(function () {
+    Route::post('/auth/logout', [AuthController::class, 'logout']);
+    Route::get('/auth/me', [AuthController::class, 'me']);
+    
+    // Registration API routes (protected)
+    Route::post('/register/hackathon', [HackathonRegistrationController::class, 'store']);
+    Route::post('/register/workshop', [WorkshopRegistrationController::class, 'store']);
+    Route::post('/register/conference', [ConferenceRegistrationController::class, 'store']);
+    
+    // Admin API routes (admin only)
+    Route::middleware('admin')->group(function () {
+        Route::get('/admin/stats', [AdminController::class, 'getStats']);
+        Route::get('/admin/registrations', [AdminController::class, 'getRegistrations']);
+    });
+});

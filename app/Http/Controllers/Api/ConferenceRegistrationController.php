@@ -29,7 +29,10 @@ class ConferenceRegistrationController extends Controller
         }
 
         try {
-            $registration = ConferenceRegistration::create($request->all());
+            $registrationData = $request->all();
+            $registrationData['user_id'] = $request->user()->id;
+            
+            $registration = ConferenceRegistration::create($registrationData);
             
             return response()->json([
                 'success' => true,

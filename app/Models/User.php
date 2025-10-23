@@ -21,6 +21,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'role',
     ];
 
     /**
@@ -44,5 +45,45 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    /**
+     * Check if user is an admin
+     */
+    public function isAdmin(): bool
+    {
+        return $this->role === 'admin';
+    }
+
+    /**
+     * Check if user is a regular user
+     */
+    public function isUser(): bool
+    {
+        return $this->role === 'user';
+    }
+
+    /**
+     * Get user's hackathon registrations
+     */
+    public function hackathonRegistrations()
+    {
+        return $this->hasMany(HackathonRegistration::class);
+    }
+
+    /**
+     * Get user's workshop registrations
+     */
+    public function workshopRegistrations()
+    {
+        return $this->hasMany(WorkshopRegistration::class);
+    }
+
+    /**
+     * Get user's conference registrations
+     */
+    public function conferenceRegistrations()
+    {
+        return $this->hasMany(ConferenceRegistration::class);
     }
 }

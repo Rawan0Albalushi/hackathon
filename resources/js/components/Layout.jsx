@@ -1,10 +1,13 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useLanguage } from '../contexts/LanguageContext';
+import { useAuth } from '../contexts/AuthContext';
 import ScrollToTop from './ScrollToTop';
+import { createRipple } from '../utils/scrollAnimations';
 
 const Layout = ({ children }) => {
     const { language, toggleLanguage, t } = useLanguage();
+    const { user, logout, isAdmin } = useAuth();
     const location = useLocation();
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
@@ -20,7 +23,8 @@ const Layout = ({ children }) => {
         setIsMobileMenuOpen(false);
     };
 
-    const handleLinkClick = () => {
+    const handleLinkClick = (event) => {
+        createRipple(event);
         closeMobileMenu();
         window.scrollTo({
             top: 0,
@@ -29,34 +33,59 @@ const Layout = ({ children }) => {
         });
     };
 
+    const handleButtonClick = (event) => {
+        createRipple(event);
+    };
+
+    const handleLogout = async () => {
+        await logout();
+    };
+
+    useEffect(() => {
+        // Add page transition effect
+        const mainContent = document.querySelector('main');
+        if (mainContent) {
+            mainContent.classList.add('page-transition-enter');
+            setTimeout(() => {
+                mainContent.classList.add('page-transition-enter-active');
+                mainContent.classList.remove('page-transition-enter');
+            }, 10);
+        }
+    }, [location.pathname]);
+
     const navigationItems = [
         { path: '/', label: t('home') },
         { path: '/hackathon', label: t('hackathon') },
         { path: '/workshop', label: t('workshop') },
         { path: '/conference', label: t('conference') },
-        { path: '/admin', label: t('adminDashboard') }
+        { path: '/animations', label: 'Animations' }
     ];
+
+    // Add admin portal if user is admin
+    if (isAdmin()) {
+        navigationItems.push({ path: '/admin-portal', label: 'لوحة الإدارة' });
+    }
 
     return (
         <div className="min-h-screen">
             <ScrollToTop />
             {/* Modern Navigation - Hidden for Admin */}
             {!location.pathname.startsWith('/admin') && (
-                <nav className="bg-white/95 backdrop-blur-md shadow-xl sticky top-0 z-50 border-b border-gray-200/50">
+                <nav className="bg-white/95 backdrop-blur-md shadow-xl sticky top-0 z-50 border-b border-gray-200/50 nav-slide-down">
                     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                         <div className="flex justify-between items-center h-20">
                             {/* Logo with gradient */}
-                            <div className="flex items-center">
-                                <Link to="/" className="flex-shrink-0 group" onClick={handleLinkClick}>
+                            <div className="flex items-center animate-fade-in-left">
+                                <Link to="/" className="flex-shrink-0 group ripple-effect" onClick={handleLinkClick}>
                                     <div className="flex items-center space-x-3 rtl:space-x-reverse">
-                                        <div className="w-12 h-12 bg-gradient-to-br from-indigo-600 to-purple-600 rounded-xl flex items-center justify-center shadow-lg group-hover:shadow-xl transition-all duration-300 transform group-hover:scale-105">
-                                            <span className="text-white font-bold text-xl">I</span>
+                                        <div className="w-12 h-12 bg-gradient-to-br from-indigo-600 to-purple-600 rounded-xl flex items-center justify-center shadow-lg group-hover:shadow-xl transition-all duration-300 transform group-hover:scale-105 hover-pulse-glow">
+                                            <span className="text-white font-bold text-xl animate-bounce">I</span>
                                         </div>
                                         <div>
-                                            <h1 className="text-xl lg:text-2xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
+                                            <h1 className="text-xl lg:text-2xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent gradient-text">
                                                 {language === 'ar' ? 'ملتقى الابتكار 2025' : 'Innovation Forum 2025'}
                                             </h1>
-                                            <p className="text-xs text-gray-500 font-medium">
+                                            <p className="text-xs text-gray-500 font-medium animate-fade-in-up animate-delay-200">
                                                 {language === 'ar' ? 'منصة إبداعية' : 'Creative Platform'}
                                             </p>
                                         </div>
@@ -65,30 +94,58 @@ const Layout = ({ children }) => {
                             </div>
                             
                             {/* Desktop Navigation */}
-                            <div className="hidden lg:flex items-center space-x-1 rtl:space-x-reverse">
-                                {navigationItems.map((item) => (
+                            <div className="hidden lg:flex items-center space-x-1 rtl:space-x-reverse animate-fade-in-right">
+                                {navigationItems.map((item, index) => (
                                     <Link
                                         key={item.path}
                                         to={item.path}
                                         onClick={handleLinkClick}
-                                        className={`relative px-4 py-2 rounded-xl text-sm font-semibold transition-all duration-300 transform hover:scale-105 ${
+                                        className={`ripple-effect relative px-4 py-2 rounded-xl text-sm font-semibold transition-all duration-300 transform hover:scale-105 animate-fade-in-up ${
                                             isActive(item.path) 
-                                                ? 'bg-gradient-to-r from-indigo-500 to-purple-500 text-white shadow-lg' 
-                                                : 'text-gray-700 hover:text-indigo-600 hover:bg-gradient-to-r hover:from-indigo-50 hover:to-purple-50'
+                                                ? 'bg-gradient-to-r from-indigo-500 to-purple-500 text-white shadow-lg hover-pulse-glow' 
+                                                : 'text-gray-700 hover:text-indigo-600 hover:bg-gradient-to-r hover:from-indigo-50 hover:to-purple-50 hover-float'
                                         }`}
+                                        style={{animationDelay: `${index * 100}ms`}}
                                     >
                                         {item.label}
                                         {isActive(item.path) && (
-                                            <div className="absolute -bottom-1 left-1/2 transform -translate-x-1/2 w-1 h-1 bg-white rounded-full"></div>
+                                            <div className="absolute -bottom-1 left-1/2 transform -translate-x-1/2 w-1 h-1 bg-white rounded-full animate-pulse"></div>
                                         )}
                                     </Link>
                                 ))}
                                 
-                                <div className="mx-2 h-6 w-px bg-gray-300"></div>
+                                <div className="mx-2 h-6 w-px bg-gray-300 animate-fade-in-up animate-delay-500"></div>
+                                
+                                {/* User Info */}
+                                {user && (
+                                    <>
+                                        <div className="flex items-center space-x-2 rtl:space-x-reverse animate-fade-in-up animate-delay-600">
+                                            <div className="w-8 h-8 bg-gradient-to-br from-green-400 to-blue-500 rounded-full flex items-center justify-center">
+                                                <span className="text-white text-sm font-bold">
+                                                    {user.name.charAt(0).toUpperCase()}
+                                                </span>
+                                            </div>
+                                            <div className="text-sm">
+                                                <div className="font-medium text-gray-900">{user.name}</div>
+                                                <div className="text-xs text-gray-500">{user.role === 'admin' ? 'مدير' : 'مستخدم'}</div>
+                                            </div>
+                                        </div>
+                                        <button
+                                            onClick={handleLogout}
+                                            className="ripple-effect px-3 py-1 rounded-lg text-xs font-medium bg-red-500 text-white hover:bg-red-600 transition-all duration-300 animate-fade-in-up animate-delay-700"
+                                        >
+                                            خروج
+                                        </button>
+                                        <div className="mx-2 h-6 w-px bg-gray-300"></div>
+                                    </>
+                                )}
                                 
                                 <button
-                                    onClick={toggleLanguage}
-                                    className="px-4 py-2 rounded-xl text-sm font-semibold bg-gradient-to-r from-indigo-500 to-purple-500 text-white hover:from-indigo-600 hover:to-purple-600 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl"
+                                    onClick={(e) => {
+                                        handleButtonClick(e);
+                                        toggleLanguage();
+                                    }}
+                                    className="ripple-effect button-press px-4 py-2 rounded-xl text-sm font-semibold bg-gradient-to-r from-indigo-500 to-purple-500 text-white hover:from-indigo-600 hover:to-purple-600 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl hover-pulse-glow animate-fade-in-up animate-delay-800"
                                 >
                                     {language === 'ar' ? 'EN' : 'عربي'}
                                 </button>
@@ -155,29 +212,52 @@ const Layout = ({ children }) => {
                             </div>
                         </div>
 
-                        {/* Mobile Navigation Menu */}
-                        <div className={`${isMobileMenuOpen ? 'block' : 'hidden'} md:hidden transition-all duration-300 ease-in-out`}>
-                            <div className="px-4 pt-4 pb-6 space-y-2 bg-gradient-to-br from-gray-50 to-indigo-50 rounded-2xl mt-4 mb-4 shadow-lg border border-gray-200/50">
+                            {/* Mobile Navigation Menu */}
+                        <div className={`${isMobileMenuOpen ? 'block' : 'hidden'} md:hidden transition-all duration-300 ease-in-out animate-slide-in-top`}>
+                            <div className="px-4 pt-4 pb-6 space-y-2 bg-gradient-to-br from-gray-50 to-indigo-50 rounded-2xl mt-4 mb-4 shadow-lg border border-gray-200/50 glass">
                                 {navigationItems.map((item, index) => (
                                     <Link
                                         key={item.path}
                                         to={item.path}
                                         onClick={handleLinkClick}
-                                        className={`flex items-center px-4 py-3 rounded-xl text-base font-semibold transition-all duration-300 transform hover:scale-105 ${
+                                        className={`ripple-effect flex items-center px-4 py-3 rounded-xl text-base font-semibold transition-all duration-300 transform hover:scale-105 animate-fade-in-up ${
                                             isActive(item.path) 
-                                                ? 'bg-gradient-to-r from-indigo-500 to-purple-500 text-white shadow-lg' 
-                                                : 'text-gray-700 hover:text-indigo-600 hover:bg-white hover:shadow-md'
+                                                ? 'bg-gradient-to-r from-indigo-500 to-purple-500 text-white shadow-lg hover-pulse-glow' 
+                                                : 'text-gray-700 hover:text-indigo-600 hover:bg-white hover:shadow-md hover-float'
                                         }`}
                                         style={{ animationDelay: `${index * 100}ms` }}
                                     >
-                                        <div className={`w-2 h-2 rounded-full mr-3 rtl:mr-0 rtl:ml-3 ${
+                                        <div className={`w-2 h-2 rounded-full mr-3 rtl:mr-0 rtl:ml-3 animate-pulse ${
                                             isActive(item.path) ? 'bg-white' : 'bg-indigo-500'
                                         }`}></div>
                                         {item.label}
                                     </Link>
                                 ))}
                                 
-                                <div className="pt-4 border-t border-gray-200">
+                                {/* User Info in Mobile Menu */}
+                                {user && (
+                                    <div className="pt-4 border-t border-gray-200 animate-fade-in-up animate-delay-500">
+                                        <div className="flex items-center space-x-3 rtl:space-x-reverse px-4 py-3 bg-gradient-to-r from-indigo-50 to-purple-50 rounded-xl">
+                                            <div className="w-10 h-10 bg-gradient-to-br from-green-400 to-blue-500 rounded-full flex items-center justify-center">
+                                                <span className="text-white font-bold">
+                                                    {user.name.charAt(0).toUpperCase()}
+                                                </span>
+                                            </div>
+                                            <div className="flex-1">
+                                                <div className="font-medium text-gray-900">{user.name}</div>
+                                                <div className="text-sm text-gray-500">{user.role === 'admin' ? 'مدير' : 'مستخدم'}</div>
+                                            </div>
+                                            <button
+                                                onClick={handleLogout}
+                                                className="px-3 py-1 rounded-lg text-xs font-medium bg-red-500 text-white hover:bg-red-600 transition-all duration-300"
+                                            >
+                                                خروج
+                                            </button>
+                                        </div>
+                                    </div>
+                                )}
+                                
+                                <div className="pt-4 border-t border-gray-200 animate-fade-in-up animate-delay-600">
                                     <div className="text-xs text-gray-500 text-center font-medium">
                                         {language === 'ar' ? 'منصة إبداعية للابتكار' : 'Creative Innovation Platform'}
                                     </div>

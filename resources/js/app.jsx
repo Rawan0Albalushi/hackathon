@@ -10,27 +10,84 @@ import WorkshopRegistration from './pages/WorkshopRegistration.jsx';
 import ConferenceRegistration from './pages/ConferenceRegistration.jsx';
 import Success from './pages/Success.jsx';
 import AdminDashboardMain from './pages/admin/AdminDashboardMain.jsx';
+import AnimationDemo from './pages/AnimationDemo.jsx';
+import Login from './pages/Login.jsx';
+import Register from './pages/Register.jsx';
+import AdminPortal from './pages/AdminPortal.jsx';
 
 // Import components
 import Layout from './components/Layout.jsx';
+import ProtectedRoute from './components/ProtectedRoute.jsx';
 import LanguageProvider from './contexts/LanguageContext.jsx';
+import { AuthProvider } from './contexts/AuthContext.jsx';
 
 const App = () => {
     return (
-        <LanguageProvider>
-            <Router>
-                <Layout>
+        <AuthProvider>
+            <LanguageProvider>
+                <Router>
                     <Routes>
-                        <Route path="/" element={<Home />} />
-                        <Route path="/hackathon" element={<HackathonRegistration />} />
-                        <Route path="/workshop" element={<WorkshopRegistration />} />
-                        <Route path="/conference" element={<ConferenceRegistration />} />
-                        <Route path="/success" element={<Success />} />
-                        <Route path="/admin" element={<AdminDashboardMain />} />
+                        {/* Public routes */}
+                        <Route path="/" element={
+                            <Layout>
+                                <Home />
+                            </Layout>
+                        } />
+                        <Route path="/login" element={<Login />} />
+                        <Route path="/register" element={<Register />} />
+                        
+                        {/* Protected routes with layout */}
+                        <Route path="/hackathon" element={
+                            <ProtectedRoute>
+                                <Layout>
+                                    <HackathonRegistration />
+                                </Layout>
+                            </ProtectedRoute>
+                        } />
+                        <Route path="/workshop" element={
+                            <ProtectedRoute>
+                                <Layout>
+                                    <WorkshopRegistration />
+                                </Layout>
+                            </ProtectedRoute>
+                        } />
+                        <Route path="/conference" element={
+                            <ProtectedRoute>
+                                <Layout>
+                                    <ConferenceRegistration />
+                                </Layout>
+                            </ProtectedRoute>
+                        } />
+                        <Route path="/success" element={
+                            <ProtectedRoute>
+                                <Layout>
+                                    <Success />
+                                </Layout>
+                            </ProtectedRoute>
+                        } />
+                        <Route path="/animations" element={
+                            <ProtectedRoute>
+                                <Layout>
+                                    <AnimationDemo />
+                                </Layout>
+                            </ProtectedRoute>
+                        } />
+                        
+                        {/* Admin routes */}
+                        <Route path="/admin" element={
+                            <ProtectedRoute requireAdmin={true}>
+                                <AdminDashboardMain />
+                            </ProtectedRoute>
+                        } />
+                        <Route path="/admin-portal" element={
+                            <ProtectedRoute requireAdmin={true}>
+                                <AdminPortal />
+                            </ProtectedRoute>
+                        } />
                     </Routes>
-                </Layout>
-            </Router>
-        </LanguageProvider>
+                </Router>
+            </LanguageProvider>
+        </AuthProvider>
     );
 };
 
