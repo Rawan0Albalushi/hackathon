@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useLanguage } from '../contexts/LanguageContext';
 import { useAuth } from '../contexts/AuthContext';
 import ScrollToTop from './ScrollToTop';
@@ -9,6 +9,7 @@ const Layout = ({ children }) => {
     const { language, toggleLanguage, t } = useLanguage();
     const { user, logout, isAdmin } = useAuth();
     const location = useLocation();
+    const navigate = useNavigate();
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
     const isActive = (path) => {
@@ -40,7 +41,7 @@ const Layout = ({ children }) => {
     const handleLogout = async () => {
         await logout();
         // Redirect to home page after logout
-        window.location.href = '/';
+        navigate('/');
     };
 
     useEffect(() => {

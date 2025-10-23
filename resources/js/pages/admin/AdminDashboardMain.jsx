@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useLanguage } from '../../contexts/LanguageContext';
 import { useAuth } from '../../contexts/AuthContext';
 import AdminStats from './AdminStats';
@@ -7,15 +8,18 @@ import AdminHackathonRegistrations from './AdminHackathonRegistrations';
 import AdminConferenceRegistrations from './AdminConferenceRegistrations';
 import AdminWorkshopRegistrations from './AdminWorkshopRegistrations';
 import AdminWorkshops from './AdminWorkshops';
+import AdminUsers from './AdminUsers';
 
 const AdminDashboardMain = () => {
     const { language, toggleLanguage } = useLanguage();
     const { user, logout } = useAuth();
+    const navigate = useNavigate();
     const [activeTab, setActiveTab] = useState('stats');
     const [sidebarOpen, setSidebarOpen] = useState(false);
 
     const handleLogout = async () => {
         await logout();
+        navigate('/');
     };
 
     const navigationItems = [
@@ -68,6 +72,16 @@ const AdminDashboardMain = () => {
                 </svg>
             ),
             color: 'from-orange-500 to-orange-600'
+        },
+        {
+            id: 'users',
+            label: language === 'ar' ? 'إدارة المستخدمين' : 'User Management',
+            icon: (
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z" />
+                </svg>
+            ),
+            color: 'from-purple-500 to-purple-600'
         }
     ];
 
@@ -224,6 +238,7 @@ const AdminDashboardMain = () => {
                             {activeTab === 'conference' && <AdminConferenceRegistrations />}
                             {activeTab === 'workshop-registrations' && <AdminWorkshopRegistrations />}
                             {activeTab === 'workshops' && <AdminWorkshops />}
+                            {activeTab === 'users' && <AdminUsers />}
                         </div>
                     </div>
                 </main>

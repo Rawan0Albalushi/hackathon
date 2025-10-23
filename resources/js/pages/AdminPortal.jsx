@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { useLanguage } from '../contexts/LanguageContext';
 import AdminStats from './admin/AdminStats';
@@ -7,11 +8,13 @@ import AdminHackathonRegistrations from './admin/AdminHackathonRegistrations';
 import AdminConferenceRegistrations from './admin/AdminConferenceRegistrations';
 import AdminWorkshopRegistrations from './admin/AdminWorkshopRegistrations';
 import AdminWorkshops from './admin/AdminWorkshops';
+import AdminUsers from './admin/AdminUsers';
 import LoadingSpinner from '../components/LoadingSpinner';
 
 const AdminPortal = () => {
     const { user, logout, isAdmin } = useAuth();
     const { language, t, toggleLanguage } = useLanguage();
+    const navigate = useNavigate();
     const [activeTab, setActiveTab] = useState('stats');
     const [loading, setLoading] = useState(true);
 
@@ -23,6 +26,7 @@ const AdminPortal = () => {
 
     const handleLogout = async () => {
         await logout();
+        navigate('/');
     };
 
     if (loading) {
@@ -182,6 +186,22 @@ const AdminPortal = () => {
                                 <span className="sm:hidden">{language === 'ar' ? 'إدارة' : 'Manage'}</span>
                             </div>
                         </button>
+                        <button
+                            onClick={() => setActiveTab('users')}
+                            className={`py-3 lg:py-4 px-2 lg:px-1 border-b-2 font-medium text-xs lg:text-sm whitespace-nowrap transition-all duration-300 ${
+                                activeTab === 'users'
+                                    ? 'border-purple-500 text-purple-600 bg-purple-50/50'
+                                    : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 hover:bg-gray-50/50'
+                            }`}
+                        >
+                            <div className="flex items-center space-x-1 lg:space-x-2 rtl:space-x-reverse">
+                                <svg className="w-3 h-3 lg:w-4 lg:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z" />
+                                </svg>
+                                <span className="hidden sm:inline">{language === 'ar' ? 'إدارة المستخدمين' : 'User Management'}</span>
+                                <span className="sm:hidden">{language === 'ar' ? 'مستخدمين' : 'Users'}</span>
+                            </div>
+                        </button>
                     </div>
                 </div>
             </nav>
@@ -195,6 +215,7 @@ const AdminPortal = () => {
                     {activeTab === 'conference' && <AdminConferenceRegistrations />}
                     {activeTab === 'workshop-registrations' && <AdminWorkshopRegistrations />}
                     {activeTab === 'workshops' && <AdminWorkshops />}
+                    {activeTab === 'users' && <AdminUsers />}
                 </div>
             </main>
         </div>

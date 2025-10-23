@@ -54,5 +54,11 @@ Route::middleware(['web', 'auth:web'])->group(function () {
         Route::post('/admin/workshops', [AdminController::class, 'createWorkshop']);
         Route::put('/admin/workshops/{id}', [AdminController::class, 'updateWorkshop']);
         Route::delete('/admin/workshops/{id}', [AdminController::class, 'deleteWorkshop']);
+        
+        // User management
+        Route::get('/admin/users', [AdminController::class, 'getUsers']);
+        Route::put('/admin/users/{id}', [AdminController::class, 'updateUser']);
+        Route::delete('/admin/users/{id}', [AdminController::class, 'deleteUser']);
+        Route::post('/admin/users/bulk-action', [AdminController::class, 'bulkUserAction']);
     });
 });
