@@ -45,7 +45,8 @@ const RegisterForm = () => {
 
         try {
             await register(formData.name, formData.email, formData.password, formData.password_confirmation);
-            navigate('/login');
+            // Auto-login is already handled in AuthContext, so navigate to home
+            navigate('/');
         } catch (err) {
             // Check if it's a validation error with field details
             if (err.response && err.response.data && err.response.data.errors) {

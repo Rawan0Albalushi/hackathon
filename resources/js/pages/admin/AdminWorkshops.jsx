@@ -1,6 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { useLanguage } from '../../contexts/LanguageContext';
 
+// Utility function to get CSRF token
+const getCsrfToken = async () => {
+    const response = await fetch('/api/csrf-token', {
+        credentials: 'include'
+    });
+    const data = await response.json();
+    return data.csrf_token;
+};
+
 const AdminWorkshops = () => {
     const { language } = useLanguage();
     const [workshops, setWorkshops] = useState([]);
@@ -23,6 +32,7 @@ const AdminWorkshops = () => {
         requirements: '',
         is_active: true
     });
+    const [isSubmitting, setIsSubmitting] = useState(false);
 
     useEffect(() => {
         fetchWorkshops();
@@ -37,7 +47,13 @@ const AdminWorkshops = () => {
                 ...(searchTerm && { search: searchTerm })
             });
 
+            // Get CSRF token
+            const csrfToken = await getCsrfToken();
+
             const response = await fetch(`/api/admin/workshops?${params}`, {
+                headers: {
+                    'X-CSRF-TOKEN': csrfToken,
+                },
                 credentials: 'include'
             });
             const data = await response.json();
@@ -57,7 +73,45 @@ const AdminWorkshops = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        setIsSubmitting(true);
+        setError(null);
+        
+        // Basic validation
+        if (!formData.title.trim()) {
+            setError('عنوان الورشة مطلوب');
+            setIsSubmitting(false);
+            return;
+        }
+        if (!formData.description.trim()) {
+            setError('وصف الورشة مطلوب');
+            setIsSubmitting(false);
+            return;
+        }
+        if (!formData.instructor.trim()) {
+            setError('اسم المدرب مطلوب');
+            setIsSubmitting(false);
+            return;
+        }
+        if (!formData.start_time) {
+            setError('وقت البداية مطلوب');
+            setIsSubmitting(false);
+            return;
+        }
+        if (!formData.end_time) {
+            setError('وقت النهاية مطلوب');
+            setIsSubmitting(false);
+            return;
+        }
+        if (new Date(formData.start_time) >= new Date(formData.end_time)) {
+            setError('وقت النهاية يجب أن يكون بعد وقت البداية');
+            setIsSubmitting(false);
+            return;
+        }
+        
         try {
+            // Get CSRF token
+            const csrfToken = await getCsrfToken();
+            
             const url = editingWorkshop 
                 ? `/api/admin/workshops/${editingWorkshop.id}`
                 : '/api/admin/workshops';
@@ -68,6 +122,7 @@ const AdminWorkshops = () => {
                 method,
                 headers: {
                     'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': csrfToken,
                 },
                 credentials: 'include',
                 body: JSON.stringify(formData)
@@ -80,11 +135,22 @@ const AdminWorkshops = () => {
                 setEditingWorkshop(null);
                 resetForm();
                 fetchWorkshops();
+                // Show success message using toast
+                if (window.showToast) {
+                    window.showToast(
+                        editingWorkshop ? 'تم تحديث الورشة بنجاح' : 'تم إضافة الورشة بنجاح',
+                        'success',
+                        4000
+                    );
+                }
             } else {
-                setError(data.message);
+                setError(data.message || 'حدث خطأ أثناء حفظ الورشة');
             }
         } catch (err) {
-            setError('فشل في حفظ الورشة');
+            console.error('Error submitting form:', err);
+            setError('فشل في حفظ الورشة - تحقق من اتصال الإنترنت');
+        } finally {
+            setIsSubmitting(false);
         }
     };
 
@@ -107,8 +173,14 @@ const AdminWorkshops = () => {
         if (!confirm('هل أنت متأكد من حذف هذه الورشة؟')) return;
         
         try {
+            // Get CSRF token
+            const csrfToken = await getCsrfToken();
+
             const response = await fetch(`/api/admin/workshops/${id}`, {
                 method: 'DELETE',
+                headers: {
+                    'X-CSRF-TOKEN': csrfToken,
+                },
                 credentials: 'include'
             });
 
@@ -116,6 +188,10 @@ const AdminWorkshops = () => {
             
             if (data.success) {
                 fetchWorkshops();
+                // Show success message using toast
+                if (window.showToast) {
+                    window.showToast('تم حذف الورشة بنجاح', 'success', 3000);
+                }
             } else {
                 setError(data.message);
             }
@@ -210,7 +286,10 @@ const AdminWorkshops = () => {
                     </div>
 
                     {error && (
-                        <div className="mb-4 bg-red-50 border border-red-200 rounded-md p-4">
+                        <div className="mb-4 bg-red-50 border border-red-200 rounded-md p-4 flex items-center space-x-2 rtl:space-x-reverse">
+                            <svg className="w-5 h-5 text-red-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
                             <p className="text-sm text-red-800">{error}</p>
                         </div>
                     )}
@@ -406,6 +485,14 @@ const AdminWorkshops = () => {
 
                         {/* Modal Body */}
                         <div className="px-6 py-4">
+                            {error && (
+                                <div className="mb-4 bg-red-50 border border-red-200 rounded-md p-4 flex items-center space-x-2 rtl:space-x-reverse">
+                                    <svg className="w-5 h-5 text-red-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                    </svg>
+                                    <p className="text-sm text-red-800">{error}</p>
+                                </div>
+                            )}
                             <form onSubmit={handleSubmit} className="space-y-4">
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                     <div className="space-y-2">
@@ -539,26 +626,35 @@ const AdminWorkshops = () => {
                                         placeholder="متطلبات الورشة (اختياري)"
                                     />
                                 </div>
-                            </form>
-                        </div>
 
-                        {/* Modal Footer */}
-                        <div className="px-6 py-4 border-t border-gray-200 bg-gradient-to-r from-gray-50 to-orange-50">
-                            <div className="flex justify-end space-x-3 rtl:space-x-reverse">
-                                <button
-                                    type="button"
-                                    onClick={() => setShowModal(false)}
-                                    className="px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 transition-colors duration-200"
-                                >
-                                    إلغاء
-                                </button>
-                                <button
-                                    onClick={handleSubmit}
-                                    className="px-4 py-2 bg-gradient-to-r from-orange-500 to-pink-500 text-white rounded-md hover:from-orange-600 hover:to-pink-600 transition-all duration-200 shadow-lg hover:shadow-xl"
-                                >
-                                    {editingWorkshop ? 'تحديث' : 'إضافة'}
-                                </button>
-                            </div>
+                                {/* Form Buttons */}
+                                <div className="flex justify-end space-x-3 rtl:space-x-reverse pt-4">
+                                    <button
+                                        type="button"
+                                        onClick={() => setShowModal(false)}
+                                        className="px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 transition-colors duration-200"
+                                    >
+                                        إلغاء
+                                    </button>
+                                    <button
+                                        type="submit"
+                                        disabled={isSubmitting}
+                                        className={`px-4 py-2 rounded-md transition-all duration-200 shadow-lg hover:shadow-xl flex items-center space-x-2 rtl:space-x-reverse ${
+                                            isSubmitting 
+                                                ? 'bg-gray-400 cursor-not-allowed' 
+                                                : 'bg-gradient-to-r from-orange-500 to-pink-500 hover:from-orange-600 hover:to-pink-600'
+                                        } text-white`}
+                                    >
+                                        {isSubmitting && (
+                                            <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                                                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                            </svg>
+                                        )}
+                                        <span>{isSubmitting ? 'جاري الحفظ...' : (editingWorkshop ? 'تحديث' : 'إضافة')}</span>
+                                    </button>
+                                </div>
+                            </form>
                         </div>
                     </div>
                 </div>

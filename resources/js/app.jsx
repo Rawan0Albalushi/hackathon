@@ -18,6 +18,7 @@ import AdminPortal from './pages/AdminPortal.jsx';
 // Import components
 import Layout from './components/Layout.jsx';
 import ProtectedRoute from './components/ProtectedRoute.jsx';
+import ToastContainer from './components/ToastContainer.jsx';
 import LanguageProvider from './contexts/LanguageContext.jsx';
 import { AuthProvider } from './contexts/AuthContext.jsx';
 
@@ -106,6 +107,7 @@ const App = () => {
                             </ProtectedRoute>
                         } />
                     </Routes>
+                    <ToastContainer />
                 </Router>
             </LanguageProvider>
         </AuthProvider>
