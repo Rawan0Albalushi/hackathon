@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useLanguage } from '../contexts/LanguageContext';
 import { useAuth } from '../contexts/AuthContext';
 import Form from '../components/Form';
+import ConferenceStatus from '../components/ConferenceStatus';
 import { submitConferenceRegistration } from '../utils/api';
 
 const ConferenceRegistration = () => {
@@ -10,6 +11,40 @@ const ConferenceRegistration = () => {
     const { user } = useAuth();
     const navigate = useNavigate();
     const [isLoading, setIsLoading] = useState(false);
+    const [existingRegistration, setExistingRegistration] = useState(null);
+    const [loadingRegistration, setLoadingRegistration] = useState(true);
+
+    // Check for existing registration
+    useEffect(() => {
+        if (user) {
+            fetchExistingRegistration();
+        } else {
+            setLoadingRegistration(false);
+        }
+    }, [user]);
+
+    const fetchExistingRegistration = async () => {
+        try {
+            const response = await fetch('/api/user/registrations', {
+                credentials: 'include'
+            });
+            const data = await response.json();
+            
+            if (data.success && data.data.conference) {
+                setExistingRegistration(data.data.conference);
+            }
+        } catch (error) {
+            console.error('Error fetching registration:', error);
+        } finally {
+            setLoadingRegistration(false);
+        }
+    };
+
+    const handleEditRegistration = () => {
+        // Navigate to edit form or show edit modal
+        // For now, we'll just reset the existing registration to allow re-registration
+        setExistingRegistration(null);
+    };
 
     const fields = [
         {
@@ -61,12 +96,9 @@ const ConferenceRegistration = () => {
         try {
             const response = await submitConferenceRegistration(formData);
             if (response.success) {
-                navigate('/success', { 
-                    state: { 
-                        type: 'conference',
-                        message: t('registrationSuccess')
-                    } 
-                });
+                // Update the existing registration state
+                setExistingRegistration(response.data);
+                // Don't navigate to success page, show the status instead
             } else {
                 alert(t('registrationFailed'));
             }
@@ -119,33 +151,52 @@ const ConferenceRegistration = () => {
                 <div className="absolute top-1/2 left-1/4 w-12 h-12 rounded-full opacity-30 animate-pulse delay-500" style={{background: '#D85584'}}></div>
             </div>
 
-            {/* Form Section */}
+            {/* Content Section */}
             <div className="py-16">
-                <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <div className="bg-white rounded-3xl shadow-2xl overflow-hidden">
-                        <div className="h-2" style={{background: 'linear-gradient(90deg, #F4A321 0%, #D85584 50%, #096289 100%)'}}></div>
-                        <div className="p-8 md:p-12">
-                            <div className="text-center mb-8">
-                                <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-                                    {language === 'ar' ? 'نموذج التسجيل في المؤتمر' : 'Conference Registration Form'}
-                                </h2>
-                                <p className="text-lg text-gray-600">
-                                    {language === 'ar' 
-                                        ? 'املأ النموذج أدناه للمشاركة في ملتقى الابتكار'
-                                        : 'Fill out the form below to participate in the Innovation Forum'
-                                    }
-                                </p>
-                            </div>
-
-                            <Form
-                                onSubmit={handleSubmit}
-                                fields={fields}
-                                title=""
-                                submitText={t('submit')}
-                                isLoading={isLoading}
-                            />
+                <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+                    {loadingRegistration ? (
+                        <div className="flex justify-center items-center py-20">
+                            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-green-600"></div>
+                            <span className="ml-4 text-lg text-gray-600">
+                                {language === 'ar' ? 'جاري التحميل...' : 'Loading...'}
+                            </span>
                         </div>
-                    </div>
+                    ) : existingRegistration ? (
+                        <ConferenceStatus 
+                            registration={existingRegistration} 
+                            onEdit={handleEditRegistration}
+                        />
+                    ) : (
+                        <div className="bg-white rounded-3xl shadow-2xl overflow-hidden transform hover:scale-[1.02] transition-transform duration-300">
+                            <div className="h-3" style={{background: 'linear-gradient(90deg, #F4A321 0%, #D85584 50%, #096289 100%)'}}></div>
+                            <div className="p-8 md:p-12">
+                                <div className="text-center mb-10">
+                                    <div className="flex justify-center mb-6">
+                                        <div className="bg-gradient-to-r from-green-500 to-teal-500 text-white p-6 rounded-3xl shadow-lg">
+                                            <span className="text-4xl">🎤</span>
+                                        </div>
+                                    </div>
+                                    <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+                                        {language === 'ar' ? 'نموذج التسجيل في المؤتمر' : 'Conference Registration Form'}
+                                    </h2>
+                                    <p className="text-lg text-gray-600 max-w-2xl mx-auto leading-relaxed">
+                                        {language === 'ar' 
+                                            ? 'املأ النموذج أدناه للمشاركة في ملتقى الابتكار'
+                                            : 'Fill out the form below to participate in the Innovation Forum'
+                                        }
+                                    </p>
+                                </div>
+
+                                <Form
+                                    onSubmit={handleSubmit}
+                                    fields={fields}
+                                    title=""
+                                    submitText={t('submit')}
+                                    isLoading={isLoading}
+                                />
+                            </div>
+                        </div>
+                    )}
                 </div>
             </div>
 

@@ -3,6 +3,7 @@ import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useLanguage } from '../contexts/LanguageContext';
 import { useAuth } from '../contexts/AuthContext';
 import Form from '../components/Form';
+import WorkshopStatus from '../components/WorkshopStatus';
 import { submitWorkshopRegistration } from '../utils/api';
 
 const WorkshopRegistration = () => {
@@ -13,6 +14,8 @@ const WorkshopRegistration = () => {
     const [isLoading, setIsLoading] = useState(false);
     const [workshops, setWorkshops] = useState([]);
     const [selectedWorkshop, setSelectedWorkshop] = useState(null);
+    const [existingRegistration, setExistingRegistration] = useState(null);
+    const [loadingRegistration, setLoadingRegistration] = useState(true);
 
     useEffect(() => {
         fetchWorkshops();
@@ -21,6 +24,15 @@ const WorkshopRegistration = () => {
             setSelectedWorkshop(workshopId);
         }
     }, [searchParams]);
+
+    // Check for existing registration
+    useEffect(() => {
+        if (user) {
+            fetchExistingRegistration();
+        } else {
+            setLoadingRegistration(false);
+        }
+    }, [user]);
 
     const fetchWorkshops = async () => {
         try {
@@ -35,6 +47,39 @@ const WorkshopRegistration = () => {
         } catch (err) {
             console.error('فشل في تحميل الورش');
         }
+    };
+
+    const fetchExistingRegistration = async () => {
+        try {
+            const response = await fetch('/api/user/registrations', {
+                credentials: 'include'
+            });
+            const data = await response.json();
+            
+            if (data.success && data.data.workshops && data.data.workshops.length > 0) {
+                // Check if there's a registration for the selected workshop
+                const workshopId = searchParams.get('workshop_id');
+                if (workshopId) {
+                    const existingReg = data.data.workshops.find(reg => reg.workshop_id == workshopId);
+                    if (existingReg) {
+                        setExistingRegistration(existingReg);
+                    }
+                } else {
+                    // If no specific workshop selected, show the first registration
+                    setExistingRegistration(data.data.workshops[0]);
+                }
+            }
+        } catch (error) {
+            console.error('Error fetching registration:', error);
+        } finally {
+            setLoadingRegistration(false);
+        }
+    };
+
+    const handleEditRegistration = () => {
+        // Navigate to edit form or show edit modal
+        // For now, we'll just reset the existing registration to allow re-registration
+        setExistingRegistration(null);
     };
 
     const fields = [
@@ -119,12 +164,9 @@ const WorkshopRegistration = () => {
             
             const response = await submitWorkshopRegistration(dataWithWorkshop);
             if (response.success) {
-                navigate('/success', { 
-                    state: { 
-                        type: 'workshop',
-                        message: t('registrationSuccess')
-                    } 
-                });
+                // Update the existing registration state
+                setExistingRegistration(response.data);
+                // Don't navigate to success page, show the status instead
             } else {
                 alert(response.message || t('registrationFailed'));
             }
@@ -177,33 +219,52 @@ const WorkshopRegistration = () => {
                 <div className="absolute top-1/2 left-1/4 w-12 h-12 rounded-full opacity-30 animate-pulse delay-500" style={{background: '#D85584'}}></div>
             </div>
 
-            {/* Form Section */}
+            {/* Content Section */}
             <div className="py-16">
-                <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <div className="bg-white rounded-3xl shadow-2xl overflow-hidden">
-                        <div className="bg-gradient-to-r from-blue-500 to-cyan-500 h-2"></div>
-                        <div className="p-8 md:p-12">
-                            <div className="text-center mb-8">
-                                <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-                                    {language === 'ar' ? 'نموذج التسجيل في الورشة' : 'Workshop Registration Form'}
-                                </h2>
-                                <p className="text-lg text-gray-600">
-                                    {language === 'ar' 
-                                        ? 'املأ النموذج أدناه للمشاركة في الورشة التدريبية'
-                                        : 'Fill out the form below to participate in the training workshop'
-                                    }
-                                </p>
-                            </div>
-
-                            <Form
-                                onSubmit={handleSubmit}
-                                fields={fields}
-                                title=""
-                                submitText={t('submit')}
-                                isLoading={isLoading}
-                            />
+                <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+                    {loadingRegistration ? (
+                        <div className="flex justify-center items-center py-20">
+                            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+                            <span className="ml-4 text-lg text-gray-600">
+                                {language === 'ar' ? 'جاري التحميل...' : 'Loading...'}
+                            </span>
                         </div>
-                    </div>
+                    ) : existingRegistration ? (
+                        <WorkshopStatus 
+                            registration={existingRegistration} 
+                            onEdit={handleEditRegistration}
+                        />
+                    ) : (
+                        <div className="bg-white rounded-3xl shadow-2xl overflow-hidden transform hover:scale-[1.02] transition-transform duration-300">
+                            <div className="bg-gradient-to-r from-blue-500 to-cyan-500 h-3"></div>
+                            <div className="p-8 md:p-12">
+                                <div className="text-center mb-10">
+                                    <div className="flex justify-center mb-6">
+                                        <div className="bg-gradient-to-r from-blue-500 to-cyan-500 text-white p-6 rounded-3xl shadow-lg">
+                                            <span className="text-4xl">🎓</span>
+                                        </div>
+                                    </div>
+                                    <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+                                        {language === 'ar' ? 'نموذج التسجيل في الورشة' : 'Workshop Registration Form'}
+                                    </h2>
+                                    <p className="text-lg text-gray-600 max-w-2xl mx-auto leading-relaxed">
+                                        {language === 'ar' 
+                                            ? 'املأ النموذج أدناه للمشاركة في الورشة التدريبية'
+                                            : 'Fill out the form below to participate in the training workshop'
+                                        }
+                                    </p>
+                                </div>
+
+                                <Form
+                                    onSubmit={handleSubmit}
+                                    fields={fields}
+                                    title=""
+                                    submitText={t('submit')}
+                                    isLoading={isLoading}
+                                />
+                            </div>
+                        </div>
+                    )}
                 </div>
             </div>
 

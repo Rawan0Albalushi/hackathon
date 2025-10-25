@@ -48,31 +48,121 @@ const AdminConferenceRegistrations = () => {
 
     const handleStatusUpdate = async () => {
         try {
-            const response = await fetch(`/api/admin/registrations/conference/${selectedRegistration.id}/status`, {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                credentials: 'include',
-                body: JSON.stringify({
-                    status: newStatus,
-                    rejection_reason: newStatus === 'rejected' ? rejectionReason : null
-                })
+            // التحقق من صحة البيانات
+            if (!selectedRegistration || !selectedRegistration.id) {
+                console.error('No registration selected');
+                setError('لم يتم اختيار تسجيل للتحديث');
+                return;
+            }
+            
+            if (!newStatus) {
+                console.error('No status selected');
+                setError('يرجى اختيار حالة جديدة');
+                return;
+            }
+            
+            console.log('Updating status for registration:', selectedRegistration.id);
+            console.log('New status:', newStatus);
+            console.log('Rejection reason:', rejectionReason);
+            
+            // إضافة loading state
+            setLoading(true);
+            setError(null);
+            
+            const url = `/api/admin/registrations/conference/${selectedRegistration.id}/status`;
+            console.log('Request URL:', url);
+            console.log('Request method: PUT');
+            console.log('Request body:', {
+                status: newStatus,
+                rejection_reason: newStatus === 'rejected' ? rejectionReason : null
             });
+            
+            // الحصول على رمز CSRF
+            const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
+            console.log('CSRF Token:', csrfToken);
+            
+            if (!csrfToken) {
+                console.error('CSRF token not found for update request');
+                setError('رمز CSRF غير موجود - يرجى تحديث الصفحة');
+                setLoading(false);
+                return;
+            }
+            
+            // جرب PUT أولاً، ثم POST إذا فشل
+            let response;
+            try {
+                response = await fetch(url, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-Requested-With': 'XMLHttpRequest',
+                        'X-CSRF-TOKEN': csrfToken,
+                    },
+                    credentials: 'include',
+                    body: JSON.stringify({
+                        status: newStatus,
+                        rejection_reason: newStatus === 'rejected' ? rejectionReason : null
+                    })
+                });
+            } catch (putError) {
+                console.log('PUT failed, trying POST:', putError);
+                response = await fetch(url, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-Requested-With': 'XMLHttpRequest',
+                        'X-CSRF-TOKEN': csrfToken,
+                    },
+                    credentials: 'include',
+                    body: JSON.stringify({
+                        status: newStatus,
+                        rejection_reason: newStatus === 'rejected' ? rejectionReason : null
+                    })
+                });
+            }
 
-            const data = await response.json();
+            console.log('Response status:', response.status);
+            console.log('Response headers:', response.headers);
+            
+            // التحقق من حالة الاستجابة
+            if (!response.ok) {
+                const errorText = await response.text();
+                console.error('HTTP Error Response:', errorText);
+                throw new Error(`HTTP error! status: ${response.status} - ${errorText}`);
+            }
+            
+            // التحقق من نوع الاستجابة
+            const contentType = response.headers.get('content-type');
+            console.log('Content-Type:', contentType);
+            
+            let data;
+            if (contentType && contentType.includes('application/json')) {
+                data = await response.json();
+            } else {
+                // إذا لم تكن JSON، احصل على النص
+                const text = await response.text();
+                console.log('Non-JSON response:', text);
+                throw new Error('الخادم لم يعد استجابة JSON صحيحة');
+            }
+            
+            console.log('Response data:', data);
             
             if (data.success) {
+                console.log('Status updated successfully');
                 setShowStatusModal(false);
                 setSelectedRegistration(null);
                 setNewStatus('');
                 setRejectionReason('');
                 fetchRegistrations();
             } else {
-                setError(data.message);
+                console.error('Update failed:', data.message);
+                setError(data.message || 'فشل في تحديث حالة التسجيل');
             }
         } catch (err) {
-            setError('فشل في تحديث حالة التسجيل');
+            console.error('Error updating status:', err);
+            setError(err.message || 'فشل في تحديث حالة التسجيل');
+        } finally {
+            setLoading(false);
         }
     };
 

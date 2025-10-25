@@ -73,24 +73,56 @@ const Home = () => {
             return {
                 type: 'hackathon',
                 text: language === 'ar' ? 'متابعة طلب الهاكثون' : 'Track Hackathon Application',
-                url: '/hackathon-registration'
+                url: '/hackathon'
             };
         }
         if (allRegistrations.conference) {
             return {
                 type: 'conference',
                 text: language === 'ar' ? 'متابعة طلب المؤتمر' : 'Track Conference Application',
-                url: '/conference-registration'
+                url: '/conference'
             };
         }
         if (allRegistrations.workshops && allRegistrations.workshops.length > 0) {
             return {
                 type: 'workshops',
                 text: language === 'ar' ? 'متابعة طلبات الورش' : 'Track Workshop Applications',
-                url: '/dashboard'
+                url: '/workshop'
             };
         }
         return null;
+    };
+
+    // Function to get workshop registration status
+    const getWorkshopRegistrationStatus = () => {
+        if (allRegistrations.workshops && allRegistrations.workshops.length > 0) {
+            return {
+                hasRegistration: true,
+                text: language === 'ar' ? 'متابعة طلبات الورش' : 'Track Workshop Applications',
+                url: '/workshop'
+            };
+        }
+        return {
+            hasRegistration: false,
+            text: language === 'ar' ? 'سجل في الورشة' : 'Register for Workshop',
+            url: '/workshop'
+        };
+    };
+
+    // Function to get conference registration status
+    const getConferenceRegistrationStatus = () => {
+        if (allRegistrations.conference) {
+            return {
+                hasRegistration: true,
+                text: language === 'ar' ? 'متابعة طلب المؤتمر' : 'Track Conference Application',
+                url: '/conference'
+            };
+        }
+        return {
+            hasRegistration: false,
+            text: language === 'ar' ? 'سجل في المؤتمر' : 'Register for Conference',
+            url: '/conference'
+        };
     };
 
     const hackathonInfo = {
@@ -193,13 +225,18 @@ const Home = () => {
                                                         {language === 'ar' ? 'سجل في الهاكثون' : 'Register for Hackathon'}
                                                     </Link>
                                                 )}
-                                                <Link
-                                                    to="/workshop"
-                                                    className="ripple-effect button-press bg-white px-8 py-4 rounded-full text-lg font-semibold hover:shadow-2xl transition-all duration-300 transform hover:scale-105 hover-float"
-                                                    style={{color: '#003C72'}}
-                                                >
-                                                    {language === 'ar' ? 'سجل في الورشة' : 'Register for Workshop'}
-                                                </Link>
+                                                {(() => {
+                                                    const workshopStatus = getWorkshopRegistrationStatus();
+                                                    return (
+                                                        <Link
+                                                            to={workshopStatus.url}
+                                                            className="ripple-effect button-press bg-white px-8 py-4 rounded-full text-lg font-semibold hover:shadow-2xl transition-all duration-300 transform hover:scale-105 hover-float"
+                                                            style={{color: '#003C72'}}
+                                                        >
+                                                            {workshopStatus.text}
+                                                        </Link>
+                                                    );
+                                                })()}
                                             </>
                                         );
                                     })()}
@@ -391,13 +428,18 @@ const Home = () => {
                                 ))}
                             </div>
                             
-                            <Link
-                                to="/workshop"
-                                className="ripple-effect button-press inline-block text-white px-8 py-4 rounded-full text-lg font-semibold hover:shadow-xl transition-all duration-300 transform hover:scale-105 hover-pulse-glow animate-fade-in-up animate-delay-700"
-                                style={{background: 'linear-gradient(135deg, #096289 0%, #003C72 100%)'}}
-                            >
-                                {language === 'ar' ? 'سجل في الورشة' : 'Register for Workshop'}
-                            </Link>
+                            {(() => {
+                                const workshopStatus = getWorkshopRegistrationStatus();
+                                return (
+                                    <Link
+                                        to={workshopStatus.url}
+                                        className="ripple-effect button-press inline-block text-white px-8 py-4 rounded-full text-lg font-semibold hover:shadow-xl transition-all duration-300 transform hover:scale-105 hover-pulse-glow animate-fade-in-up animate-delay-700"
+                                        style={{background: 'linear-gradient(135deg, #096289 0%, #003C72 100%)'}}
+                                    >
+                                        {workshopStatus.text}
+                                    </Link>
+                                );
+                            })()}
                         </div>
                     </div>
                 </div>
@@ -429,13 +471,18 @@ const Home = () => {
                                 ))}
                             </div>
                             
-                            <Link
-                                to="/conference"
-                                className="ripple-effect button-press inline-block text-white px-8 py-4 rounded-full text-lg font-semibold hover:shadow-xl transition-all duration-300 transform hover:scale-105 hover-pulse-glow animate-fade-in-up animate-delay-700"
-                                style={{background: 'linear-gradient(135deg, #003C72 0%, #096289 100%)'}}
-                            >
-                                {language === 'ar' ? 'سجل في المؤتمر' : 'Register for Conference'}
-                            </Link>
+                            {(() => {
+                                const conferenceStatus = getConferenceRegistrationStatus();
+                                return (
+                                    <Link
+                                        to={conferenceStatus.url}
+                                        className="ripple-effect button-press inline-block text-white px-8 py-4 rounded-full text-lg font-semibold hover:shadow-xl transition-all duration-300 transform hover:scale-105 hover-pulse-glow animate-fade-in-up animate-delay-700"
+                                        style={{background: 'linear-gradient(135deg, #003C72 0%, #096289 100%)'}}
+                                    >
+                                        {conferenceStatus.text}
+                                    </Link>
+                                );
+                            })()}
                         </div>
                         
                         <div className="relative animate-fade-in-right">
@@ -531,13 +578,18 @@ const Home = () => {
                                         </Link>
                                     );
                                 })()}
-                                <Link
-                                    to="/workshop"
-                                    className="ripple-effect button-press bg-white px-8 py-4 rounded-full text-lg font-semibold hover:shadow-2xl transition-all duration-300 transform hover:scale-105 hover-float"
-                                    style={{color: '#003C72'}}
-                                >
-                                    {language === 'ar' ? 'سجل في الورش' : 'Register for Workshops'}
-                                </Link>
+                                {(() => {
+                                    const workshopStatus = getWorkshopRegistrationStatus();
+                                    return (
+                                        <Link
+                                            to={workshopStatus.url}
+                                            className="ripple-effect button-press bg-white px-8 py-4 rounded-full text-lg font-semibold hover:shadow-2xl transition-all duration-300 transform hover:scale-105 hover-float"
+                                            style={{color: '#003C72'}}
+                                        >
+                                            {workshopStatus.text}
+                                        </Link>
+                                    );
+                                })()}
                             </>
                         ) : (
                             <>
@@ -548,13 +600,18 @@ const Home = () => {
                                 >
                                     {language === 'ar' ? 'ابدأ رحلتك الآن' : 'Start Your Journey Now'}
                                 </Link>
-                                <Link
-                                    to="/workshop"
-                                    className="ripple-effect button-press bg-white px-8 py-4 rounded-full text-lg font-semibold hover:shadow-2xl transition-all duration-300 transform hover:scale-105 hover-float"
-                                    style={{color: '#003C72'}}
-                                >
-                                    {language === 'ar' ? 'تعلم المزيد' : 'Learn More'}
-                                </Link>
+                                {(() => {
+                                    const workshopStatus = getWorkshopRegistrationStatus();
+                                    return (
+                                        <Link
+                                            to={workshopStatus.url}
+                                            className="ripple-effect button-press bg-white px-8 py-4 rounded-full text-lg font-semibold hover:shadow-2xl transition-all duration-300 transform hover:scale-105 hover-float"
+                                            style={{color: '#003C72'}}
+                                        >
+                                            {workshopStatus.hasRegistration ? workshopStatus.text : (language === 'ar' ? 'تعلم المزيد' : 'Learn More')}
+                                        </Link>
+                                    );
+                                })()}
                             </>
                         )}
                     </div>
