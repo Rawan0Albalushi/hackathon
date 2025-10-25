@@ -6,6 +6,17 @@ const Form = ({ onSubmit, fields, title, submitText, isLoading = false }) => {
     const [formData, setFormData] = useState({});
     const [errors, setErrors] = useState({});
 
+    // Initialize form data with field values
+    React.useEffect(() => {
+        const initialData = {};
+        fields.forEach(field => {
+            if (field.value !== undefined) {
+                initialData[field.name] = field.value;
+            }
+        });
+        setFormData(initialData);
+    }, [fields]);
+
     const handleChange = (e) => {
         const { name, value, type, checked } = e.target;
         
@@ -37,8 +48,15 @@ const Form = ({ onSubmit, fields, title, submitText, isLoading = false }) => {
                 newErrors[field.name] = t('invalidEmail');
             }
             
-            if (field.type === 'tel' && formData[field.name] && !/^[\+]?[0-9\s\-\(\)]{10,}$/.test(formData[field.name])) {
-                newErrors[field.name] = t('invalidPhone');
+            if (field.type === 'tel' && formData[field.name]) {
+                // For Omani phone numbers with fixed +968 prefix
+                if (field.countryCode === '+968') {
+                    if (!/^[0-9]{8}$/.test(formData[field.name])) {
+                        newErrors[field.name] = language === 'ar' ? 'يجب أن يكون رقم الهاتف 8 أرقام' : 'Phone number must be 8 digits';
+                    }
+                } else if (!/^[\+]?[0-9\s\-\(\)]{10,}$/.test(formData[field.name])) {
+                    newErrors[field.name] = t('invalidPhone');
+                }
             }
             
             if (field.name === 'age') {
@@ -62,7 +80,7 @@ const Form = ({ onSubmit, fields, title, submitText, isLoading = false }) => {
     const renderField = (field) => {
         const commonClasses = `w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors ${
             errors[field.name] ? 'border-red-500' : 'border-gray-300'
-        }`;
+        } ${field.readonly ? 'bg-gray-100 cursor-not-allowed' : ''}`;
         
         const labelClasses = `block text-sm font-medium text-gray-700 mb-2 ${
             language === 'ar' ? 'text-right' : 'text-left'
@@ -81,6 +99,7 @@ const Form = ({ onSubmit, fields, title, submitText, isLoading = false }) => {
                             onChange={handleChange}
                             className={commonClasses}
                             required={field.required}
+                            disabled={field.readonly}
                         >
                             <option value="">{language === 'ar' ? 'اختر...' : 'Select...'}</option>
                             {field.options.map(option => (
@@ -136,7 +155,50 @@ const Form = ({ onSubmit, fields, title, submitText, isLoading = false }) => {
                             className={commonClasses}
                             placeholder={field.placeholder}
                             required={field.required}
+                            readOnly={field.readonly}
                         />
+                        {errors[field.name] && (
+                            <p className="text-red-500 text-sm mt-1">{errors[field.name]}</p>
+                        )}
+                    </div>
+                );
+
+            case 'tel':
+                return (
+                    <div key={field.name} className="mb-6">
+                        <label className={labelClasses}>
+                            {field.label} {field.required && <span className="text-red-500">*</span>}
+                        </label>
+                        {field.countryCode ? (
+                            <div className="flex" dir="ltr">
+                                <div className="flex items-center px-3 py-3 bg-gray-100 border border-r-0 border-gray-300 rounded-l-lg text-gray-700 font-medium whitespace-nowrap">
+                                    {field.countryCode}
+                                </div>
+                                <input
+                                    type={field.type}
+                                    name={field.name}
+                                    value={formData[field.name] || ''}
+                                    onChange={handleChange}
+                                    placeholder={field.placeholder}
+                                    className={`${commonClasses} rounded-l-none`}
+                                    required={field.required}
+                                    readOnly={field.readonly}
+                                    maxLength={8}
+                                    dir="ltr"
+                                />
+                            </div>
+                        ) : (
+                            <input
+                                type={field.type}
+                                name={field.name}
+                                value={formData[field.name] || ''}
+                                onChange={handleChange}
+                                placeholder={field.placeholder}
+                                className={commonClasses}
+                                required={field.required}
+                                readOnly={field.readonly}
+                            />
+                        )}
                         {errors[field.name] && (
                             <p className="text-red-500 text-sm mt-1">{errors[field.name]}</p>
                         )}
@@ -157,6 +219,7 @@ const Form = ({ onSubmit, fields, title, submitText, isLoading = false }) => {
                             placeholder={field.placeholder}
                             className={commonClasses}
                             required={field.required}
+                            readOnly={field.readonly}
                         />
                         {errors[field.name] && (
                             <p className="text-red-500 text-sm mt-1">{errors[field.name]}</p>

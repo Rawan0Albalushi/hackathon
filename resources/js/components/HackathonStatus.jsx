@@ -38,7 +38,7 @@ const HackathonStatus = ({ registration, onEdit }) => {
     };
 
     const formatDate = (dateString) => {
-        return new Date(dateString).toLocaleDateString('ar-SA', {
+        return new Date(dateString).toLocaleDateString('en-US', {
             year: 'numeric',
             month: 'long',
             day: 'numeric',
@@ -113,18 +113,6 @@ const HackathonStatus = ({ registration, onEdit }) => {
                 </div>
             </div>
 
-            {/* Action Buttons */}
-            {registration.status === 'rejected' && (
-                <div className="flex flex-wrap gap-4 mb-8">
-                    <button
-                        onClick={onEdit}
-                        className="group bg-gradient-to-r from-blue-500 to-purple-600 text-white px-8 py-4 rounded-2xl hover:from-blue-600 hover:to-purple-700 transition-all duration-300 flex items-center space-x-3 rtl:space-x-reverse shadow-lg hover:shadow-xl transform hover:-translate-y-1"
-                    >
-                        <span className="text-xl group-hover:scale-110 transition-transform duration-200">✏️</span>
-                        <span className="font-semibold">{language === 'ar' ? 'تعديل الطلب' : 'Edit Application'}</span>
-                    </button>
-                </div>
-            )}
 
             {/* Registration Details */}
             <div className="bg-white rounded-3xl shadow-2xl overflow-hidden transform transition-all duration-500 animate-in slide-in-from-top-4">

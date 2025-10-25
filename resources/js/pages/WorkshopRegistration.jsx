@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useLanguage } from '../contexts/LanguageContext';
+import { useAuth } from '../contexts/AuthContext';
 import Form from '../components/Form';
 import { submitWorkshopRegistration } from '../utils/api';
 
 const WorkshopRegistration = () => {
     const { t, language } = useLanguage();
+    const { user } = useAuth();
     const navigate = useNavigate();
     const [searchParams] = useSearchParams();
     const [isLoading, setIsLoading] = useState(false);
@@ -60,14 +62,17 @@ const WorkshopRegistration = () => {
             label: t('email'),
             type: 'email',
             required: true,
-            placeholder: language === 'ar' ? 'example@email.com' : 'example@email.com'
+            readonly: true,
+            placeholder: language === 'ar' ? 'example@email.com' : 'example@email.com',
+            value: user?.email || ''
         },
         {
             name: 'phone',
             label: t('phone'),
             type: 'tel',
             required: true,
-            placeholder: language === 'ar' ? '+966501234567' : '+966501234567'
+            countryCode: '+968',
+            placeholder: language === 'ar' ? '12345678' : '12345678'
         },
         {
             name: 'background',

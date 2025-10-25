@@ -59,14 +59,17 @@ const HackathonRegistration = () => {
             label: t('email'),
             type: 'email',
             required: true,
-            placeholder: language === 'ar' ? 'example@email.com' : 'example@email.com'
+            readonly: true,
+            placeholder: language === 'ar' ? 'example@email.com' : 'example@email.com',
+            value: user?.email || ''
         },
         {
             name: 'phone',
             label: t('phone'),
             type: 'tel',
             required: true,
-            placeholder: language === 'ar' ? '+966501234567' : '+966501234567'
+            countryCode: '+968',
+            placeholder: language === 'ar' ? '12345678' : '12345678'
         },
         {
             name: 'age',

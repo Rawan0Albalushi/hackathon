@@ -87,7 +87,7 @@ const UserDashboard = () => {
     };
 
     const formatDate = (dateString) => {
-        return new Date(dateString).toLocaleDateString(language === 'ar' ? 'ar-SA' : 'en-US', {
+        return new Date(dateString).toLocaleDateString('en-US', {
             year: 'numeric',
             month: 'long',
             day: 'numeric',
@@ -265,12 +265,14 @@ const UserDashboard = () => {
                                     </div>
                                 )}
 
-                                <Link 
-                                    to="/hackathon-registration"
-                                    className="block w-full bg-gradient-to-r from-blue-500 to-purple-600 text-white text-center py-3 rounded-2xl font-semibold hover:from-blue-600 hover:to-purple-700 transition-all duration-300 transform hover:scale-105"
-                                >
-                                    {language === 'ar' ? 'مراجعة الطلب' : 'Review Application'}
-                                </Link>
+                                {registrations.hackathon.status !== 'rejected' && (
+                                    <Link 
+                                        to="/hackathon-registration"
+                                        className="block w-full bg-gradient-to-r from-blue-500 to-purple-600 text-white text-center py-3 rounded-2xl font-semibold hover:from-blue-600 hover:to-purple-700 transition-all duration-300 transform hover:scale-105"
+                                    >
+                                        {language === 'ar' ? 'مراجعة الطلب' : 'Review Application'}
+                                    </Link>
+                                )}
                             </div>
                         ) : (
                             <div className="text-center py-12">
@@ -360,12 +362,14 @@ const UserDashboard = () => {
                                     </div>
                                 )}
 
-                                <Link 
-                                    to="/conference-registration"
-                                    className="block w-full bg-gradient-to-r from-green-500 to-teal-600 text-white text-center py-3 rounded-2xl font-semibold hover:from-green-600 hover:to-teal-700 transition-all duration-300 transform hover:scale-105"
-                                >
-                                    {language === 'ar' ? 'مراجعة الطلب' : 'Review Application'}
-                                </Link>
+                                {registrations.conference.status !== 'rejected' && (
+                                    <Link 
+                                        to="/conference-registration"
+                                        className="block w-full bg-gradient-to-r from-green-500 to-teal-600 text-white text-center py-3 rounded-2xl font-semibold hover:from-green-600 hover:to-teal-700 transition-all duration-300 transform hover:scale-105"
+                                    >
+                                        {language === 'ar' ? 'مراجعة الطلب' : 'Review Application'}
+                                    </Link>
+                                )}
                             </div>
                         ) : (
                             <div className="text-center py-12">
