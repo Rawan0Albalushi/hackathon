@@ -67,10 +67,16 @@ const AdminWorkshopRegistrations = () => {
 
     const handleStatusUpdate = async () => {
         try {
+            // Get CSRF token
+            const token = document.head.querySelector('meta[name="csrf-token"]');
+            const csrfToken = token ? token.content : '';
+
             const response = await fetch(`/api/admin/registrations/workshop/${selectedRegistration.id}/status`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': csrfToken,
+                    'X-Requested-With': 'XMLHttpRequest',
                 },
                 credentials: 'include',
                 body: JSON.stringify({

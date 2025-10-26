@@ -46,7 +46,7 @@ const LoginForm = () => {
     };
 
     return (
-        <div className="min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 relative overflow-hidden" style={{background: 'linear-gradient(135deg, #003C72 0%, #096289 50%, #D85584 100%)'}}>
+        <div className="min-h-screen flex items-center justify-center py-16 px-4 sm:px-6 lg:px-8 relative overflow-visible" style={{background: 'linear-gradient(135deg, #003C72 0%, #096289 50%, #D85584 100%)'}}>
             {/* Background Elements */}
             <div className="absolute inset-0 bg-black opacity-20"></div>
             {/* Floating elements positioned to avoid text overlap */}
@@ -60,12 +60,12 @@ const LoginForm = () => {
             <div className="login-floating-bg hidden xl:block absolute top-1/3 left-1/5 w-14 h-14 rounded-full opacity-10 animate-pulse delay-900 hover-float" style={{background: '#096289'}}></div>
             
             <div className="w-full max-w-md mx-auto">
-                <div className="space-y-8 relative z-10">
+                <div className="space-y-8 relative z-10 py-4">
                     <div className="text-center">
                         <div className="mx-auto w-20 h-20 lg:w-24 lg:h-24 rounded-3xl flex items-center justify-center mb-8 shadow-2xl animate-fade-in-down" style={{background: 'linear-gradient(135deg, #F4A321 0%, #D85584 100%)'}}>
                             <span className="text-white text-3xl lg:text-4xl font-bold">👤</span>
                         </div>
-                        <h2 className="text-5xl lg:text-6xl font-bold text-white mb-4 animate-fade-in-up gradient-text">
+                        <h2 className="text-5xl lg:text-6xl font-bold text-white mb-6 animate-fade-in-up gradient-text" style={{lineHeight: '1.1', paddingBottom: '0.75rem'}}>
                             {t('loginTitle')}
                         </h2>
                         <p className="text-lg lg:text-xl text-indigo-200 animate-fade-in-up animate-delay-200 mb-6">

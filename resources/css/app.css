@@ -1650,10 +1650,24 @@
     pointer-events: none;
 }
 
-/* Prevent text clipping */
-.login-title {
+/* Prevent text clipping for all large headings */
+.login-title, .gradient-text, h1, h2, h3 {
     line-height: 1.2;
-    padding-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+/* Specific fixes for large text sizes */
+.text-5xl, .text-6xl, .text-7xl {
+    line-height: 1.1;
+    padding-bottom: 0.75rem;
+    margin-bottom: 1.5rem;
+}
+
+/* Arabic text specific fixes */
+.arabic-text, [dir="rtl"] h1, [dir="rtl"] h2, [dir="rtl"] h3 {
+    line-height: 1.3;
+    padding-bottom: 0.5rem;
     margin-bottom: 1rem;
 }
 
@@ -1662,6 +1676,27 @@
     line-height: 1.4;
     word-spacing: 0.1em;
     letter-spacing: 0.05em;
+}
+
+/* Additional fixes for text clipping prevention */
+.text-center h1, .text-center h2, .text-center h3 {
+    overflow: visible;
+    white-space: nowrap;
+    text-overflow: unset;
+}
+
+/* Fix for gradient text clipping */
+.gradient-text {
+    display: inline-block;
+    overflow: visible;
+    white-space: nowrap;
+}
+
+/* Container fixes to prevent clipping */
+.hero-section, .login-container, .registration-hero {
+    overflow: visible;
+    padding-top: 2rem;
+    padding-bottom: 2rem;
 }
 
 

@@ -177,6 +177,7 @@ const Home = () => {
                         <h1 
                             ref={titleRef}
                             className="text-4xl md:text-6xl lg:text-7xl font-bold mb-6 leading-tight gradient-text animate-fade-in-down"
+                            style={{lineHeight: '1.1', paddingBottom: '0.75rem'}}
                         >
                         </h1>
                         <p 

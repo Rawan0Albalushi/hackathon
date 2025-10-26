@@ -17,17 +17,57 @@ const Form = ({ onSubmit, fields, title, submitText, isLoading = false }) => {
         setFormData(initialData);
     }, [fields]);
 
+    // Update form data when field values change
+    React.useEffect(() => {
+        const updatedData = { ...formData };
+        let hasChanges = false;
+        
+        fields.forEach(field => {
+            if (field.value !== undefined && JSON.stringify(field.value) !== JSON.stringify(formData[field.name])) {
+                updatedData[field.name] = field.value;
+                hasChanges = true;
+            }
+        });
+        
+        if (hasChanges) {
+            console.log('Updating form data from field values:', updatedData);
+            setFormData(updatedData);
+        }
+    }, [fields]);
+
     const handleChange = (e) => {
         const { name, value, type, checked } = e.target;
+        console.log('Form handleChange:', { name, value, type, checked, formData: formData[name] });
         
         if (type === 'checkbox') {
             const currentValues = formData[name] || [];
             const newValues = checked 
                 ? [...currentValues, value]
                 : currentValues.filter(v => v !== value);
-            setFormData({ ...formData, [name]: newValues });
+            
+            console.log('Checkbox change:', { currentValues, newValues, checked });
+            
+            // Update form data first
+            setFormData(prev => {
+                const updated = { ...prev, [name]: newValues };
+                console.log('Updated formData:', updated);
+                return updated;
+            });
+            
+            // Then call custom onChange if exists
+            const field = fields.find(f => f.name === name);
+            if (field && field.onChange) {
+                console.log('Calling custom onChange:', newValues);
+                field.onChange(newValues);
+            }
         } else {
-            setFormData({ ...formData, [name]: value });
+            setFormData(prev => ({ ...prev, [name]: value }));
+            
+            // Call custom onChange if exists
+            const field = fields.find(f => f.name === name);
+            if (field && field.onChange) {
+                field.onChange(value);
+            }
         }
         
         // Clear error when user starts typing
@@ -120,20 +160,42 @@ const Form = ({ onSubmit, fields, title, submitText, isLoading = false }) => {
                         <label className={labelClasses}>
                             {field.label} {field.required && <span className="text-red-500">*</span>}
                         </label>
-                        <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
-                            {field.options.map(option => (
-                                <label key={option.value} className="flex items-center space-x-2 rtl:space-x-reverse">
-                                    <input
-                                        type="checkbox"
-                                        name={field.name}
-                                        value={option.value}
-                                        checked={(formData[field.name] || []).includes(option.value)}
-                                        onChange={handleChange}
-                                        className="rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
-                                    />
-                                    <span className="text-sm text-gray-700">{option.label}</span>
-                                </label>
-                            ))}
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            {field.options.map(option => {
+                                const currentValues = formData[field.name] || [];
+                                const isChecked = currentValues.includes(option.value);
+                                console.log(`Checkbox ${option.value}:`, { 
+                                    isChecked, 
+                                    currentValues, 
+                                    fieldName: field.name,
+                                    formData: formData[field.name]
+                                });
+                                return (
+                                    <label key={option.value} className={`flex items-center space-x-3 rtl:space-x-reverse p-3 border rounded-lg cursor-pointer transition-colors duration-200 ${
+                                    isChecked ? 'border-indigo-500 bg-indigo-50' : 'border-gray-200 hover:bg-gray-50'
+                                }`}>
+                                        <input
+                                            type="checkbox"
+                                            name={field.name}
+                                            value={option.value}
+                                            checked={isChecked}
+                                            onChange={handleChange}
+                                            onClick={(e) => {
+                                                console.log('Checkbox clicked:', option.value, 'checked:', !isChecked);
+                                                // Don't prevent default - let the checkbox work normally
+                                                // The onChange handler will take care of the state
+                                            }}
+                                            onMouseDown={(e) => {
+                                                console.log('Checkbox mouse down:', option.value);
+                                            }}
+                                            className="w-4 h-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500 focus:ring-2"
+                                            style={{ pointerEvents: 'auto' }}
+                                            key={`${field.name}-${option.value}`}
+                                        />
+                                        <span className="text-sm font-medium text-gray-700">{option.label}</span>
+                                    </label>
+                                );
+                            })}
                         </div>
                         {errors[field.name] && (
                             <p className="text-red-500 text-sm mt-1">{errors[field.name]}</p>

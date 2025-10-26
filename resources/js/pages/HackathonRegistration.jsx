@@ -157,14 +157,14 @@ const HackathonRegistration = () => {
                     <div className="absolute bottom-1/3 left-1/3 w-24 h-24 rounded-full opacity-20 animate-pulse delay-300" style={{background: '#4ECDC4'}}></div>
                 </div>
                 
-                <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+                <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24">
                     <div className="text-center">
                         <div className="flex justify-center mb-8">
                             <div className="w-24 h-24 bg-white/30 rounded-3xl flex items-center justify-center backdrop-blur-sm shadow-2xl transform hover:scale-110 transition-transform duration-300">
                                 <span className="text-5xl animate-bounce">🚀</span>
                             </div>
                         </div>
-                        <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold mb-8 leading-tight drop-shadow-lg">
+                        <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold mb-8 leading-tight drop-shadow-lg" style={{lineHeight: '1.1', paddingBottom: '0.75rem'}}>
                             {language === 'ar' ? 'هاكاثون "ابتكر من الدقم"' : 'Hackathon "Innovate from Duqm"'}
                         </h1>
                         <p className="text-2xl md:text-3xl mb-10 max-w-5xl mx-auto font-medium" style={{color: '#F4A321'}}>

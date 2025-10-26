@@ -13,15 +13,17 @@ const WorkshopRegistration = () => {
     const [searchParams] = useSearchParams();
     const [isLoading, setIsLoading] = useState(false);
     const [workshops, setWorkshops] = useState([]);
-    const [selectedWorkshop, setSelectedWorkshop] = useState(null);
+    const [selectedWorkshops, setSelectedWorkshops] = useState([]);
     const [existingRegistration, setExistingRegistration] = useState(null);
     const [loadingRegistration, setLoadingRegistration] = useState(true);
+    const [userRegistrations, setUserRegistrations] = useState([]);
+    const [workshopsWithStatus, setWorkshopsWithStatus] = useState([]);
 
     useEffect(() => {
         fetchWorkshops();
         const workshopId = searchParams.get('workshop_id');
         if (workshopId) {
-            setSelectedWorkshop(workshopId);
+            setSelectedWorkshops([workshopId]);
         }
     }, [searchParams]);
 
@@ -43,11 +45,86 @@ const WorkshopRegistration = () => {
             
             if (data.success) {
                 setWorkshops(data.data);
+                // Also fetch user registrations to get status
+                await fetchUserRegistrations();
             }
         } catch (err) {
             console.error('فشل في تحميل الورش');
         }
     };
+
+    const fetchUserRegistrations = async () => {
+        try {
+            const response = await fetch('/api/user/registrations', {
+                credentials: 'include'
+            });
+            const data = await response.json();
+            
+            if (data.success && data.data.workshops) {
+                setUserRegistrations(data.data.workshops);
+                // Combine workshops with registration status
+                combineWorkshopsWithStatus(data.data.workshops);
+            }
+        } catch (error) {
+            console.error('Error fetching user registrations:', error);
+        }
+    };
+
+    const combineWorkshopsWithStatus = (registrations) => {
+        const workshopsWithStatus = workshops.map(workshop => {
+            const registration = registrations.find(reg => reg.workshop_id == workshop.id);
+            return {
+                ...workshop,
+                registration: registration || null,
+                isRegistered: !!registration,
+                registrationStatus: registration?.status || null
+            };
+        });
+        setWorkshopsWithStatus(workshopsWithStatus);
+    };
+
+    const toggleWorkshopSelection = (workshopId) => {
+        // Check if workshop is already registered
+        const workshop = workshopsWithStatus.find(w => w.id == workshopId);
+        if (workshop && workshop.isRegistered) {
+            alert(language === 'ar' 
+                ? 'لقد قمت بالتسجيل في هذه الورشة مسبقاً' 
+                : 'You have already registered for this workshop');
+            return;
+        }
+
+        setSelectedWorkshops(prev => {
+            if (prev.includes(workshopId)) {
+                // إزالة الورشة من القائمة
+                return prev.filter(id => id !== workshopId);
+            } else {
+                // إضافة الورشة إلى القائمة
+                return [...prev, workshopId];
+            }
+        });
+    };
+
+    const handleWorkshopChange = (values) => {
+        console.log('Workshop selection changed from form:', values);
+        setSelectedWorkshops(values);
+    };
+
+    // Force update form when selectedWorkshops changes
+    React.useEffect(() => {
+        console.log('Selected workshops changed, updating form:', selectedWorkshops);
+    }, [selectedWorkshops]);
+
+    // Update form data when selectedWorkshops changes
+    React.useEffect(() => {
+        console.log('Selected workshops updated:', selectedWorkshops);
+    }, [selectedWorkshops]);
+
+    // Combine workshops with status when workshops or userRegistrations change
+    React.useEffect(() => {
+        if (workshops.length > 0 && userRegistrations.length >= 0) {
+            combineWorkshopsWithStatus(userRegistrations);
+        }
+    }, [workshops, userRegistrations]);
 
     const fetchExistingRegistration = async () => {
         try {
@@ -82,18 +159,49 @@ const WorkshopRegistration = () => {
         setExistingRegistration(null);
     };
 
+    const getStatusInfo = (status) => {
+        switch (status) {
+            case 'pending':
+                return {
+                    text: language === 'ar' ? 'في الانتظار' : 'Pending',
+                    color: 'bg-yellow-100 text-yellow-800',
+                    icon: '⏳'
+                };
+            case 'approved':
+                return {
+                    text: language === 'ar' ? 'مقبول' : 'Approved',
+                    color: 'bg-green-100 text-green-800',
+                    icon: '✅'
+                };
+            case 'rejected':
+                return {
+                    text: language === 'ar' ? 'مرفوض' : 'Rejected',
+                    color: 'bg-red-100 text-red-800',
+                    icon: '❌'
+                };
+            default:
+                return {
+                    text: language === 'ar' ? 'غير محدد' : 'Unknown',
+                    color: 'bg-gray-100 text-gray-800',
+                    icon: '❓'
+                };
+        }
+    };
+
     const fields = [
         {
-            name: 'workshop_id',
-            label: language === 'ar' ? 'اختر الورشة' : 'Select Workshop',
-            type: 'select',
+            name: 'workshop_ids',
+            label: language === 'ar' ? 'اختر الورش الجديدة' : 'Select New Workshops',
+            type: 'checkbox-group',
             required: true,
-            options: workshops.map(workshop => ({
-                value: workshop.id,
-                label: workshop.title
-            })),
-            value: selectedWorkshop,
-            onChange: (value) => setSelectedWorkshop(value)
+            options: workshopsWithStatus
+                .filter(workshop => !workshop.isRegistered)
+                .map(workshop => ({
+                    value: workshop.id,
+                    label: workshop.title
+                })),
+            value: selectedWorkshops,
+            onChange: handleWorkshopChange
         },
         {
             name: 'full_name',
@@ -154,18 +262,27 @@ const WorkshopRegistration = () => {
     ];
 
     const handleSubmit = async (formData) => {
+        if (selectedWorkshops.length === 0) {
+            alert(language === 'ar' ? 'يرجى اختيار ورشة واحدة على الأقل' : 'Please select at least one workshop');
+            return;
+        }
+
         setIsLoading(true);
         try {
-            // Add workshop_id to form data
-            const dataWithWorkshop = {
+            // Add workshop_ids to form data
+            const dataWithWorkshops = {
                 ...formData,
-                workshop_id: selectedWorkshop
+                workshop_ids: selectedWorkshops
             };
             
-            const response = await submitWorkshopRegistration(dataWithWorkshop);
+            const response = await submitWorkshopRegistration(dataWithWorkshops);
             if (response.success) {
                 // Update the existing registration state
                 setExistingRegistration(response.data);
+                // Refresh user registrations to update workshop status
+                await fetchUserRegistrations();
+                // Clear selected workshops
+                setSelectedWorkshops([]);
                 // Don't navigate to success page, show the status instead
             } else {
                 alert(response.message || t('registrationFailed'));
@@ -183,14 +300,14 @@ const WorkshopRegistration = () => {
             {/* Hero Section */}
             <div className="relative text-white overflow-hidden" style={{background: 'linear-gradient(135deg, #096289 0%, #003C72 100%)'}}>
                 <div className="absolute inset-0 bg-black opacity-20"></div>
-                <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+                <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
                     <div className="text-center">
                         <div className="flex justify-center mb-6">
                             <div className="w-20 h-20 bg-white/20 rounded-2xl flex items-center justify-center backdrop-blur-sm">
                                 <span className="text-4xl">🎓</span>
                             </div>
                         </div>
-                        <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 leading-tight">
+                        <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 leading-tight" style={{lineHeight: '1.1', paddingBottom: '0.75rem'}}>
                             {language === 'ar' ? 'الورش التدريبية' : 'Training Workshops'}
                         </h1>
                         <p className="text-xl md:text-2xl mb-8 max-w-4xl mx-auto" style={{color: '#F4A321'}}>
@@ -219,8 +336,321 @@ const WorkshopRegistration = () => {
                 <div className="absolute top-1/2 left-1/4 w-12 h-12 rounded-full opacity-30 animate-pulse delay-500" style={{background: '#D85584'}}></div>
             </div>
 
+            {/* Available Workshops Section */}
+            <div className="py-16 bg-white">
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div className="text-center mb-12">
+                        <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4" style={{lineHeight: '1.1', paddingBottom: '0.75rem'}}>
+                            {language === 'ar' ? 'الورش التدريبية' : 'Training Workshops'}
+                        </h2>
+                        <p className="text-lg text-gray-600 max-w-3xl mx-auto">
+                            {language === 'ar' 
+                                ? 'اختر الورش التي تريد المشاركة فيها لتطوير مهاراتك - الورش المسجلة فيها تظهر بحالة التسجيل، والورش الجديدة متاحة للتسجيل'
+                                : 'Choose the workshops you want to participate in to develop your skills - registered workshops show their status, new workshops are available for registration'
+                            }
+                        </p>
+                    </div>
+
+                    {/* Registered Workshops Section */}
+                    {workshopsWithStatus.filter(w => w.isRegistered).length > 0 && (
+                        <div className="mb-12">
+                            <h3 className="text-2xl font-bold text-gray-900 mb-6 text-center">
+                                {language === 'ar' ? 'الورش المسجلة فيها' : 'Registered Workshops'}
+                            </h3>
+                            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                                {workshopsWithStatus
+                                    .filter(workshop => workshop.isRegistered)
+                                    .map((workshop) => {
+                                        // تحديد الألوان حسب الحالة
+                                        const getStatusColors = (status) => {
+                                            switch (status) {
+                                                case 'pending':
+                                                    return {
+                                                        bg: 'bg-gradient-to-br from-yellow-50 to-orange-50',
+                                                        border: 'border-yellow-200',
+                                                        badge: 'bg-yellow-100 text-yellow-800',
+                                                        detailBg: 'bg-white/70',
+                                                        detailBorder: 'border-yellow-100'
+                                                    };
+                                                case 'approved':
+                                                    return {
+                                                        bg: 'bg-gradient-to-br from-green-50 to-emerald-50',
+                                                        border: 'border-green-200',
+                                                        badge: 'bg-green-100 text-green-800',
+                                                        detailBg: 'bg-white/70',
+                                                        detailBorder: 'border-green-100'
+                                                    };
+                                                case 'rejected':
+                                                    return {
+                                                        bg: 'bg-gradient-to-br from-red-50 to-pink-50',
+                                                        border: 'border-red-200',
+                                                        badge: 'bg-red-100 text-red-800',
+                                                        detailBg: 'bg-white/70',
+                                                        detailBorder: 'border-red-100'
+                                                    };
+                                                default:
+                                                    return {
+                                                        bg: 'bg-gradient-to-br from-gray-50 to-slate-50',
+                                                        border: 'border-gray-200',
+                                                        badge: 'bg-gray-100 text-gray-800',
+                                                        detailBg: 'bg-white/70',
+                                                        detailBorder: 'border-gray-100'
+                                                    };
+                                            }
+                                        };
+
+                                        const colors = getStatusColors(workshop.registrationStatus);
+
+                                        return (
+                                        <div 
+                                            key={workshop.id} 
+                                            className={`${colors.bg} rounded-2xl shadow-lg border-2 ${colors.border} overflow-hidden hover:shadow-xl transition-all duration-300`}
+                                        >
+                                            <div className="p-6">
+                                                <div className="flex items-center justify-between mb-4">
+                                                    <div className="w-12 h-12 rounded-xl flex items-center justify-center text-2xl" 
+                                                         style={{background: `linear-gradient(135deg, ${workshop.color || '#10B981'} 0%, #059669 100%)`}}>
+                                                        {workshop.icon || '🎓'}
+                                                    </div>
+                                                    <div className={`text-sm font-medium px-3 py-1 rounded-full ${colors.badge}`}>
+                                                        {language === 'ar' ? 'مسجل' : 'Registered'}
+                                                    </div>
+                                                </div>
+                                                
+                                                <h3 className="text-xl font-bold text-gray-900 mb-4">
+                                                    {workshop.title}
+                                                </h3>
+                                                
+                                                {/* Status Section */}
+                                                <div className={`mb-4 p-3 bg-white rounded-lg border ${colors.detailBorder}`}>
+                                                    <div className="flex items-center justify-between">
+                                                        <div className="flex items-center space-x-2 rtl:space-x-reverse">
+                                                            <span className="text-lg">{getStatusInfo(workshop.registrationStatus).icon}</span>
+                                                            <span className="text-sm font-medium text-gray-700">
+                                                                {language === 'ar' ? 'الحالة:' : 'Status:'}
+                                                            </span>
+                                                        </div>
+                                                        <span className={`px-3 py-1 rounded-full text-xs font-medium ${getStatusInfo(workshop.registrationStatus).color}`}>
+                                                            {getStatusInfo(workshop.registrationStatus).text}
+                                                        </span>
+                                                    </div>
+                                                    {workshop.registrationStatus === 'rejected' && workshop.registration?.rejection_reason && (
+                                                        <div className="mt-2 p-2 bg-red-50 rounded text-sm text-red-700">
+                                                            <strong>{language === 'ar' ? 'سبب الرفض:' : 'Rejection Reason:'}</strong> {workshop.registration.rejection_reason}
+                                                        </div>
+                                                    )}
+                                                </div>
+                                                
+                                                {/* Registration Details */}
+                                                <div className="space-y-3 mb-4">
+                                                    <div className={`${colors.detailBg} rounded-lg p-3 border ${colors.detailBorder}`}>
+                                                        <div className="flex items-center space-x-2 rtl:space-x-reverse mb-2">
+                                                            <span className="text-blue-600">👤</span>
+                                                            <span className="text-sm font-medium text-gray-700">
+                                                                {language === 'ar' ? 'المسجل:' : 'Registered by:'}
+                                                            </span>
+                                                        </div>
+                                                        <p className="text-gray-900 font-medium text-sm">
+                                                            {workshop.registration?.full_name || 'N/A'}
+                                                        </p>
+                                                    </div>
+
+                                                    <div className={`${colors.detailBg} rounded-lg p-3 border ${colors.detailBorder}`}>
+                                                        <div className="flex items-center space-x-2 rtl:space-x-reverse mb-2">
+                                                            <span className="text-green-600">📧</span>
+                                                            <span className="text-sm font-medium text-gray-700">
+                                                                {language === 'ar' ? 'البريد الإلكتروني:' : 'Email:'}
+                                                            </span>
+                                                        </div>
+                                                        <p className="text-gray-900 font-medium text-sm">
+                                                            {workshop.registration?.email || 'N/A'}
+                                                        </p>
+                                                    </div>
+
+                                                    <div className={`${colors.detailBg} rounded-lg p-3 border ${colors.detailBorder}`}>
+                                                        <div className="flex items-center space-x-2 rtl:space-x-reverse mb-2">
+                                                            <span className="text-purple-600">🎓</span>
+                                                            <span className="text-sm font-medium text-gray-700">
+                                                                {language === 'ar' ? 'الخلفية التعليمية:' : 'Background:'}
+                                                            </span>
+                                                        </div>
+                                                        <p className="text-gray-900 font-medium text-sm">
+                                                            {workshop.registration?.background === 'programming' ? (language === 'ar' ? 'برمجة' : 'Programming') :
+                                                             workshop.registration?.background === 'accounting' ? (language === 'ar' ? 'محاسبة' : 'Accounting') :
+                                                             workshop.registration?.background === 'engineering' ? (language === 'ar' ? 'هندسة' : 'Engineering') :
+                                                             workshop.registration?.background === 'business' ? (language === 'ar' ? 'إدارة أعمال' : 'Business Administration') :
+                                                             workshop.registration?.background === 'design' ? (language === 'ar' ? 'تصميم' : 'Design') :
+                                                             workshop.registration?.background === 'marketing' ? (language === 'ar' ? 'تسويق' : 'Marketing') :
+                                                             workshop.registration?.background === 'finance' ? (language === 'ar' ? 'مالية' : 'Finance') :
+                                                             workshop.registration?.background === 'healthcare' ? (language === 'ar' ? 'صحة' : 'Healthcare') :
+                                                             workshop.registration?.background === 'education' ? (language === 'ar' ? 'تعليم' : 'Education') :
+                                                             workshop.registration?.background === 'law' ? (language === 'ar' ? 'قانون' : 'Law') :
+                                                             workshop.registration?.background === 'psychology' ? (language === 'ar' ? 'علم نفس' : 'Psychology') :
+                                                             workshop.registration?.background === 'media' ? (language === 'ar' ? 'إعلام' : 'Media') :
+                                                             workshop.registration?.background === 'tourism' ? (language === 'ar' ? 'سياحة' : 'Tourism') :
+                                                             workshop.registration?.background === 'agriculture' ? (language === 'ar' ? 'زراعة' : 'Agriculture') :
+                                                             workshop.registration?.background || 'N/A'}
+                                                        </p>
+                                                    </div>
+
+                                                    {workshop.registration?.reason && (
+                                                        <div className={`${colors.detailBg} rounded-lg p-3 border ${colors.detailBorder}`}>
+                                                            <div className="flex items-center space-x-2 rtl:space-x-reverse mb-2">
+                                                                <span className="text-orange-600">💭</span>
+                                                                <span className="text-sm font-medium text-gray-700">
+                                                                    {language === 'ar' ? 'سبب المشاركة:' : 'Reason:'}
+                                                                </span>
+                                                            </div>
+                                                            <p className="text-gray-900 font-medium text-sm">
+                                                                {workshop.registration.reason}
+                                                            </p>
+                                                        </div>
+                                                    )}
+
+                                                    <div className={`${colors.detailBg} rounded-lg p-3 border ${colors.detailBorder}`}>
+                                                        <div className="flex items-center space-x-2 rtl:space-x-reverse mb-2">
+                                                            <span className="text-indigo-600">📅</span>
+                                                            <span className="text-sm font-medium text-gray-700">
+                                                                {language === 'ar' ? 'تاريخ التسجيل:' : 'Registration Date:'}
+                                                            </span>
+                                                        </div>
+                                                        <p className="text-gray-900 font-medium text-sm">
+                                                            {workshop.registration?.created_at ? new Date(workshop.registration.created_at).toLocaleDateString('en-US', {
+                                                                year: 'numeric',
+                                                                month: 'long',
+                                                                day: 'numeric',
+                                                                hour: '2-digit',
+                                                                minute: '2-digit'
+                                                            }) : 'N/A'}
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                                
+                                                <div className={`text-sm text-gray-500 mb-4 ${colors.detailBg} rounded-lg p-2 border ${colors.detailBorder}`}>
+                                                    <div className="flex items-center space-x-2 rtl:space-x-reverse">
+                                                        <span>📅</span>
+                                                        <span>{workshop.date || (language === 'ar' ? '15 يناير' : 'Jan 15')} • {workshop.time || '10:00 - 12:00'}</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        );
+                                    })}
+                            </div>
+                        </div>
+                    )}
+
+                    {/* Available Workshops Section */}
+                    <div className="mb-8">
+                        <h3 className="text-2xl font-bold text-gray-900 mb-6 text-center">
+                            {language === 'ar' ? 'الورش المتاحة للتسجيل' : 'Available Workshops for Registration'}
+                        </h3>
+
+                    <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                        {workshopsWithStatus
+                            .filter(workshop => !workshop.isRegistered)
+                            .map((workshop, index) => (
+                            <div 
+                                key={workshop.id} 
+                                className={`bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 overflow-hidden border-2 ${
+                                    selectedWorkshops.includes(workshop.id)
+                                        ? 'border-blue-500 ring-2 ring-blue-200' 
+                                        : 'border-gray-200 hover:border-blue-300'
+                                }`}
+                            >
+                                <div className="p-6">
+                                    <div className="flex items-center justify-between mb-4">
+                                        <div className="w-12 h-12 rounded-xl flex items-center justify-center text-2xl" 
+                                             style={{background: `linear-gradient(135deg, ${workshop.color || '#096289'} 0%, #003C72 100%)`}}>
+                                            {workshop.icon || '🎓'}
+                                        </div>
+                                        <div className="text-sm text-gray-500">
+                                            {workshop.date || (language === 'ar' ? '15 يناير' : 'Jan 15')}
+                                        </div>
+                                    </div>
+                                    
+                                    <h3 className="text-xl font-bold text-gray-900 mb-2">
+                                        {workshop.title || (language === 'ar' ? 'تحليل المشكلات' : 'Problem Analysis')}
+                                    </h3>
+                                    
+                                    <p className="text-gray-600 text-sm mb-4">
+                                        {workshop.description || (language === 'ar' 
+                                            ? 'تعلم كيفية تحليل المشكلات التقنية وإيجاد الحلول المناسبة'
+                                            : 'Learn how to analyze technical problems and find appropriate solutions'
+                                        )}
+                                    </p>
+                                    
+                                    <div className="flex items-center justify-between text-sm text-gray-500 mb-4">
+                                        <div className="flex items-center space-x-2 rtl:space-x-reverse">
+                                            <span>👨‍🏫</span>
+                                            <span>{workshop.instructor || (language === 'ar' ? 'د. أحمد محمد' : 'Dr. Ahmed Mohamed')}</span>
+                                        </div>
+                                        <div className="flex items-center space-x-2 rtl:space-x-reverse">
+                                            <span>👥</span>
+                                            <span>{workshop.capacity || 25} {language === 'ar' ? 'مقعد' : 'seats'}</span>
+                                        </div>
+                                    </div>
+
+                                    
+                                    <div className="flex items-center justify-between">
+                                        <div className="text-sm text-gray-500">
+                                            {workshop.time || '10:00 - 12:00'}
+                                        </div>
+                                        <button
+                                            onClick={() => {
+                                                if (selectedWorkshops.includes(workshop.id)) {
+                                                    toggleWorkshopSelection(workshop.id);
+                                                } else {
+                                                    // إضافة الورشة المختارة وفتح نموذج التسجيل
+                                                    setSelectedWorkshops([workshop.id]);
+                                                    // إزالة أي تسجيل موجود لفتح النموذج
+                                                    setExistingRegistration(null);
+                                                    // التمرير إلى نموذج التسجيل
+                                                    setTimeout(() => {
+                                                        const formSection = document.querySelector('.registration-form-section');
+                                                        if (formSection) {
+                                                            formSection.scrollIntoView({ behavior: 'smooth' });
+                                                        }
+                                                    }, 100);
+                                                }
+                                            }}
+                                            className={`px-4 py-2 text-sm font-medium rounded-lg transition-colors duration-200 ${
+                                                selectedWorkshops.includes(workshop.id)
+                                                    ? 'bg-green-600 text-white'
+                                                    : 'bg-blue-600 text-white hover:bg-blue-700'
+                                            }`}
+                                        >
+                                            {selectedWorkshops.includes(workshop.id)
+                                                ? (language === 'ar' ? 'محدد' : 'Selected')
+                                                : (language === 'ar' ? 'سجل الآن' : 'Register Now')
+                                            }
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+
+                    {workshopsWithStatus.filter(w => !w.isRegistered).length === 0 && (
+                        <div className="text-center py-12">
+                            <div className="text-6xl mb-4">🎓</div>
+                            <h3 className="text-xl font-semibold text-gray-600 mb-2">
+                                {language === 'ar' ? 'لا توجد ورش متاحة للتسجيل حالياً' : 'No workshops available for registration at the moment'}
+                            </h3>
+                            <p className="text-gray-500">
+                                {language === 'ar' 
+                                    ? 'جميع الورش متاحة أو لا توجد ورش جديدة'
+                                    : 'All workshops are registered or no new workshops available'
+                                }
+                            </p>
+                        </div>
+                    )}
+
+                </div>
+            </div>
+
             {/* Content Section */}
-            <div className="py-16">
+            <div className="py-16 registration-form-section">
                 <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
                     {loadingRegistration ? (
                         <div className="flex justify-center items-center py-20">
@@ -229,7 +659,7 @@ const WorkshopRegistration = () => {
                                 {language === 'ar' ? 'جاري التحميل...' : 'Loading...'}
                             </span>
                         </div>
-                    ) : existingRegistration ? (
+                    ) : existingRegistration && selectedWorkshops.length === 0 ? (
                         <WorkshopStatus 
                             registration={existingRegistration} 
                             onEdit={handleEditRegistration}
@@ -254,6 +684,35 @@ const WorkshopRegistration = () => {
                                         }
                                     </p>
                                 </div>
+
+                                <div className="mb-6 p-4 bg-blue-50 rounded-lg border border-blue-200">
+                                    <p className="text-sm text-blue-700">
+                                        {language === 'ar' 
+                                            ? '💡 يمكنك اختيار الورش الجديدة من القائمة أعلاه - الورش المسجلة فيها مسبقاً لا تظهر في النموذج'
+                                            : '💡 You can select new workshops from the list above - previously registered workshops will not appear in the form'
+                                        }
+                                    </p>
+                                </div>
+
+                                {selectedWorkshops.length > 0 && (
+                                    <div className="mb-6 p-4 bg-green-50 rounded-lg border border-green-200">
+                                        <div className="flex items-center space-x-2 rtl:space-x-reverse">
+                                            <span className="text-green-600 text-lg">✅</span>
+                                            <p className="text-sm text-green-700 font-medium">
+                                                {language === 'ar' 
+                                                    ? `تم اختيار ${selectedWorkshops.length} ورشة للتسجيل - املأ النموذج أدناه`
+                                                    : `${selectedWorkshops.length} workshop(s) selected for registration - fill out the form below`
+                                                }
+                                            </p>
+                                        </div>
+                                        <div className="mt-2 text-xs text-green-600">
+                                            {language === 'ar' 
+                                                ? '💡 يمكنك إضافة ورش أخرى من القائمة أعلاه'
+                                                : '💡 You can add more workshops from the list above'
+                                            }
+                                        </div>
+                                    </div>
+                                )}
 
                                 <Form
                                     onSubmit={handleSubmit}
@@ -313,6 +772,7 @@ const WorkshopRegistration = () => {
                     </div>
                 </div>
             </div>
+        </div>
         </div>
     );
 };
