@@ -115,49 +115,49 @@ const ConferenceRegistration = () => {
             {/* Hero Section */}
             <div className="relative text-white overflow-hidden" style={{background: 'linear-gradient(135deg, #003C72 0%, #096289 100%)'}}>
                 <div className="absolute inset-0 bg-black opacity-20"></div>
-                <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+                <div className="relative max-w-7xl mx-auto px-3 sm:px-4 lg:px-8 py-12 sm:py-16 lg:py-20">
                     <div className="text-center">
-                        <div className="flex justify-center mb-6">
-                            <div className="w-20 h-20 bg-white/20 rounded-2xl flex items-center justify-center backdrop-blur-sm">
-                                <span className="text-4xl">🎤</span>
+                        <div className="flex justify-center mb-4 sm:mb-6">
+                            <div className="w-16 h-16 sm:w-20 sm:h-20 bg-white/20 rounded-xl sm:rounded-2xl flex items-center justify-center backdrop-blur-sm">
+                                <span className="text-3xl sm:text-4xl">🎤</span>
                             </div>
                         </div>
-                        <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 leading-tight" style={{lineHeight: '1.1', paddingBottom: '0.75rem'}}>
+                        <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold mb-4 sm:mb-6 leading-tight px-2" style={{lineHeight: '1.1', paddingBottom: '0.5rem'}}>
                             {language === 'ar' ? 'ملتقى الابتكار 2025' : 'Innovation Forum 2025'}
                         </h1>
-                        <p className="text-xl md:text-2xl mb-8 max-w-4xl mx-auto" style={{color: '#F4A321'}}>
+                        <p className="text-sm sm:text-base md:text-lg lg:text-xl xl:text-2xl mb-6 sm:mb-8 max-w-4xl mx-auto px-2" style={{color: '#F4A321'}}>
                             {language === 'ar' 
                                 ? 'المؤتمر الصحفي - النسخة الثالثة من ملتقى الابتكار'
                                 : 'Press Conference - Third Edition of Innovation Forum'
                             }
                         </p>
-                        <div className="flex flex-wrap justify-center gap-4 text-sm">
-                            <div className="bg-white/20 px-4 py-2 rounded-full backdrop-blur-sm">
+                        <div className="flex flex-wrap justify-center gap-2 sm:gap-4 text-xs sm:text-sm px-2">
+                            <div className="bg-white/20 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full backdrop-blur-sm">
                                 {language === 'ar' ? 'مؤسسات حكومية وخاصة' : 'Government & Private Institutions'}
                             </div>
-                            <div className="bg-white/20 px-4 py-2 rounded-full backdrop-blur-sm">
+                            <div className="bg-white/20 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full backdrop-blur-sm">
                                 {language === 'ar' ? 'تحفيز العقول الشابة' : 'Stimulating Young Minds'}
                             </div>
-                            <div className="bg-white/20 px-4 py-2 rounded-full backdrop-blur-sm">
+                            <div className="bg-white/20 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full backdrop-blur-sm">
                                 {language === 'ar' ? 'تحويل الأفكار إلى مشاريع' : 'Transforming Ideas into Projects'}
                             </div>
                         </div>
                     </div>
                 </div>
                 
-                {/* Floating Elements */}
-                <div className="absolute top-20 left-10 w-16 h-16 rounded-full opacity-30 animate-pulse" style={{background: '#003C72'}}></div>
-                <div className="absolute bottom-20 right-10 w-24 h-24 rounded-full opacity-30 animate-pulse delay-1000" style={{background: '#096289'}}></div>
-                <div className="absolute top-1/2 left-1/4 w-12 h-12 rounded-full opacity-30 animate-pulse delay-500" style={{background: '#D85584'}}></div>
+                {/* Floating Elements - Responsive */}
+                <div className="absolute top-10 sm:top-20 left-4 sm:left-10 w-8 h-8 sm:w-12 sm:h-12 lg:w-16 lg:h-16 rounded-full opacity-20 sm:opacity-30 animate-pulse" style={{background: '#003C72'}}></div>
+                <div className="absolute bottom-10 sm:bottom-20 right-4 sm:right-10 w-12 h-12 sm:w-18 sm:h-18 lg:w-24 lg:h-24 rounded-full opacity-20 sm:opacity-30 animate-pulse delay-1000" style={{background: '#096289'}}></div>
+                <div className="absolute top-1/2 left-1/6 sm:left-1/4 w-6 h-6 sm:w-8 sm:h-8 lg:w-12 lg:h-12 rounded-full opacity-20 sm:opacity-30 animate-pulse delay-500" style={{background: '#D85584'}}></div>
             </div>
 
             {/* Content Section */}
-            <div className="py-16">
-                <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="py-12 sm:py-16">
+                <div className="max-w-6xl mx-auto px-3 sm:px-4 lg:px-8">
                     {loadingRegistration ? (
-                        <div className="flex justify-center items-center py-20">
-                            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-green-600"></div>
-                            <span className="ml-4 text-lg text-gray-600">
+                        <div className="flex justify-center items-center py-12 sm:py-20">
+                            <div className="animate-spin rounded-full h-8 w-8 sm:h-12 sm:w-12 border-b-2 border-green-600"></div>
+                            <span className="ml-3 sm:ml-4 text-sm sm:text-lg text-gray-600">
                                 {language === 'ar' ? 'جاري التحميل...' : 'Loading...'}
                             </span>
                         </div>
@@ -167,19 +167,19 @@ const ConferenceRegistration = () => {
                             onEdit={handleEditRegistration}
                         />
                     ) : (
-                        <div className="bg-white rounded-3xl shadow-2xl overflow-hidden transform hover:scale-[1.02] transition-transform duration-300">
-                            <div className="h-3" style={{background: 'linear-gradient(90deg, #F4A321 0%, #D85584 50%, #096289 100%)'}}></div>
-                            <div className="p-8 md:p-12">
-                                <div className="text-center mb-10">
-                                    <div className="flex justify-center mb-6">
-                                        <div className="bg-gradient-to-r from-green-500 to-teal-500 text-white p-6 rounded-3xl shadow-lg">
-                                            <span className="text-4xl">🎤</span>
+                        <div className="bg-white rounded-2xl sm:rounded-3xl shadow-2xl overflow-hidden transform hover:scale-[1.02] transition-transform duration-300">
+                            <div className="h-2 sm:h-3" style={{background: 'linear-gradient(90deg, #F4A321 0%, #D85584 50%, #096289 100%)'}}></div>
+                            <div className="p-4 sm:p-6 md:p-8 lg:p-12">
+                                <div className="text-center mb-6 sm:mb-8 lg:mb-10">
+                                    <div className="flex justify-center mb-4 sm:mb-6">
+                                        <div className="bg-gradient-to-r from-green-500 to-teal-500 text-white p-4 sm:p-6 rounded-2xl sm:rounded-3xl shadow-lg">
+                                            <span className="text-2xl sm:text-3xl lg:text-4xl">🎤</span>
                                         </div>
                                     </div>
-                                    <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+                                    <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-3 sm:mb-4 px-2">
                                         {language === 'ar' ? 'نموذج التسجيل في المؤتمر' : 'Conference Registration Form'}
                                     </h2>
-                                    <p className="text-lg text-gray-600 max-w-2xl mx-auto leading-relaxed">
+                                    <p className="text-sm sm:text-base lg:text-lg text-gray-600 max-w-2xl mx-auto leading-relaxed px-2">
                                         {language === 'ar' 
                                             ? 'املأ النموذج أدناه للمشاركة في ملتقى الابتكار'
                                             : 'Fill out the form below to participate in the Innovation Forum'
@@ -201,15 +201,15 @@ const ConferenceRegistration = () => {
             </div>
 
             {/* Info Section */}
-            <div className="py-16 bg-gradient-to-br from-gray-50 to-green-50">
-                <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <div className="grid md:grid-cols-3 gap-8">
-                        <div className="bg-white rounded-2xl p-6 shadow-lg hover:shadow-xl transition-shadow duration-300">
-                            <div className="text-4xl mb-4">🏛️</div>
-                            <h3 className="text-xl font-bold text-gray-900 mb-2">
+            <div className="py-12 sm:py-16 bg-gradient-to-br from-gray-50 to-green-50">
+                <div className="max-w-6xl mx-auto px-3 sm:px-4 lg:px-8">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
+                        <div className="bg-white rounded-xl sm:rounded-2xl p-4 sm:p-6 shadow-lg hover:shadow-xl transition-shadow duration-300">
+                            <div className="text-3xl sm:text-4xl mb-3 sm:mb-4">🏛️</div>
+                            <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-2">
                                 {language === 'ar' ? 'مؤسسات حكومية وخاصة' : 'Government & Private Institutions'}
                             </h3>
-                            <p className="text-gray-600">
+                            <p className="text-sm sm:text-base text-gray-600">
                                 {language === 'ar' 
                                     ? 'لقاء مع نخبة من المؤسسات الحكومية والخاصة والأكاديمية'
                                     : 'Meet with elite government, private and academic institutions'
@@ -217,12 +217,12 @@ const ConferenceRegistration = () => {
                             </p>
                         </div>
                         
-                        <div className="bg-white rounded-2xl p-6 shadow-lg hover:shadow-xl transition-shadow duration-300">
-                            <div className="text-4xl mb-4">🧠</div>
-                            <h3 className="text-xl font-bold text-gray-900 mb-2">
+                        <div className="bg-white rounded-xl sm:rounded-2xl p-4 sm:p-6 shadow-lg hover:shadow-xl transition-shadow duration-300">
+                            <div className="text-3xl sm:text-4xl mb-3 sm:mb-4">🧠</div>
+                            <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-2">
                                 {language === 'ar' ? 'تحفيز العقول الشابة' : 'Stimulating Young Minds'}
                             </h3>
-                            <p className="text-gray-600">
+                            <p className="text-sm sm:text-base text-gray-600">
                                 {language === 'ar' 
                                     ? 'تحفيز العقول الشابة وتحويل الأفكار الإبداعية إلى مشاريع واقعية'
                                     : 'Stimulating young minds and transforming creative ideas into real projects'
@@ -230,12 +230,12 @@ const ConferenceRegistration = () => {
                             </p>
                         </div>
                         
-                        <div className="bg-white rounded-2xl p-6 shadow-lg hover:shadow-xl transition-shadow duration-300">
-                            <div className="text-4xl mb-4">💡</div>
-                            <h3 className="text-xl font-bold text-gray-900 mb-2">
+                        <div className="bg-white rounded-xl sm:rounded-2xl p-4 sm:p-6 shadow-lg hover:shadow-xl transition-shadow duration-300 sm:col-span-2 lg:col-span-1">
+                            <div className="text-3xl sm:text-4xl mb-3 sm:mb-4">💡</div>
+                            <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-2">
                                 {language === 'ar' ? 'تحويل الأفكار إلى مشاريع' : 'Transforming Ideas into Projects'}
                             </h3>
-                            <p className="text-gray-600">
+                            <p className="text-sm sm:text-base text-gray-600">
                                 {language === 'ar' 
                                     ? 'تحويل الأفكار الإبداعية إلى مشاريع قابلة للتطبيق'
                                     : 'Transforming creative ideas into practical projects'

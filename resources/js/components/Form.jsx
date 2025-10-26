@@ -118,18 +118,18 @@ const Form = ({ onSubmit, fields, title, submitText, isLoading = false }) => {
     };
 
     const renderField = (field) => {
-        const commonClasses = `w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors ${
+        const commonClasses = `w-full px-3 sm:px-4 py-2.5 sm:py-3 border rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors text-sm sm:text-base ${
             errors[field.name] ? 'border-red-500' : 'border-gray-300'
         } ${field.readonly ? 'bg-gray-100 cursor-not-allowed' : ''}`;
         
-        const labelClasses = `block text-sm font-medium text-gray-700 mb-2 ${
+        const labelClasses = `block text-xs sm:text-sm font-medium text-gray-700 mb-1.5 sm:mb-2 ${
             language === 'ar' ? 'text-right' : 'text-left'
         }`;
 
         switch (field.type) {
             case 'select':
                 return (
-                    <div key={field.name} className="mb-6">
+                    <div key={field.name} className="mb-4 sm:mb-6">
                         <label className={labelClasses}>
                             {field.label} {field.required && <span className="text-red-500">*</span>}
                         </label>
@@ -149,18 +149,18 @@ const Form = ({ onSubmit, fields, title, submitText, isLoading = false }) => {
                             ))}
                         </select>
                         {errors[field.name] && (
-                            <p className="text-red-500 text-sm mt-1">{errors[field.name]}</p>
+                            <p className="text-red-500 text-xs sm:text-sm mt-1">{errors[field.name]}</p>
                         )}
                     </div>
                 );
 
             case 'checkbox-group':
                 return (
-                    <div key={field.name} className="mb-6">
+                    <div key={field.name} className="mb-4 sm:mb-6">
                         <label className={labelClasses}>
                             {field.label} {field.required && <span className="text-red-500">*</span>}
                         </label>
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                             {field.options.map(option => {
                                 const currentValues = formData[field.name] || [];
                                 const isChecked = currentValues.includes(option.value);
@@ -171,7 +171,7 @@ const Form = ({ onSubmit, fields, title, submitText, isLoading = false }) => {
                                     formData: formData[field.name]
                                 });
                                 return (
-                                    <label key={option.value} className={`flex items-center space-x-3 rtl:space-x-reverse p-3 border rounded-lg cursor-pointer transition-colors duration-200 ${
+                                    <label key={option.value} className={`flex items-center space-x-2 sm:space-x-3 rtl:space-x-reverse p-2.5 sm:p-3 border rounded-lg cursor-pointer transition-colors duration-200 ${
                                     isChecked ? 'border-indigo-500 bg-indigo-50' : 'border-gray-200 hover:bg-gray-50'
                                 }`}>
                                         <input
@@ -188,11 +188,11 @@ const Form = ({ onSubmit, fields, title, submitText, isLoading = false }) => {
                                             onMouseDown={(e) => {
                                                 console.log('Checkbox mouse down:', option.value);
                                             }}
-                                            className="w-4 h-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500 focus:ring-2"
+                                            className="w-4 h-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500 focus:ring-2 flex-shrink-0"
                                             style={{ pointerEvents: 'auto' }}
                                             key={`${field.name}-${option.value}`}
                                         />
-                                        <span className="text-sm font-medium text-gray-700">{option.label}</span>
+                                        <span className="text-xs sm:text-sm font-medium text-gray-700">{option.label}</span>
                                     </label>
                                 );
                             })}
@@ -205,7 +205,7 @@ const Form = ({ onSubmit, fields, title, submitText, isLoading = false }) => {
 
             case 'textarea':
                 return (
-                    <div key={field.name} className="mb-6">
+                    <div key={field.name} className="mb-4 sm:mb-6">
                         <label className={labelClasses}>
                             {field.label} {field.required && <span className="text-red-500">*</span>}
                         </label>
@@ -220,20 +220,20 @@ const Form = ({ onSubmit, fields, title, submitText, isLoading = false }) => {
                             readOnly={field.readonly}
                         />
                         {errors[field.name] && (
-                            <p className="text-red-500 text-sm mt-1">{errors[field.name]}</p>
+                            <p className="text-red-500 text-xs sm:text-sm mt-1">{errors[field.name]}</p>
                         )}
                     </div>
                 );
 
             case 'tel':
                 return (
-                    <div key={field.name} className="mb-6">
+                    <div key={field.name} className="mb-4 sm:mb-6">
                         <label className={labelClasses}>
                             {field.label} {field.required && <span className="text-red-500">*</span>}
                         </label>
                         {field.countryCode ? (
                             <div className="flex" dir="ltr">
-                                <div className="flex items-center px-3 py-3 bg-gray-100 border border-r-0 border-gray-300 rounded-l-lg text-gray-700 font-medium whitespace-nowrap">
+                                <div className="flex items-center px-2 sm:px-3 py-2.5 sm:py-3 bg-gray-100 border border-r-0 border-gray-300 rounded-l-lg text-gray-700 font-medium whitespace-nowrap text-xs sm:text-sm">
                                     {field.countryCode}
                                 </div>
                                 <input
@@ -262,14 +262,14 @@ const Form = ({ onSubmit, fields, title, submitText, isLoading = false }) => {
                             />
                         )}
                         {errors[field.name] && (
-                            <p className="text-red-500 text-sm mt-1">{errors[field.name]}</p>
+                            <p className="text-red-500 text-xs sm:text-sm mt-1">{errors[field.name]}</p>
                         )}
                     </div>
                 );
 
             default:
                 return (
-                    <div key={field.name} className="mb-6">
+                    <div key={field.name} className="mb-4 sm:mb-6">
                         <label className={labelClasses}>
                             {field.label} {field.required && <span className="text-red-500">*</span>}
                         </label>
@@ -284,7 +284,7 @@ const Form = ({ onSubmit, fields, title, submitText, isLoading = false }) => {
                             readOnly={field.readonly}
                         />
                         {errors[field.name] && (
-                            <p className="text-red-500 text-sm mt-1">{errors[field.name]}</p>
+                            <p className="text-red-500 text-xs sm:text-sm mt-1">{errors[field.name]}</p>
                         )}
                     </div>
                 );
@@ -293,18 +293,20 @@ const Form = ({ onSubmit, fields, title, submitText, isLoading = false }) => {
 
     return (
         <div className="max-w-2xl mx-auto">
-            <div className="bg-white rounded-2xl shadow-xl p-8">
-                <h2 className="text-3xl font-bold text-center text-gray-900 mb-8">
-                    {title}
-                </h2>
+            <div className="bg-white rounded-xl sm:rounded-2xl shadow-xl p-4 sm:p-6 lg:p-8">
+                {title && (
+                    <h2 className="text-2xl sm:text-3xl font-bold text-center text-gray-900 mb-6 sm:mb-8">
+                        {title}
+                    </h2>
+                )}
                 
-                <form onSubmit={handleSubmit} className="space-y-6">
+                <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6">
                     {fields.map(renderField)}
                     
                     <button
                         type="submit"
                         disabled={isLoading}
-                        className={`w-full py-4 px-6 rounded-lg font-semibold text-white transition-all duration-300 ${
+                        className={`w-full py-3 sm:py-4 px-4 sm:px-6 rounded-lg font-semibold text-sm sm:text-base text-white transition-all duration-300 ${
                             isLoading 
                                 ? 'bg-gray-400 cursor-not-allowed' 
                                 : 'bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 hover:shadow-lg transform hover:scale-105'
@@ -312,8 +314,8 @@ const Form = ({ onSubmit, fields, title, submitText, isLoading = false }) => {
                     >
                         {isLoading ? (
                             <div className="flex items-center justify-center">
-                                <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-2"></div>
-                                {language === 'ar' ? 'جاري الإرسال...' : 'Submitting...'}
+                                <div className="animate-spin rounded-full h-4 w-4 sm:h-5 sm:w-5 border-b-2 border-white mr-2"></div>
+                                <span className="text-sm sm:text-base">{language === 'ar' ? 'جاري الإرسال...' : 'Submitting...'}</span>
                             </div>
                         ) : (
                             submitText

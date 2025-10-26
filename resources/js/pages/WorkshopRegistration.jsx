@@ -300,50 +300,50 @@ const WorkshopRegistration = () => {
             {/* Hero Section */}
             <div className="relative text-white overflow-hidden" style={{background: 'linear-gradient(135deg, #096289 0%, #003C72 100%)'}}>
                 <div className="absolute inset-0 bg-black opacity-20"></div>
-                <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+                <div className="relative max-w-7xl mx-auto px-3 sm:px-4 lg:px-8 py-12 sm:py-16 lg:py-20">
                     <div className="text-center">
-                        <div className="flex justify-center mb-6">
-                            <div className="w-20 h-20 bg-white/20 rounded-2xl flex items-center justify-center backdrop-blur-sm">
-                                <span className="text-4xl">🎓</span>
+                        <div className="flex justify-center mb-4 sm:mb-6">
+                            <div className="w-16 h-16 sm:w-20 sm:h-20 bg-white/20 rounded-xl sm:rounded-2xl flex items-center justify-center backdrop-blur-sm">
+                                <span className="text-3xl sm:text-4xl">🎓</span>
                             </div>
                         </div>
-                        <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 leading-tight" style={{lineHeight: '1.1', paddingBottom: '0.75rem'}}>
+                        <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold mb-4 sm:mb-6 leading-tight px-2" style={{lineHeight: '1.1', paddingBottom: '0.5rem'}}>
                             {language === 'ar' ? 'الورش التدريبية' : 'Training Workshops'}
                         </h1>
-                        <p className="text-xl md:text-2xl mb-8 max-w-4xl mx-auto" style={{color: '#F4A321'}}>
+                        <p className="text-sm sm:text-base md:text-lg lg:text-xl xl:text-2xl mb-6 sm:mb-8 max-w-4xl mx-auto px-2" style={{color: '#F4A321'}}>
                             {language === 'ar' 
                                 ? 'ورش تأهيلية تسبق الهاكثون لصقل المهارات وتطوير الحلول'
                                 : 'Preparatory workshops before the hackathon to hone skills and develop solutions'
                             }
                         </p>
-                        <div className="flex flex-wrap justify-center gap-4 text-sm">
-                            <div className="bg-white/20 px-4 py-2 rounded-full backdrop-blur-sm">
+                        <div className="flex flex-wrap justify-center gap-2 sm:gap-4 text-xs sm:text-sm px-2">
+                            <div className="bg-white/20 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full backdrop-blur-sm">
                                 {language === 'ar' ? 'تحليل المشكلات' : 'Problem Analysis'}
                             </div>
-                            <div className="bg-white/20 px-4 py-2 rounded-full backdrop-blur-sm">
+                            <div className="bg-white/20 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full backdrop-blur-sm">
                                 {language === 'ar' ? 'تطوير الحلول' : 'Solution Development'}
                             </div>
-                            <div className="bg-white/20 px-4 py-2 rounded-full backdrop-blur-sm">
+                            <div className="bg-white/20 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full backdrop-blur-sm">
                                 {language === 'ar' ? 'العمل الجماعي' : 'Teamwork'}
                             </div>
                         </div>
                     </div>
                 </div>
                 
-                {/* Floating Elements */}
-                <div className="absolute top-20 left-10 w-16 h-16 rounded-full opacity-30 animate-pulse" style={{background: '#096289'}}></div>
-                <div className="absolute bottom-20 right-10 w-24 h-24 rounded-full opacity-30 animate-pulse delay-1000" style={{background: '#003C72'}}></div>
-                <div className="absolute top-1/2 left-1/4 w-12 h-12 rounded-full opacity-30 animate-pulse delay-500" style={{background: '#D85584'}}></div>
+                {/* Floating Elements - Responsive */}
+                <div className="absolute top-10 sm:top-20 left-4 sm:left-10 w-8 h-8 sm:w-12 sm:h-12 lg:w-16 lg:h-16 rounded-full opacity-20 sm:opacity-30 animate-pulse" style={{background: '#096289'}}></div>
+                <div className="absolute bottom-10 sm:bottom-20 right-4 sm:right-10 w-12 h-12 sm:w-18 sm:h-18 lg:w-24 lg:h-24 rounded-full opacity-20 sm:opacity-30 animate-pulse delay-1000" style={{background: '#003C72'}}></div>
+                <div className="absolute top-1/2 left-1/6 sm:left-1/4 w-6 h-6 sm:w-8 sm:h-8 lg:w-12 lg:h-12 rounded-full opacity-20 sm:opacity-30 animate-pulse delay-500" style={{background: '#D85584'}}></div>
             </div>
 
             {/* Available Workshops Section */}
-            <div className="py-16 bg-white">
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <div className="text-center mb-12">
-                        <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4" style={{lineHeight: '1.1', paddingBottom: '0.75rem'}}>
+            <div className="py-12 sm:py-16 bg-white">
+                <div className="max-w-7xl mx-auto px-3 sm:px-4 lg:px-8">
+                    <div className="text-center mb-8 sm:mb-10 lg:mb-12">
+                        <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-3 sm:mb-4 px-2" style={{lineHeight: '1.1', paddingBottom: '0.5rem'}}>
                             {language === 'ar' ? 'الورش التدريبية' : 'Training Workshops'}
                         </h2>
-                        <p className="text-lg text-gray-600 max-w-3xl mx-auto">
+                        <p className="text-sm sm:text-base lg:text-lg text-gray-600 max-w-3xl mx-auto px-2">
                             {language === 'ar' 
                                 ? 'اختر الورش التي تريد المشاركة فيها لتطوير مهاراتك - الورش المسجلة فيها تظهر بحالة التسجيل، والورش الجديدة متاحة للتسجيل'
                                 : 'Choose the workshops you want to participate in to develop your skills - registered workshops show their status, new workshops are available for registration'
@@ -353,11 +353,11 @@ const WorkshopRegistration = () => {
 
                     {/* Registered Workshops Section */}
                     {workshopsWithStatus.filter(w => w.isRegistered).length > 0 && (
-                        <div className="mb-12">
-                            <h3 className="text-2xl font-bold text-gray-900 mb-6 text-center">
+                        <div className="mb-8 sm:mb-10 lg:mb-12">
+                            <h3 className="text-xl sm:text-2xl font-bold text-gray-900 mb-4 sm:mb-6 text-center px-2">
                                 {language === 'ar' ? 'الورش المسجلة فيها' : 'Registered Workshops'}
                             </h3>
-                            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
                                 {workshopsWithStatus
                                     .filter(workshop => workshop.isRegistered)
                                     .map((workshop) => {
@@ -404,77 +404,77 @@ const WorkshopRegistration = () => {
                                         return (
                                         <div 
                                             key={workshop.id} 
-                                            className={`${colors.bg} rounded-2xl shadow-lg border-2 ${colors.border} overflow-hidden hover:shadow-xl transition-all duration-300`}
+                                            className={`${colors.bg} rounded-xl sm:rounded-2xl shadow-lg border-2 ${colors.border} overflow-hidden hover:shadow-xl transition-all duration-300`}
                                         >
-                                            <div className="p-6">
-                                                <div className="flex items-center justify-between mb-4">
-                                                    <div className="w-12 h-12 rounded-xl flex items-center justify-center text-2xl" 
+                                            <div className="p-4 sm:p-6">
+                                                <div className="flex items-center justify-between mb-3 sm:mb-4">
+                                                    <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-lg sm:rounded-xl flex items-center justify-center text-xl sm:text-2xl" 
                                                          style={{background: `linear-gradient(135deg, ${workshop.color || '#10B981'} 0%, #059669 100%)`}}>
                                                         {workshop.icon || '🎓'}
                                                     </div>
-                                                    <div className={`text-sm font-medium px-3 py-1 rounded-full ${colors.badge}`}>
+                                                    <div className={`text-xs sm:text-sm font-medium px-2 sm:px-3 py-1 rounded-full ${colors.badge}`}>
                                                         {language === 'ar' ? 'مسجل' : 'Registered'}
                                                     </div>
                                                 </div>
                                                 
-                                                <h3 className="text-xl font-bold text-gray-900 mb-4">
+                                                <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-3 sm:mb-4">
                                                     {workshop.title}
                                                 </h3>
                                                 
                                                 {/* Status Section */}
-                                                <div className={`mb-4 p-3 bg-white rounded-lg border ${colors.detailBorder}`}>
+                                                <div className={`mb-3 sm:mb-4 p-2.5 sm:p-3 bg-white rounded-lg border ${colors.detailBorder}`}>
                                                     <div className="flex items-center justify-between">
-                                                        <div className="flex items-center space-x-2 rtl:space-x-reverse">
-                                                            <span className="text-lg">{getStatusInfo(workshop.registrationStatus).icon}</span>
-                                                            <span className="text-sm font-medium text-gray-700">
+                                                        <div className="flex items-center space-x-1.5 sm:space-x-2 rtl:space-x-reverse">
+                                                            <span className="text-base sm:text-lg">{getStatusInfo(workshop.registrationStatus).icon}</span>
+                                                            <span className="text-xs sm:text-sm font-medium text-gray-700">
                                                                 {language === 'ar' ? 'الحالة:' : 'Status:'}
                                                             </span>
                                                         </div>
-                                                        <span className={`px-3 py-1 rounded-full text-xs font-medium ${getStatusInfo(workshop.registrationStatus).color}`}>
+                                                        <span className={`px-2 sm:px-3 py-1 rounded-full text-xs font-medium ${getStatusInfo(workshop.registrationStatus).color}`}>
                                                             {getStatusInfo(workshop.registrationStatus).text}
                                                         </span>
                                                     </div>
                                                     {workshop.registrationStatus === 'rejected' && workshop.registration?.rejection_reason && (
-                                                        <div className="mt-2 p-2 bg-red-50 rounded text-sm text-red-700">
+                                                        <div className="mt-2 p-2 bg-red-50 rounded text-xs sm:text-sm text-red-700">
                                                             <strong>{language === 'ar' ? 'سبب الرفض:' : 'Rejection Reason:'}</strong> {workshop.registration.rejection_reason}
                                                         </div>
                                                     )}
                                                 </div>
                                                 
                                                 {/* Registration Details */}
-                                                <div className="space-y-3 mb-4">
-                                                    <div className={`${colors.detailBg} rounded-lg p-3 border ${colors.detailBorder}`}>
-                                                        <div className="flex items-center space-x-2 rtl:space-x-reverse mb-2">
-                                                            <span className="text-blue-600">👤</span>
-                                                            <span className="text-sm font-medium text-gray-700">
+                                                <div className="space-y-2 sm:space-y-3 mb-3 sm:mb-4">
+                                                    <div className={`${colors.detailBg} rounded-lg p-2.5 sm:p-3 border ${colors.detailBorder}`}>
+                                                        <div className="flex items-center space-x-1.5 sm:space-x-2 rtl:space-x-reverse mb-1.5 sm:mb-2">
+                                                            <span className="text-blue-600 text-sm sm:text-base">👤</span>
+                                                            <span className="text-xs sm:text-sm font-medium text-gray-700">
                                                                 {language === 'ar' ? 'المسجل:' : 'Registered by:'}
                                                             </span>
                                                         </div>
-                                                        <p className="text-gray-900 font-medium text-sm">
+                                                        <p className="text-gray-900 font-medium text-xs sm:text-sm">
                                                             {workshop.registration?.full_name || 'N/A'}
                                                         </p>
                                                     </div>
 
-                                                    <div className={`${colors.detailBg} rounded-lg p-3 border ${colors.detailBorder}`}>
-                                                        <div className="flex items-center space-x-2 rtl:space-x-reverse mb-2">
-                                                            <span className="text-green-600">📧</span>
-                                                            <span className="text-sm font-medium text-gray-700">
+                                                    <div className={`${colors.detailBg} rounded-lg p-2.5 sm:p-3 border ${colors.detailBorder}`}>
+                                                        <div className="flex items-center space-x-1.5 sm:space-x-2 rtl:space-x-reverse mb-1.5 sm:mb-2">
+                                                            <span className="text-green-600 text-sm sm:text-base">📧</span>
+                                                            <span className="text-xs sm:text-sm font-medium text-gray-700">
                                                                 {language === 'ar' ? 'البريد الإلكتروني:' : 'Email:'}
                                                             </span>
                                                         </div>
-                                                        <p className="text-gray-900 font-medium text-sm">
+                                                        <p className="text-gray-900 font-medium text-xs sm:text-sm">
                                                             {workshop.registration?.email || 'N/A'}
                                                         </p>
                                                     </div>
 
-                                                    <div className={`${colors.detailBg} rounded-lg p-3 border ${colors.detailBorder}`}>
-                                                        <div className="flex items-center space-x-2 rtl:space-x-reverse mb-2">
-                                                            <span className="text-purple-600">🎓</span>
-                                                            <span className="text-sm font-medium text-gray-700">
+                                                    <div className={`${colors.detailBg} rounded-lg p-2.5 sm:p-3 border ${colors.detailBorder}`}>
+                                                        <div className="flex items-center space-x-1.5 sm:space-x-2 rtl:space-x-reverse mb-1.5 sm:mb-2">
+                                                            <span className="text-purple-600 text-sm sm:text-base">🎓</span>
+                                                            <span className="text-xs sm:text-sm font-medium text-gray-700">
                                                                 {language === 'ar' ? 'الخلفية التعليمية:' : 'Background:'}
                                                             </span>
                                                         </div>
-                                                        <p className="text-gray-900 font-medium text-sm">
+                                                        <p className="text-gray-900 font-medium text-xs sm:text-sm">
                                                             {workshop.registration?.background === 'programming' ? (language === 'ar' ? 'برمجة' : 'Programming') :
                                                              workshop.registration?.background === 'accounting' ? (language === 'ar' ? 'محاسبة' : 'Accounting') :
                                                              workshop.registration?.background === 'engineering' ? (language === 'ar' ? 'هندسة' : 'Engineering') :
@@ -541,59 +541,59 @@ const WorkshopRegistration = () => {
                     )}
 
                     {/* Available Workshops Section */}
-                    <div className="mb-8">
-                        <h3 className="text-2xl font-bold text-gray-900 mb-6 text-center">
+                    <div className="mb-6 sm:mb-8">
+                        <h3 className="text-xl sm:text-2xl font-bold text-gray-900 mb-4 sm:mb-6 text-center px-2">
                             {language === 'ar' ? 'الورش المتاحة للتسجيل' : 'Available Workshops for Registration'}
                         </h3>
 
-                    <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8">
                         {workshopsWithStatus
                             .filter(workshop => !workshop.isRegistered)
                             .map((workshop, index) => (
                             <div 
                                 key={workshop.id} 
-                                className={`bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 overflow-hidden border-2 ${
+                                className={`bg-white rounded-xl sm:rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 sm:hover:-translate-y-2 overflow-hidden border-2 ${
                                     selectedWorkshops.includes(workshop.id)
                                         ? 'border-blue-500 ring-2 ring-blue-200' 
                                         : 'border-gray-200 hover:border-blue-300'
                                 }`}
                             >
-                                <div className="p-6">
-                                    <div className="flex items-center justify-between mb-4">
-                                        <div className="w-12 h-12 rounded-xl flex items-center justify-center text-2xl" 
+                                <div className="p-4 sm:p-6">
+                                    <div className="flex items-center justify-between mb-3 sm:mb-4">
+                                        <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-lg sm:rounded-xl flex items-center justify-center text-xl sm:text-2xl" 
                                              style={{background: `linear-gradient(135deg, ${workshop.color || '#096289'} 0%, #003C72 100%)`}}>
                                             {workshop.icon || '🎓'}
                                         </div>
-                                        <div className="text-sm text-gray-500">
+                                        <div className="text-xs sm:text-sm text-gray-500">
                                             {workshop.date || (language === 'ar' ? '15 يناير' : 'Jan 15')}
                                         </div>
                                     </div>
                                     
-                                    <h3 className="text-xl font-bold text-gray-900 mb-2">
+                                    <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-2">
                                         {workshop.title || (language === 'ar' ? 'تحليل المشكلات' : 'Problem Analysis')}
                                     </h3>
                                     
-                                    <p className="text-gray-600 text-sm mb-4">
+                                    <p className="text-gray-600 text-xs sm:text-sm mb-3 sm:mb-4">
                                         {workshop.description || (language === 'ar' 
                                             ? 'تعلم كيفية تحليل المشكلات التقنية وإيجاد الحلول المناسبة'
                                             : 'Learn how to analyze technical problems and find appropriate solutions'
                                         )}
                                     </p>
                                     
-                                    <div className="flex items-center justify-between text-sm text-gray-500 mb-4">
-                                        <div className="flex items-center space-x-2 rtl:space-x-reverse">
-                                            <span>👨‍🏫</span>
-                                            <span>{workshop.instructor || (language === 'ar' ? 'د. أحمد محمد' : 'Dr. Ahmed Mohamed')}</span>
+                                    <div className="flex items-center justify-between text-xs sm:text-sm text-gray-500 mb-3 sm:mb-4">
+                                        <div className="flex items-center space-x-1.5 sm:space-x-2 rtl:space-x-reverse">
+                                            <span className="text-sm sm:text-base">👨‍🏫</span>
+                                            <span className="truncate">{workshop.instructor || (language === 'ar' ? 'د. أحمد محمد' : 'Dr. Ahmed Mohamed')}</span>
                                         </div>
-                                        <div className="flex items-center space-x-2 rtl:space-x-reverse">
-                                            <span>👥</span>
+                                        <div className="flex items-center space-x-1.5 sm:space-x-2 rtl:space-x-reverse">
+                                            <span className="text-sm sm:text-base">👥</span>
                                             <span>{workshop.capacity || 25} {language === 'ar' ? 'مقعد' : 'seats'}</span>
                                         </div>
                                     </div>
 
                                     
                                     <div className="flex items-center justify-between">
-                                        <div className="text-sm text-gray-500">
+                                        <div className="text-xs sm:text-sm text-gray-500">
                                             {workshop.time || '10:00 - 12:00'}
                                         </div>
                                         <button
@@ -614,7 +614,7 @@ const WorkshopRegistration = () => {
                                                     }, 100);
                                                 }
                                             }}
-                                            className={`px-4 py-2 text-sm font-medium rounded-lg transition-colors duration-200 ${
+                                            className={`px-3 sm:px-4 py-1.5 sm:py-2 text-xs sm:text-sm font-medium rounded-lg transition-colors duration-200 ${
                                                 selectedWorkshops.includes(workshop.id)
                                                     ? 'bg-green-600 text-white'
                                                     : 'bg-blue-600 text-white hover:bg-blue-700'
@@ -632,12 +632,12 @@ const WorkshopRegistration = () => {
                     </div>
 
                     {workshopsWithStatus.filter(w => !w.isRegistered).length === 0 && (
-                        <div className="text-center py-12">
-                            <div className="text-6xl mb-4">🎓</div>
-                            <h3 className="text-xl font-semibold text-gray-600 mb-2">
+                        <div className="text-center py-8 sm:py-12">
+                            <div className="text-4xl sm:text-6xl mb-3 sm:mb-4">🎓</div>
+                            <h3 className="text-lg sm:text-xl font-semibold text-gray-600 mb-2 px-2">
                                 {language === 'ar' ? 'لا توجد ورش متاحة للتسجيل حالياً' : 'No workshops available for registration at the moment'}
                             </h3>
-                            <p className="text-gray-500">
+                            <p className="text-sm sm:text-base text-gray-500 px-2">
                                 {language === 'ar' 
                                     ? 'جميع الورش متاحة أو لا توجد ورش جديدة'
                                     : 'All workshops are registered or no new workshops available'
