@@ -50,7 +50,7 @@ const AdminPortal = () => {
                         {language === 'ar' ? 'الوصول مرفوض' : 'Access Denied'}
                     </h1>
                     <p className="text-gray-600">
-                        {language === 'ar' ? 'ليس لديك صلاحيات الإدارة' : 'You don\'t have admin privileges.'}
+                        {language === 'ar' ? 'لست مخولاً للوصول لهذه الصفحة' : 'You are not authorized to access this page.'}
                     </p>
                 </div>
             </div>

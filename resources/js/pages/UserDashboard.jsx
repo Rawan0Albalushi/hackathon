@@ -57,19 +57,19 @@ const UserDashboard = () => {
     const getStatusBadge = (status) => {
         const statusConfig = {
             'pending': {
-                bg: 'bg-gradient-to-r from-yellow-400 to-orange-400',
+                style: {background: 'linear-gradient(135deg, #F4A321 0%, #D85584 100%)'},
                 text: 'text-white',
                 icon: '⏳',
                 label: language === 'ar' ? 'قيد المراجعة' : 'Under Review'
             },
             'approved': {
-                bg: 'bg-gradient-to-r from-green-400 to-emerald-500',
+                style: {background: 'linear-gradient(135deg, #096289 0%, #003C72 100%)'},
                 text: 'text-white',
                 icon: '✅',
                 label: language === 'ar' ? 'مقبول' : 'Approved'
             },
             'rejected': {
-                bg: 'bg-gradient-to-r from-red-400 to-pink-500',
+                style: {background: 'linear-gradient(135deg, #ff6b6b 0%, #ee5a52 100%)'},
                 text: 'text-white',
                 icon: '❌',
                 label: language === 'ar' ? 'مرفوض' : 'Rejected'
@@ -79,7 +79,7 @@ const UserDashboard = () => {
         const config = statusConfig[status] || statusConfig['pending'];
 
         return (
-            <div className={`${config.bg} ${config.text} px-4 py-2 rounded-full text-sm font-semibold shadow-lg flex items-center space-x-2 rtl:space-x-reverse`}>
+            <div className={`${config.text} px-4 py-2 rounded-full text-sm font-semibold shadow-lg flex items-center space-x-2 rtl:space-x-reverse`} style={config.style}>
                 <span className="text-lg">{config.icon}</span>
                 <span>{config.label}</span>
             </div>
@@ -98,19 +98,19 @@ const UserDashboard = () => {
 
     if (loading) {
         return (
-            <div className="min-h-screen bg-gradient-to-br from-blue-50 to-purple-50 flex items-center justify-center">
+            <div className="min-h-screen flex items-center justify-center" style={{background: 'linear-gradient(to bottom, #FFF5EB 0%, #FFE5F0 25%, #E8F4F8 50%, #F0E8F5 75%, #FFF5EB 100%)'}}>
                 <div className="text-center">
                     <div className="relative">
-                        <div className="animate-spin rounded-full h-16 w-16 border-4 border-purple-200 mx-auto"></div>
-                        <div className="animate-spin rounded-full h-16 w-16 border-4 border-purple-600 border-t-transparent mx-auto absolute top-0 left-1/2 transform -translate-x-1/2"></div>
+                        <div className="animate-spin rounded-full h-16 w-16 border-4 mx-auto" style={{borderColor: 'rgba(244, 163, 33, 0.2)'}}></div>
+                        <div className="animate-spin rounded-full h-16 w-16 border-4 border-t-transparent mx-auto absolute top-0 left-1/2 transform -translate-x-1/2" style={{borderColor: '#F4A321'}}></div>
                     </div>
                     <p className="mt-6 text-gray-700 text-lg font-medium">
                         {language === 'ar' ? 'جاري تحميل لوحة التحكم...' : 'Loading Dashboard...'}
                     </p>
                     <div className="mt-4 flex justify-center space-x-1">
-                        <div className="w-2 h-2 bg-purple-600 rounded-full animate-bounce"></div>
-                        <div className="w-2 h-2 bg-purple-600 rounded-full animate-bounce delay-100"></div>
-                        <div className="w-2 h-2 bg-purple-600 rounded-full animate-bounce delay-200"></div>
+                        <div className="w-2 h-2 rounded-full animate-bounce" style={{backgroundColor: '#F4A321'}}></div>
+                        <div className="w-2 h-2 rounded-full animate-bounce delay-100" style={{backgroundColor: '#D85584'}}></div>
+                        <div className="w-2 h-2 rounded-full animate-bounce delay-200" style={{backgroundColor: '#096289'}}></div>
                     </div>
                 </div>
             </div>
@@ -118,13 +118,13 @@ const UserDashboard = () => {
     }
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50">
+        <div className="min-h-screen relative" style={{background: 'linear-gradient(to bottom, #FFF5EB 0%, #FFE5F0 25%, #E8F4F8 50%, #F0E8F5 75%, #FFF5EB 100%)'}}>
             {/* Header Section */}
-            <div className="bg-gradient-to-r from-purple-600 via-blue-600 to-indigo-600 text-white py-16">
+            <div className="text-white py-16 animate-gradient rounded-3xl mx-4 mt-4" style={{background: 'linear-gradient(135deg, #003C72 0%, #096289 50%, #D85584 100%)'}}>
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="text-center">
                         <div className="flex justify-center mb-6">
-                            <div className="bg-white/20 backdrop-blur-sm p-4 rounded-3xl">
+                            <div className="bg-white/20 backdrop-blur-sm p-4 rounded-3xl logo-icon-enhanced">
                                 <span className="text-4xl">🎛️</span>
                             </div>
                         </div>
@@ -144,10 +144,10 @@ const UserDashboard = () => {
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-8 relative z-10">
 
                 {error && (
-                    <div className="mb-8 bg-gradient-to-r from-red-50 to-pink-50 border border-red-200 rounded-2xl p-6 shadow-lg">
+                    <div className="mb-8 bg-white/80 backdrop-blur-sm border border-red-200/50 rounded-2xl p-6 shadow-lg">
                         <div className="flex items-center space-x-3 rtl:space-x-reverse">
-                            <div className="bg-red-100 p-3 rounded-full">
-                                <span className="text-red-600 text-xl">⚠️</span>
+                            <div className="p-3 rounded-full shadow-lg" style={{background: 'linear-gradient(135deg, #ff6b6b 0%, #ee5a52 100%)'}}>
+                                <span className="text-white text-xl">⚠️</span>
                             </div>
                             <div>
                                 <h3 className="text-lg font-semibold text-red-800">
@@ -161,9 +161,9 @@ const UserDashboard = () => {
 
                 {/* Statistics Cards */}
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-                    <div className="bg-white rounded-2xl p-6 shadow-xl hover:shadow-2xl transition-shadow duration-300 transform hover:-translate-y-1">
+                    <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-6 shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1 border border-white/20">
                         <div className="flex items-center space-x-4 rtl:space-x-reverse">
-                            <div className="bg-gradient-to-r from-blue-500 to-purple-600 text-white p-4 rounded-2xl">
+                            <div className="text-white p-4 rounded-2xl shadow-lg" style={{background: 'linear-gradient(135deg, #F4A321 0%, #D85584 100%)'}}>
                                 <span className="text-2xl">🚀</span>
                             </div>
                             <div>
@@ -177,9 +177,9 @@ const UserDashboard = () => {
                         </div>
                     </div>
 
-                    <div className="bg-white rounded-2xl p-6 shadow-xl hover:shadow-2xl transition-shadow duration-300 transform hover:-translate-y-1">
+                    <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-6 shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1 border border-white/20">
                         <div className="flex items-center space-x-4 rtl:space-x-reverse">
-                            <div className="bg-gradient-to-r from-green-500 to-teal-600 text-white p-4 rounded-2xl">
+                            <div className="text-white p-4 rounded-2xl shadow-lg" style={{background: 'linear-gradient(135deg, #096289 0%, #003C72 100%)'}}>
                                 <span className="text-2xl">🎯</span>
                             </div>
                             <div>
@@ -193,9 +193,9 @@ const UserDashboard = () => {
                         </div>
                     </div>
 
-                    <div className="bg-white rounded-2xl p-6 shadow-xl hover:shadow-2xl transition-shadow duration-300 transform hover:-translate-y-1">
+                    <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-6 shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1 border border-white/20">
                         <div className="flex items-center space-x-4 rtl:space-x-reverse">
-                            <div className="bg-gradient-to-r from-orange-500 to-red-600 text-white p-4 rounded-2xl">
+                            <div className="text-white p-4 rounded-2xl shadow-lg" style={{background: 'linear-gradient(135deg, #D85584 0%, #F4A321 100%)'}}>
                                 <span className="text-2xl">🛠️</span>
                             </div>
                             <div>
@@ -212,9 +212,9 @@ const UserDashboard = () => {
 
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                     {/* Hackathon Registration */}
-                    <div className="bg-white rounded-3xl shadow-xl p-8 hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1">
+                    <div className="bg-white/80 backdrop-blur-sm rounded-3xl shadow-xl p-8 hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1 border border-white/20">
                         <div className="flex items-center space-x-4 rtl:space-x-reverse mb-6">
-                            <div className="bg-gradient-to-r from-blue-500 to-purple-600 text-white p-4 rounded-2xl">
+                            <div className="text-white p-4 rounded-2xl shadow-lg" style={{background: 'linear-gradient(135deg, #F4A321 0%, #D85584 100%)'}}>
                                 <span className="text-2xl">🚀</span>
                             </div>
                             <h2 className="text-2xl font-bold text-gray-900">
@@ -224,37 +224,84 @@ const UserDashboard = () => {
                         
                         {registrations.hackathon ? (
                             <div className="space-y-6">
-                                <div className="flex justify-between items-center">
-                                    <span className="text-lg font-semibold text-gray-700">
-                                        {language === 'ar' ? 'الحالة:' : 'Status:'}
-                                    </span>
+                                {/* Status Header */}
+                                <div className="flex justify-between items-center p-4 rounded-2xl" style={{background: 'linear-gradient(135deg, rgba(244, 163, 33, 0.1) 0%, rgba(216, 85, 132, 0.1) 100%)'}}>
+                                    <div className="flex items-center space-x-3 rtl:space-x-reverse">
+                                        <div className="p-2 rounded-full" style={{background: 'linear-gradient(135deg, #F4A321 0%, #D85584 100%)'}}>
+                                            <span className="text-white text-lg">🚀</span>
+                                        </div>
+                                        <div>
+                                            <h3 className="font-bold text-gray-900 text-lg">
+                                                {language === 'ar' ? 'تسجيل الهاكثون' : 'Hackathon Registration'}
+                                            </h3>
+                                            <p className="text-sm text-gray-600">
+                                                {language === 'ar' ? 'رقم الطلب:' : 'Application ID:'} #{registrations.hackathon.id}
+                                            </p>
+                                        </div>
+                                    </div>
                                     {getStatusBadge(registrations.hackathon.status)}
                                 </div>
                                 
-                                <div className="bg-gray-50 rounded-2xl p-6 space-y-4">
-                                    <div className="flex items-center space-x-3 rtl:space-x-reverse">
-                                        <span className="text-blue-600 text-xl">👤</span>
-                                        <div>
-                                            <p className="font-semibold text-gray-900">{registrations.hackathon.full_name}</p>
-                                            <p className="text-gray-600">{registrations.hackathon.email}</p>
+                                {/* Registration Details */}
+                                <div className="bg-white/60 backdrop-blur-sm rounded-2xl p-6 space-y-6 border border-white/30">
+                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                        <div className="flex items-center space-x-3 rtl:space-x-reverse">
+                                            <div className="p-3 rounded-full shadow-lg" style={{background: 'linear-gradient(135deg, #F4A321 0%, #D85584 100%)'}}>
+                                                <span className="text-white text-xl">👤</span>
+                                            </div>
+                                            <div>
+                                                <p className="font-semibold text-gray-900 text-lg">{registrations.hackathon.full_name}</p>
+                                                <p className="text-gray-600">{registrations.hackathon.email}</p>
+                                                <p className="text-sm text-gray-500 mt-1">
+                                                    {language === 'ar' ? 'المشارك' : 'Participant'}
+                                                </p>
+                                            </div>
+                                        </div>
+                                        
+                                        <div className="flex items-center space-x-3 rtl:space-x-reverse">
+                                            <div className="p-3 rounded-full shadow-lg" style={{background: 'linear-gradient(135deg, #096289 0%, #003C72 100%)'}}>
+                                                <span className="text-white text-xl">📅</span>
+                                            </div>
+                                            <div>
+                                                <p className="font-semibold text-gray-900">
+                                                    {language === 'ar' ? 'تاريخ التسجيل' : 'Registration Date'}
+                                                </p>
+                                                <p className="text-gray-600">{formatDate(registrations.hackathon.created_at)}</p>
+                                                <p className="text-sm text-gray-500 mt-1">
+                                                    {language === 'ar' ? 'تم التسجيل' : 'Registered'}
+                                                </p>
+                                            </div>
                                         </div>
                                     </div>
-                                    
-                                    <div className="flex items-center space-x-3 rtl:space-x-reverse">
-                                        <span className="text-green-600 text-xl">📅</span>
-                                        <div>
-                                            <p className="font-semibold text-gray-900">
-                                                {language === 'ar' ? 'تاريخ التسجيل:' : 'Registration Date:'}
-                                            </p>
-                                            <p className="text-gray-600">{formatDate(registrations.hackathon.created_at)}</p>
+
+                                    {/* Skills Section */}
+                                    {registrations.hackathon.skills && typeof registrations.hackathon.skills === 'string' && (
+                                        <div className="border-t border-gray-200 pt-6">
+                                            <div className="flex items-center space-x-3 rtl:space-x-reverse mb-4">
+                                                <div className="p-2 rounded-full" style={{background: 'linear-gradient(135deg, #D85584 0%, #F4A321 100%)'}}>
+                                                    <span className="text-white text-lg">🛠️</span>
+                                                </div>
+                                                <h4 className="font-semibold text-gray-900">
+                                                    {language === 'ar' ? 'المهارات المذكورة' : 'Mentioned Skills'}
+                                                </h4>
+                                            </div>
+                                            <div className="flex flex-wrap gap-2">
+                                                {registrations.hackathon.skills.split(',').map((skill, index) => (
+                                                    <span key={index} className="px-3 py-1 rounded-full text-sm font-medium text-white" style={{background: 'linear-gradient(135deg, #F4A321 0%, #D85584 100%)'}}>
+                                                        {skill.trim()}
+                                                    </span>
+                                                ))}
+                                            </div>
                                         </div>
-                                    </div>
+                                    )}
                                 </div>
 
                                 {registrations.hackathon.rejection_reason && (
-                                    <div className="bg-gradient-to-r from-red-50 to-pink-50 border border-red-200 rounded-2xl p-4">
+                                    <div className="bg-white/60 backdrop-blur-sm border border-red-200/50 rounded-2xl p-4">
                                         <div className="flex items-start space-x-3 rtl:space-x-reverse">
-                                            <span className="text-red-600 text-xl">❌</span>
+                                            <div className="p-2 rounded-full shadow-lg" style={{background: 'linear-gradient(135deg, #ff6b6b 0%, #ee5a52 100%)'}}>
+                                                <span className="text-white text-lg">❌</span>
+                                            </div>
                                             <div>
                                                 <p className="font-semibold text-red-800">
                                                     {language === 'ar' ? 'سبب الرفض:' : 'Rejection Reason:'}
@@ -268,7 +315,8 @@ const UserDashboard = () => {
                                 {registrations.hackathon.status !== 'rejected' && (
                                     <Link 
                                         to="/hackathon-registration"
-                                        className="block w-full bg-gradient-to-r from-blue-500 to-purple-600 text-white text-center py-3 rounded-2xl font-semibold hover:from-blue-600 hover:to-purple-700 transition-all duration-300 transform hover:scale-105"
+                                        className="block w-full text-white text-center py-3 rounded-2xl font-semibold transition-all duration-300 transform hover:scale-105 shadow-lg"
+                                        style={{background: 'linear-gradient(135deg, #F4A321 0%, #D85584 100%)'}}
                                     >
                                         {language === 'ar' ? 'مراجعة الطلب' : 'Review Application'}
                                     </Link>
@@ -276,8 +324,8 @@ const UserDashboard = () => {
                             </div>
                         ) : (
                             <div className="text-center py-12">
-                                <div className="bg-gray-100 rounded-full p-6 w-24 h-24 mx-auto mb-6 flex items-center justify-center">
-                                    <span className="text-4xl text-gray-400">🚀</span>
+                                <div className="rounded-full p-6 w-24 h-24 mx-auto mb-6 flex items-center justify-center shadow-lg" style={{background: 'linear-gradient(135deg, #F4A321 0%, #D85584 100%)'}}>
+                                    <span className="text-4xl text-white">🚀</span>
                                 </div>
                                 <h3 className="text-xl font-semibold text-gray-900 mb-4">
                                     {language === 'ar' ? 'لم تسجل في الهاكثون بعد' : 'Not registered for hackathon yet'}
@@ -290,7 +338,8 @@ const UserDashboard = () => {
                                 </p>
                                 <Link 
                                     to="/hackathon-registration"
-                                    className="bg-gradient-to-r from-blue-500 to-purple-600 text-white px-8 py-3 rounded-2xl font-semibold hover:from-blue-600 hover:to-purple-700 transition-all duration-300 transform hover:scale-105 inline-block"
+                                    className="text-white px-8 py-3 rounded-2xl font-semibold transition-all duration-300 transform hover:scale-105 inline-block shadow-lg"
+                                    style={{background: 'linear-gradient(135deg, #F4A321 0%, #D85584 100%)'}}
                                 >
                                     {language === 'ar' ? 'سجل الآن' : 'Register Now'}
                                 </Link>
@@ -299,9 +348,9 @@ const UserDashboard = () => {
                     </div>
 
                     {/* Conference Registration */}
-                    <div className="bg-white rounded-3xl shadow-xl p-8 hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1">
+                    <div className="bg-white/80 backdrop-blur-sm rounded-3xl shadow-xl p-8 hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1 border border-white/20">
                         <div className="flex items-center space-x-4 rtl:space-x-reverse mb-6">
-                            <div className="bg-gradient-to-r from-green-500 to-teal-600 text-white p-4 rounded-2xl">
+                            <div className="text-white p-4 rounded-2xl shadow-lg" style={{background: 'linear-gradient(135deg, #096289 0%, #003C72 100%)'}}>
                                 <span className="text-2xl">🎯</span>
                             </div>
                             <h2 className="text-2xl font-bold text-gray-900">
@@ -311,47 +360,84 @@ const UserDashboard = () => {
                         
                         {registrations.conference ? (
                             <div className="space-y-6">
-                                <div className="flex justify-between items-center">
-                                    <span className="text-lg font-semibold text-gray-700">
-                                        {language === 'ar' ? 'الحالة:' : 'Status:'}
-                                    </span>
+                                {/* Status Header */}
+                                <div className="flex justify-between items-center p-4 rounded-2xl" style={{background: 'linear-gradient(135deg, rgba(9, 98, 137, 0.1) 0%, rgba(0, 60, 114, 0.1) 100%)'}}>
+                                    <div className="flex items-center space-x-3 rtl:space-x-reverse">
+                                        <div className="p-2 rounded-full" style={{background: 'linear-gradient(135deg, #096289 0%, #003C72 100%)'}}>
+                                            <span className="text-white text-lg">🎯</span>
+                                        </div>
+                                        <div>
+                                            <h3 className="font-bold text-gray-900 text-lg">
+                                                {language === 'ar' ? 'تسجيل المؤتمر' : 'Conference Registration'}
+                                            </h3>
+                                            <p className="text-sm text-gray-600">
+                                                {language === 'ar' ? 'رقم الطلب:' : 'Application ID:'} #{registrations.conference.id}
+                                            </p>
+                                        </div>
+                                    </div>
                                     {getStatusBadge(registrations.conference.status)}
                                 </div>
                                 
-                                <div className="bg-gray-50 rounded-2xl p-6 space-y-4">
-                                    <div className="flex items-center space-x-3 rtl:space-x-reverse">
-                                        <span className="text-green-600 text-xl">👤</span>
-                                        <div>
-                                            <p className="font-semibold text-gray-900">{registrations.conference.full_name}</p>
-                                            <p className="text-gray-600">{registrations.conference.email}</p>
+                                {/* Registration Details */}
+                                <div className="bg-white/60 backdrop-blur-sm rounded-2xl p-6 space-y-6 border border-white/30">
+                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                        <div className="flex items-center space-x-3 rtl:space-x-reverse">
+                                            <div className="p-3 rounded-full shadow-lg" style={{background: 'linear-gradient(135deg, #096289 0%, #003C72 100%)'}}>
+                                                <span className="text-white text-xl">👤</span>
+                                            </div>
+                                            <div>
+                                                <p className="font-semibold text-gray-900 text-lg">{registrations.conference.full_name}</p>
+                                                <p className="text-gray-600">{registrations.conference.email}</p>
+                                                <p className="text-sm text-gray-500 mt-1">
+                                                    {language === 'ar' ? 'المشارك' : 'Participant'}
+                                                </p>
+                                            </div>
+                                        </div>
+                                        
+                                        <div className="flex items-center space-x-3 rtl:space-x-reverse">
+                                            <div className="p-3 rounded-full shadow-lg" style={{background: 'linear-gradient(135deg, #F4A321 0%, #D85584 100%)'}}>
+                                                <span className="text-white text-xl">📅</span>
+                                            </div>
+                                            <div>
+                                                <p className="font-semibold text-gray-900">
+                                                    {language === 'ar' ? 'تاريخ التسجيل' : 'Registration Date'}
+                                                </p>
+                                                <p className="text-gray-600">{formatDate(registrations.conference.created_at)}</p>
+                                                <p className="text-sm text-gray-500 mt-1">
+                                                    {language === 'ar' ? 'تم التسجيل' : 'Registered'}
+                                                </p>
+                                            </div>
                                         </div>
                                     </div>
-                                    
-                                    <div className="flex items-center space-x-3 rtl:space-x-reverse">
-                                        <span className="text-blue-600 text-xl">🎪</span>
-                                        <div>
-                                            <p className="font-semibold text-gray-900">
-                                                {language === 'ar' ? 'الجلسة المختارة:' : 'Selected Session:'}
-                                            </p>
-                                            <p className="text-gray-600">{registrations.conference.session_choice}</p>
+
+                                    {/* Session Choice Section */}
+                                    <div className="border-t border-gray-200 pt-6">
+                                        <div className="flex items-center space-x-3 rtl:space-x-reverse mb-4">
+                                            <div className="p-2 rounded-full" style={{background: 'linear-gradient(135deg, #D85584 0%, #F4A321 100%)'}}>
+                                                <span className="text-white text-lg">🎪</span>
+                                            </div>
+                                            <h4 className="font-semibold text-gray-900">
+                                                {language === 'ar' ? 'الجلسة المختارة' : 'Selected Session'}
+                                            </h4>
                                         </div>
-                                    </div>
-                                    
-                                    <div className="flex items-center space-x-3 rtl:space-x-reverse">
-                                        <span className="text-purple-600 text-xl">📅</span>
-                                        <div>
-                                            <p className="font-semibold text-gray-900">
-                                                {language === 'ar' ? 'تاريخ التسجيل:' : 'Registration Date:'}
+                                        <div className="bg-white/40 rounded-xl p-4 border border-white/50">
+                                            <div className="flex items-center space-x-3 rtl:space-x-reverse">
+                                                <div className="w-3 h-3 rounded-full" style={{background: 'linear-gradient(135deg, #096289 0%, #003C72 100%)'}}></div>
+                                                <p className="font-medium text-gray-900 text-lg">{registrations.conference.session_choice}</p>
+                                            </div>
+                                            <p className="text-sm text-gray-600 mt-2">
+                                                {language === 'ar' ? 'ستحضر هذه الجلسة في المؤتمر' : 'You will attend this session at the conference'}
                                             </p>
-                                            <p className="text-gray-600">{formatDate(registrations.conference.created_at)}</p>
                                         </div>
                                     </div>
                                 </div>
 
                                 {registrations.conference.rejection_reason && (
-                                    <div className="bg-gradient-to-r from-red-50 to-pink-50 border border-red-200 rounded-2xl p-4">
+                                    <div className="bg-white/60 backdrop-blur-sm border border-red-200/50 rounded-2xl p-4">
                                         <div className="flex items-start space-x-3 rtl:space-x-reverse">
-                                            <span className="text-red-600 text-xl">❌</span>
+                                            <div className="p-2 rounded-full shadow-lg" style={{background: 'linear-gradient(135deg, #ff6b6b 0%, #ee5a52 100%)'}}>
+                                                <span className="text-white text-lg">❌</span>
+                                            </div>
                                             <div>
                                                 <p className="font-semibold text-red-800">
                                                     {language === 'ar' ? 'سبب الرفض:' : 'Rejection Reason:'}
@@ -365,7 +451,8 @@ const UserDashboard = () => {
                                 {registrations.conference.status !== 'rejected' && (
                                     <Link 
                                         to="/conference-registration"
-                                        className="block w-full bg-gradient-to-r from-green-500 to-teal-600 text-white text-center py-3 rounded-2xl font-semibold hover:from-green-600 hover:to-teal-700 transition-all duration-300 transform hover:scale-105"
+                                        className="block w-full text-white text-center py-3 rounded-2xl font-semibold transition-all duration-300 transform hover:scale-105 shadow-lg"
+                                        style={{background: 'linear-gradient(135deg, #096289 0%, #003C72 100%)'}}
                                     >
                                         {language === 'ar' ? 'مراجعة الطلب' : 'Review Application'}
                                     </Link>
@@ -373,8 +460,8 @@ const UserDashboard = () => {
                             </div>
                         ) : (
                             <div className="text-center py-12">
-                                <div className="bg-gray-100 rounded-full p-6 w-24 h-24 mx-auto mb-6 flex items-center justify-center">
-                                    <span className="text-4xl text-gray-400">🎯</span>
+                                <div className="rounded-full p-6 w-24 h-24 mx-auto mb-6 flex items-center justify-center shadow-lg" style={{background: 'linear-gradient(135deg, #096289 0%, #003C72 100%)'}}>
+                                    <span className="text-4xl text-white">🎯</span>
                                 </div>
                                 <h3 className="text-xl font-semibold text-gray-900 mb-4">
                                     {language === 'ar' ? 'لم تسجل في المؤتمر بعد' : 'Not registered for conference yet'}
@@ -387,7 +474,8 @@ const UserDashboard = () => {
                                 </p>
                                 <Link 
                                     to="/conference-registration"
-                                    className="bg-gradient-to-r from-green-500 to-teal-600 text-white px-8 py-3 rounded-2xl font-semibold hover:from-green-600 hover:to-teal-700 transition-all duration-300 transform hover:scale-105 inline-block"
+                                    className="text-white px-8 py-3 rounded-2xl font-semibold transition-all duration-300 transform hover:scale-105 inline-block shadow-lg"
+                                    style={{background: 'linear-gradient(135deg, #096289 0%, #003C72 100%)'}}
                                 >
                                     {language === 'ar' ? 'سجل الآن' : 'Register Now'}
                                 </Link>
@@ -396,159 +484,378 @@ const UserDashboard = () => {
                     </div>
                 </div>
 
-                {/* Workshop Registrations */}
+                {/* Workshop Registrations - Redesigned */}
                 <div className="mt-12">
-                    <div className="bg-white rounded-3xl shadow-xl p-8 hover:shadow-2xl transition-all duration-300">
-                        <div className="flex items-center space-x-4 rtl:space-x-reverse mb-8">
-                            <div className="bg-gradient-to-r from-orange-500 to-red-600 text-white p-4 rounded-2xl">
-                                <span className="text-2xl">🛠️</span>
+                    {/* Section Header with Enhanced Design */}
+                    <div className="relative mb-8">
+                        <div className="absolute inset-0 bg-gradient-to-r from-purple-600/20 via-pink-600/20 to-orange-600/20 rounded-3xl blur-xl"></div>
+                        <div className="relative bg-white/90 backdrop-blur-sm rounded-3xl p-8 border border-white/30 shadow-2xl">
+                            <div className="flex items-center justify-between">
+                                <div className="flex items-center space-x-6 rtl:space-x-reverse">
+                                    <div className="relative">
+                                        <div className="absolute inset-0 bg-gradient-to-r from-purple-600 to-pink-600 rounded-2xl blur-lg opacity-60"></div>
+                                        <div className="relative p-4 rounded-2xl shadow-xl" style={{background: 'linear-gradient(135deg, #D85584 0%, #F4A321 100%)'}}>
+                                            <span className="text-white text-3xl">🛠️</span>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <h2 className="text-4xl font-bold text-gray-900 mb-2">
+                                            {language === 'ar' ? 'تسجيلات الورش' : 'Workshop Registrations'}
+                                        </h2>
+                                        <p className="text-gray-600 text-lg">
+                                            {language === 'ar' 
+                                                ? 'إدارة ومتابعة تسجيلاتك في الورش التدريبية'
+                                                : 'Manage and track your workshop registrations'
+                                            }
+                                        </p>
+                                    </div>
+                                </div>
+                                <div className="text-center">
+                                    <div className="text-5xl font-bold text-gray-900 mb-1">{registrations.workshops.length}</div>
+                                    <div className="text-sm text-gray-600 font-medium">
+                                        {language === 'ar' ? 'ورشة مسجلة' : 'Workshops'}
+                                    </div>
+                                </div>
                             </div>
-                            <h2 className="text-3xl font-bold text-gray-900">
-                                {language === 'ar' ? 'تسجيلات الورش' : 'Workshop Registrations'}
-                            </h2>
                         </div>
-                        
-                        {registrations.workshops.length > 0 ? (
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                {registrations.workshops.map((workshop, index) => (
-                                    <div key={index} className="bg-gradient-to-br from-gray-50 to-blue-50 rounded-2xl p-6 border border-gray-200 hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1">
-                                        <div className="flex justify-between items-start mb-4">
-                                            <h3 className="font-bold text-gray-900 text-lg">{workshop.workshop?.title}</h3>
-                                            {getStatusBadge(workshop.status)}
-                                        </div>
-                                        
-                                        <div className="space-y-3">
-                                            <div className="flex items-center space-x-3 rtl:space-x-reverse">
-                                                <span className="text-orange-600 text-xl">👨‍🏫</span>
-                                                <div>
-                                                    <p className="font-semibold text-gray-900">
-                                                        {language === 'ar' ? 'المدرب:' : 'Instructor:'}
-                                                    </p>
-                                                    <p className="text-gray-600">{workshop.workshop?.instructor}</p>
-                                                </div>
-                                            </div>
+                    </div>
+
+                    {registrations.workshops.length > 0 ? (
+                        <div className="space-y-8">
+                            {/* Enhanced Workshop Cards */}
+                            <div className="grid grid-cols-1 xl:grid-cols-2 gap-8">
+                                {registrations.workshops.map((workshop, index) => {
+                                    // Dynamic card styling based on status
+                                    const getCardStyle = (status) => {
+                                        switch(status) {
+                                            case 'approved':
+                                                return {
+                                                    gradient: 'linear-gradient(135deg, #10B981 0%, #059669 100%)',
+                                                    border: 'border-green-200/50',
+                                                    bg: 'bg-green-50/30',
+                                                    shadow: 'shadow-green-200/20'
+                                                };
+                                            case 'pending':
+                                                return {
+                                                    gradient: 'linear-gradient(135deg, #F59E0B 0%, #D97706 100%)',
+                                                    border: 'border-yellow-200/50',
+                                                    bg: 'bg-yellow-50/30',
+                                                    shadow: 'shadow-yellow-200/20'
+                                                };
+                                            case 'rejected':
+                                                return {
+                                                    gradient: 'linear-gradient(135deg, #EF4444 0%, #DC2626 100%)',
+                                                    border: 'border-red-200/50',
+                                                    bg: 'bg-red-50/30',
+                                                    shadow: 'shadow-red-200/20'
+                                                };
+                                            default:
+                                                return {
+                                                    gradient: 'linear-gradient(135deg, #D85584 0%, #F4A321 100%)',
+                                                    border: 'border-pink-200/50',
+                                                    bg: 'bg-pink-50/30',
+                                                    shadow: 'shadow-pink-200/20'
+                                                };
+                                        }
+                                    };
+
+                                    const cardStyle = getCardStyle(workshop.status);
+
+                                    return (
+                                        <div key={index} className={`relative group ${cardStyle.bg} backdrop-blur-sm rounded-3xl p-8 border ${cardStyle.border} hover:shadow-2xl transition-all duration-700 transform hover:-translate-y-3 hover:scale-[1.02]`}>
+                                            {/* Animated Background */}
+                                            <div className="absolute inset-0 rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-700" style={{background: cardStyle.gradient}}></div>
                                             
-                                            <div className="flex items-center space-x-3 rtl:space-x-reverse">
-                                                <span className="text-blue-600 text-xl">📅</span>
-                                                <div>
-                                                    <p className="font-semibold text-gray-900">
-                                                        {language === 'ar' ? 'تاريخ التسجيل:' : 'Registration Date:'}
-                                                    </p>
-                                                    <p className="text-gray-600">{formatDate(workshop.created_at)}</p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        
-                                        {workshop.rejection_reason && (
-                                            <div className="mt-4 bg-gradient-to-r from-red-50 to-pink-50 border border-red-200 rounded-xl p-4">
-                                                <div className="flex items-start space-x-3 rtl:space-x-reverse">
-                                                    <span className="text-red-600 text-xl">❌</span>
-                                                    <div>
-                                                        <p className="font-semibold text-red-800">
-                                                            {language === 'ar' ? 'سبب الرفض:' : 'Rejection Reason:'}
-                                                        </p>
-                                                        <p className="text-red-700 mt-1">{workshop.rejection_reason}</p>
+                                            {/* Card Content */}
+                                            <div className="relative z-10">
+                                                {/* Workshop Header */}
+                                                <div className="flex justify-between items-start mb-8">
+                                                    <div className="flex items-center space-x-4 rtl:space-x-reverse">
+                                                        <div className="relative">
+                                                            <div className="absolute inset-0 rounded-2xl blur-lg opacity-60" style={{background: cardStyle.gradient}}></div>
+                                                            <div className="relative p-4 rounded-2xl shadow-xl" style={{background: cardStyle.gradient}}>
+                                                                <span className="text-white text-2xl">🛠️</span>
+                                                            </div>
+                                                        </div>
+                                                        <div>
+                                                            <h3 className="font-bold text-gray-900 text-2xl mb-2 group-hover:text-white transition-colors duration-500">
+                                                                {workshop.workshop?.title}
+                                                            </h3>
+                                                            <div className="flex items-center space-x-3 rtl:space-x-reverse">
+                                                                <span className="text-sm text-gray-500 group-hover:text-white/80 transition-colors duration-500">
+                                                                    {language === 'ar' ? 'رقم التسجيل:' : 'Registration ID:'}
+                                                                </span>
+                                                                <span className="text-sm font-mono bg-white/80 group-hover:bg-white px-3 py-1 rounded-lg shadow-sm">
+                                                                    #{workshop.id}
+                                                                </span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div className="transform hover:scale-110 transition-transform duration-300">
+                                                        {getStatusBadge(workshop.status)}
                                                     </div>
                                                 </div>
+                                                
+                                                {/* Workshop Description */}
+                                                {workshop.workshop?.description && (
+                                                    <div className="mb-8">
+                                                        <div className="bg-white/70 group-hover:bg-white/90 backdrop-blur-sm rounded-2xl p-6 border border-white/60 group-hover:border-white/80 transition-all duration-500">
+                                                            <p className="text-gray-700 text-sm leading-relaxed group-hover:text-gray-800 transition-colors duration-500">
+                                                                {workshop.workshop.description}
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                )}
+                                                
+                                                {/* Enhanced Workshop Details */}
+                                                <div className="space-y-6 mb-8">
+                                                    {/* Instructor & Date Row */}
+                                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                                        <div className="flex items-center space-x-4 rtl:space-x-reverse p-5 bg-white/60 group-hover:bg-white/80 rounded-2xl border border-white/70 group-hover:border-white/90 transition-all duration-500">
+                                                            <div className="p-3 rounded-xl shadow-lg" style={{background: cardStyle.gradient}}>
+                                                                <span className="text-white text-lg">👨‍🏫</span>
+                                                            </div>
+                                                            <div className="flex-1">
+                                                                <p className="font-semibold text-gray-900 text-sm group-hover:text-gray-800 transition-colors duration-500">
+                                                                    {language === 'ar' ? 'المدرب' : 'Instructor'}
+                                                                </p>
+                                                                <p className="text-gray-700 font-medium group-hover:text-gray-800 transition-colors duration-500">
+                                                                    {workshop.workshop?.instructor}
+                                                                </p>
+                                                            </div>
+                                                        </div>
+                                                        
+                                                        <div className="flex items-center space-x-4 rtl:space-x-reverse p-5 bg-white/60 group-hover:bg-white/80 rounded-2xl border border-white/70 group-hover:border-white/90 transition-all duration-500">
+                                                            <div className="p-3 rounded-xl shadow-lg" style={{background: cardStyle.gradient}}>
+                                                                <span className="text-white text-lg">📅</span>
+                                                            </div>
+                                                            <div className="flex-1">
+                                                                <p className="font-semibold text-gray-900 text-sm group-hover:text-gray-800 transition-colors duration-500">
+                                                                    {language === 'ar' ? 'تاريخ التسجيل' : 'Registration Date'}
+                                                                </p>
+                                                                <p className="text-gray-700 font-medium group-hover:text-gray-800 transition-colors duration-500">
+                                                                    {formatDate(workshop.created_at)}
+                                                                </p>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    {/* Workshop Schedule */}
+                                                    {workshop.workshop?.start_time && workshop.workshop?.end_time && (
+                                                        <div className="bg-white/60 group-hover:bg-white/80 backdrop-blur-sm rounded-2xl p-6 border border-white/70 group-hover:border-white/90 transition-all duration-500">
+                                                            <div className="flex items-center space-x-3 rtl:space-x-reverse mb-5">
+                                                                <div className="p-2 rounded-xl shadow-lg" style={{background: cardStyle.gradient}}>
+                                                                    <span className="text-white text-lg">⏰</span>
+                                                                </div>
+                                                                <h4 className="font-semibold text-gray-900 text-lg group-hover:text-gray-800 transition-colors duration-500">
+                                                                    {language === 'ar' ? 'مواعيد الورشة' : 'Workshop Schedule'}
+                                                                </h4>
+                                                            </div>
+                                                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                                                <div className="flex items-center justify-between p-4 bg-white/70 group-hover:bg-white/90 rounded-xl border border-white/80 group-hover:border-white transition-all duration-500">
+                                                                    <div className="flex items-center space-x-3 rtl:space-x-reverse">
+                                                                        <div className="w-3 h-3 rounded-full shadow-sm" style={{background: cardStyle.gradient}}></div>
+                                                                        <span className="text-sm font-medium text-gray-700 group-hover:text-gray-800 transition-colors duration-500">
+                                                                            {language === 'ar' ? 'وقت البداية' : 'Start Time'}
+                                                                        </span>
+                                                                    </div>
+                                                                    <span className="text-sm font-semibold text-gray-900 group-hover:text-gray-800 transition-colors duration-500">
+                                                                        {formatDate(workshop.workshop.start_time)}
+                                                                    </span>
+                                                                </div>
+                                                                <div className="flex items-center justify-between p-4 bg-white/70 group-hover:bg-white/90 rounded-xl border border-white/80 group-hover:border-white transition-all duration-500">
+                                                                    <div className="flex items-center space-x-3 rtl:space-x-reverse">
+                                                                        <div className="w-3 h-3 rounded-full shadow-sm" style={{background: cardStyle.gradient}}></div>
+                                                                        <span className="text-sm font-medium text-gray-700 group-hover:text-gray-800 transition-colors duration-500">
+                                                                            {language === 'ar' ? 'وقت النهاية' : 'End Time'}
+                                                                        </span>
+                                                                    </div>
+                                                                    <span className="text-sm font-semibold text-gray-900 group-hover:text-gray-800 transition-colors duration-500">
+                                                                        {formatDate(workshop.workshop.end_time)}
+                                                                    </span>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    )}
+
+                                                    {/* Max Participants */}
+                                                    {workshop.workshop?.max_participants && (
+                                                        <div className="flex items-center space-x-4 rtl:space-x-reverse p-5 bg-white/60 group-hover:bg-white/80 rounded-2xl border border-white/70 group-hover:border-white/90 transition-all duration-500">
+                                                            <div className="p-3 rounded-xl shadow-lg" style={{background: cardStyle.gradient}}>
+                                                                <span className="text-white text-lg">👥</span>
+                                                            </div>
+                                                            <div className="flex-1">
+                                                                <p className="font-semibold text-gray-900 text-sm group-hover:text-gray-800 transition-colors duration-500">
+                                                                    {language === 'ar' ? 'الحد الأقصى للمشاركين' : 'Maximum Participants'}
+                                                                </p>
+                                                                <p className="text-gray-700 font-medium group-hover:text-gray-800 transition-colors duration-500">
+                                                                    {workshop.workshop.max_participants}
+                                                                </p>
+                                                            </div>
+                                                        </div>
+                                                    )}
+                                                </div>
+                                            
+                                                {/* Rejection Reason */}
+                                                {workshop.rejection_reason && (
+                                                    <div className="mt-6 bg-red-50/80 group-hover:bg-red-50/90 backdrop-blur-sm border border-red-200/60 group-hover:border-red-200/80 rounded-2xl p-6 transition-all duration-500">
+                                                        <div className="flex items-start space-x-4 rtl:space-x-reverse">
+                                                            <div className="p-2 rounded-full shadow-lg" style={{background: 'linear-gradient(135deg, #ff6b6b 0%, #ee5a52 100%)'}}>
+                                                                <span className="text-white text-lg">❌</span>
+                                                            </div>
+                                                            <div>
+                                                                <p className="font-semibold text-red-800 text-sm">
+                                                                    {language === 'ar' ? 'سبب الرفض:' : 'Rejection Reason:'}
+                                                                </p>
+                                                                <p className="text-red-700 mt-2 text-sm leading-relaxed">
+                                                                    {workshop.rejection_reason}
+                                                                </p>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                )}
                                             </div>
-                                        )}
-                                    </div>
-                                ))}
+                                        </div>
+                                    );
+                                })}
                             </div>
-                        ) : (
-                            <div className="text-center py-16">
-                                <div className="bg-gray-100 rounded-full p-8 w-32 h-32 mx-auto mb-8 flex items-center justify-center">
-                                    <span className="text-6xl text-gray-400">🛠️</span>
+                        </div>
+                    ) : (
+                        <div className="text-center py-20">
+                            <div className="relative mb-8">
+                                <div className="absolute inset-0 bg-gradient-to-r from-purple-600/20 via-pink-600/20 to-orange-600/20 rounded-full blur-2xl"></div>
+                                <div className="relative rounded-full p-12 w-40 h-40 mx-auto flex items-center justify-center shadow-2xl" style={{background: 'linear-gradient(135deg, #D85584 0%, #F4A321 100%)'}}>
+                                    <span className="text-white text-7xl">🛠️</span>
                                 </div>
-                                <h3 className="text-2xl font-semibold text-gray-900 mb-4">
-                                    {language === 'ar' ? 'لم تسجل في أي ورشة بعد' : 'No workshop registrations yet'}
-                                </h3>
-                                <p className="text-gray-600 mb-8 max-w-md mx-auto">
-                                    {language === 'ar' 
-                                        ? 'اكتشف الورش المتاحة وطور مهاراتك في مجالات مختلفة'
-                                        : 'Discover available workshops and develop your skills in different areas'
-                                    }
-                                </p>
-                                <Link 
-                                    to="/workshop-registration"
-                                    className="bg-gradient-to-r from-orange-500 to-red-600 text-white px-8 py-4 rounded-2xl font-semibold hover:from-orange-600 hover:to-red-700 transition-all duration-300 transform hover:scale-105 inline-block"
-                                >
-                                    {language === 'ar' ? 'تصفح الورش المتاحة' : 'Browse Available Workshops'}
-                                </Link>
                             </div>
-                        )}
-                    </div>
+                            <h3 className="text-3xl font-bold text-gray-900 mb-4">
+                                {language === 'ar' ? 'لم تسجل في أي ورشة بعد' : 'No workshop registrations yet'}
+                            </h3>
+                            <p className="text-gray-600 mb-10 max-w-lg mx-auto text-lg leading-relaxed">
+                                {language === 'ar' 
+                                    ? 'اكتشف الورش المتاحة وطور مهاراتك في مجالات مختلفة من خلال ورش تدريبية متخصصة'
+                                    : 'Discover available workshops and develop your skills in different areas through specialized training workshops'
+                                }
+                            </p>
+                            <Link 
+                                to="/workshop-registration"
+                                className="inline-block text-white px-10 py-4 rounded-2xl font-semibold text-lg transition-all duration-300 transform hover:scale-105 shadow-xl hover:shadow-2xl"
+                                style={{background: 'linear-gradient(135deg, #D85584 0%, #F4A321 100%)'}}
+                            >
+                                {language === 'ar' ? 'تصفح الورش المتاحة' : 'Browse Available Workshops'}
+                            </Link>
+                        </div>
+                    )}
                 </div>
 
                 {/* Available Workshops */}
-                {availableWorkshops.length > 0 && (
-                    <div className="mt-12">
-                        <div className="bg-white rounded-3xl shadow-xl p-8 hover:shadow-2xl transition-all duration-300">
-                            <div className="flex items-center space-x-4 rtl:space-x-reverse mb-8">
-                                <div className="bg-gradient-to-r from-emerald-500 to-cyan-600 text-white p-4 rounded-2xl">
-                                    <span className="text-2xl">🌟</span>
+                {availableWorkshops.length > 0 && (() => {
+                    // Filter out workshops that are already registered
+                    const registeredWorkshopIds = registrations.workshops.map(w => w.workshop?.id).filter(Boolean);
+                    const availableWorkshopsFiltered = availableWorkshops.filter(workshop => 
+                        !registeredWorkshopIds.includes(workshop.id)
+                    );
+                    
+                    return availableWorkshopsFiltered.length > 0 && (
+                        <div className="mt-12">
+                            <div className="bg-white/80 backdrop-blur-sm rounded-3xl shadow-xl p-8 hover:shadow-2xl transition-all duration-300 border border-white/20">
+                                <div className="flex items-center space-x-4 rtl:space-x-reverse mb-8">
+                                    <div className="text-white p-4 rounded-2xl shadow-lg" style={{background: 'linear-gradient(135deg, #F4A321 0%, #096289 100%)'}}>
+                                        <span className="text-2xl">🌟</span>
+                                    </div>
+                                    <div>
+                                        <h2 className="text-3xl font-bold text-gray-900">
+                                            {language === 'ar' ? 'الورش المتاحة' : 'Available Workshops'}
+                                        </h2>
+                                        <p className="text-gray-600 mt-2">
+                                            {language === 'ar' 
+                                                ? `متاح ${availableWorkshopsFiltered.length} ورشة للتسجيل`
+                                                : `${availableWorkshopsFiltered.length} workshops available for registration`
+                                            }
+                                        </p>
+                                    </div>
                                 </div>
-                                <h2 className="text-3xl font-bold text-gray-900">
-                                    {language === 'ar' ? 'الورش المتاحة' : 'Available Workshops'}
-                                </h2>
-                            </div>
-                            
-                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                                {availableWorkshops.map((workshop) => (
-                                    <div key={workshop.id} className="bg-gradient-to-br from-emerald-50 to-cyan-50 border border-emerald-200 rounded-2xl p-6 hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1">
-                                        <div className="mb-4">
-                                            <h3 className="font-bold text-gray-900 text-lg mb-2">{workshop.title}</h3>
-                                            <p className="text-gray-600 text-sm leading-relaxed">{workshop.description}</p>
+                                
+                                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                                    {availableWorkshopsFiltered.map((workshop) => (
+                                    <div key={workshop.id} className="bg-white/60 backdrop-blur-sm border border-white/30 rounded-2xl p-6 hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1">
+                                        {/* Workshop Header */}
+                                        <div className="mb-6">
+                                            <div className="flex items-center space-x-3 rtl:space-x-reverse mb-3">
+                                                <div className="p-2 rounded-full shadow-lg" style={{background: 'linear-gradient(135deg, #F4A321 0%, #096289 100%)'}}>
+                                                    <span className="text-white text-lg">🌟</span>
+                                                </div>
+                                                <div>
+                                                    <h3 className="font-bold text-gray-900 text-lg">{workshop.title}</h3>
+                                                    <p className="text-sm text-gray-600">
+                                                        {language === 'ar' ? 'ورشة متاحة' : 'Available Workshop'}
+                                                    </p>
+                                                </div>
+                                            </div>
+                                            <p className="text-gray-600 text-sm leading-relaxed bg-white/40 rounded-xl p-3 border border-white/50">
+                                                {workshop.description}
+                                            </p>
                                         </div>
                                         
-                                        <div className="space-y-3 mb-6">
-                                            <div className="flex items-center space-x-3 rtl:space-x-reverse">
-                                                <span className="text-emerald-600 text-lg">👨‍🏫</span>
-                                                <div>
-                                                    <p className="font-semibold text-gray-900 text-sm">
-                                                        {language === 'ar' ? 'المدرب:' : 'Instructor:'}
-                                                    </p>
-                                                    <p className="text-gray-600 text-sm">{workshop.instructor}</p>
-                                                </div>
-                                            </div>
-                                            
-                                            <div className="flex items-center space-x-3 rtl:space-x-reverse">
-                                                <span className="text-blue-600 text-lg">⏰</span>
-                                                <div>
-                                                    <p className="font-semibold text-gray-900 text-sm">
-                                                        {language === 'ar' ? 'التوقيت:' : 'Schedule:'}
-                                                    </p>
-                                                    <p className="text-gray-600 text-sm">
-                                                        {formatDate(workshop.start_time)} - {formatDate(workshop.end_time)}
-                                                    </p>
-                                                </div>
-                                            </div>
-                                            
-                                            {workshop.max_participants && (
+                                        {/* Workshop Details */}
+                                        <div className="space-y-4 mb-6">
+                                            <div className="grid grid-cols-1 gap-4">
                                                 <div className="flex items-center space-x-3 rtl:space-x-reverse">
-                                                    <span className="text-purple-600 text-lg">👥</span>
+                                                    <div className="p-2 rounded-full" style={{background: 'linear-gradient(135deg, #F4A321 0%, #D85584 100%)'}}>
+                                                        <span className="text-white text-lg">👨‍🏫</span>
+                                                    </div>
                                                     <div>
                                                         <p className="font-semibold text-gray-900 text-sm">
-                                                            {language === 'ar' ? 'الحد الأقصى:' : 'Max Participants:'}
+                                                            {language === 'ar' ? 'المدرب' : 'Instructor'}
                                                         </p>
-                                                        <p className="text-gray-600 text-sm">{workshop.max_participants}</p>
+                                                        <p className="text-gray-600 text-sm">{workshop.instructor}</p>
                                                     </div>
                                                 </div>
-                                            )}
+                                                
+                                                <div className="flex items-center space-x-3 rtl:space-x-reverse">
+                                                    <div className="p-2 rounded-full" style={{background: 'linear-gradient(135deg, #096289 0%, #003C72 100%)'}}>
+                                                        <span className="text-white text-lg">⏰</span>
+                                                    </div>
+                                                    <div>
+                                                        <p className="font-semibold text-gray-900 text-sm">
+                                                            {language === 'ar' ? 'التوقيت' : 'Schedule'}
+                                                        </p>
+                                                        <p className="text-gray-600 text-sm">
+                                                            {formatDate(workshop.start_time)} - {formatDate(workshop.end_time)}
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                                
+                                                {workshop.max_participants && (
+                                                    <div className="flex items-center space-x-3 rtl:space-x-reverse">
+                                                        <div className="p-2 rounded-full" style={{background: 'linear-gradient(135deg, #D85584 0%, #F4A321 100%)'}}>
+                                                            <span className="text-white text-lg">👥</span>
+                                                        </div>
+                                                        <div>
+                                                            <p className="font-semibold text-gray-900 text-sm">
+                                                                {language === 'ar' ? 'الحد الأقصى للمشاركين' : 'Max Participants'}
+                                                            </p>
+                                                            <p className="text-gray-600 text-sm">{workshop.max_participants}</p>
+                                                        </div>
+                                                    </div>
+                                                )}
+                                            </div>
                                         </div>
                                         
                                         <Link 
                                             to={`/workshop-registration?workshop_id=${workshop.id}`}
-                                            className="block w-full bg-gradient-to-r from-emerald-500 to-cyan-600 text-white text-center py-3 rounded-2xl font-semibold hover:from-emerald-600 hover:to-cyan-700 transition-all duration-300 transform hover:scale-105"
+                                            className="block w-full text-white text-center py-3 rounded-2xl font-semibold transition-all duration-300 transform hover:scale-105 shadow-lg"
+                                            style={{background: 'linear-gradient(135deg, #F4A321 0%, #096289 100%)'}}
                                         >
                                             {language === 'ar' ? 'سجل في هذه الورشة' : 'Register for this Workshop'}
                                         </Link>
                                     </div>
-                                ))}
+                                    ))}
+                                </div>
                             </div>
                         </div>
-                    </div>
-                )}
+                    );
+                })()}
             </div>
         </div>
     );

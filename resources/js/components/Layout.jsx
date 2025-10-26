@@ -57,10 +57,10 @@ const Layout = ({ children }) => {
         { path: '/conference', label: t('conference') }
     ];
 
-    // Add admin portal if user is admin
-    if (isAdmin()) {
-        navigationItems.push({ path: '/admin-portal', label: 'لوحة الإدارة' });
-    }
+    // Admin portal hidden from navigation
+    // if (isAdmin()) {
+    //     navigationItems.push({ path: '/admin-portal', label: 'لوحة الإدارة' });
+    // }
 
     return (
         <div className="min-h-screen">
