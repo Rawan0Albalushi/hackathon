@@ -190,14 +190,14 @@ const Home = () => {
                                 <>
                                     <Link
                                         to="/login"
-                                        className="ripple-effect button-press text-white px-4 sm:px-6 lg:px-8 py-3 sm:py-4 rounded-full text-sm sm:text-base lg:text-lg font-semibold hover:shadow-2xl transition-all duration-300 transform hover:scale-105 hover-pulse-glow w-full sm:w-auto"
+                                        className="ripple-effect button-press text-white px-4 sm:px-6 lg:px-8 py-3 sm:py-4 rounded-full text-sm sm:text-base lg:text-lg font-semibold hover:shadow-2xl transition-all duration-300 transform  hover-pulse-glow w-full sm:w-auto"
                                         style={{background: 'linear-gradient(135deg, #F4A321 0%, #D85584 100%)'}}
                                     >
                                         {language === 'ar' ? 'تسجيل الدخول' : 'Login'}
                                     </Link>
                                     <Link
                                         to="/register"
-                                        className="ripple-effect button-press bg-white px-4 sm:px-6 lg:px-8 py-3 sm:py-4 rounded-full text-sm sm:text-base lg:text-lg font-semibold hover:shadow-2xl transition-all duration-300 transform hover:scale-105 hover-float w-full sm:w-auto"
+                                        className="ripple-effect button-press bg-white px-4 sm:px-6 lg:px-8 py-3 sm:py-4 rounded-full text-sm sm:text-base lg:text-lg font-semibold hover:shadow-2xl transition-all duration-300 transform  hover-float w-full sm:w-auto"
                                         style={{color: '#003C72'}}
                                     >
                                         {language === 'ar' ? 'إنشاء حساب' : 'Create Account'}
@@ -212,7 +212,7 @@ const Home = () => {
                                                 {registrationToTrack ? (
                                                     <Link
                                                         to={registrationToTrack.url}
-                                                        className="ripple-effect button-press text-white px-4 sm:px-6 lg:px-8 py-3 sm:py-4 rounded-full text-sm sm:text-base lg:text-lg font-semibold hover:shadow-2xl transition-all duration-300 transform hover:scale-105 hover-pulse-glow w-full sm:w-auto"
+                                                        className="ripple-effect button-press text-white px-4 sm:px-6 lg:px-8 py-3 sm:py-4 rounded-full text-sm sm:text-base lg:text-lg font-semibold hover:shadow-2xl transition-all duration-300 transform  hover-pulse-glow w-full sm:w-auto"
                                                         style={{background: 'linear-gradient(135deg, #F4A321 0%, #D85584 100%)'}}
                                                     >
                                                         {registrationToTrack.text}
@@ -220,7 +220,7 @@ const Home = () => {
                                                 ) : (
                                                     <Link
                                                         to="/hackathon"
-                                                        className="ripple-effect button-press text-white px-4 sm:px-6 lg:px-8 py-3 sm:py-4 rounded-full text-sm sm:text-base lg:text-lg font-semibold hover:shadow-2xl transition-all duration-300 transform hover:scale-105 hover-pulse-glow w-full sm:w-auto"
+                                                        className="ripple-effect button-press text-white px-4 sm:px-6 lg:px-8 py-3 sm:py-4 rounded-full text-sm sm:text-base lg:text-lg font-semibold hover:shadow-2xl transition-all duration-300 transform  hover-pulse-glow w-full sm:w-auto"
                                                         style={{background: 'linear-gradient(135deg, #F4A321 0%, #D85584 100%)'}}
                                                     >
                                                         {language === 'ar' ? 'سجل في الهاكثون' : 'Register for Hackathon'}
@@ -231,7 +231,7 @@ const Home = () => {
                                                     return (
                                                         <Link
                                                             to={workshopStatus.url}
-                                                            className="ripple-effect button-press bg-white px-4 sm:px-6 lg:px-8 py-3 sm:py-4 rounded-full text-sm sm:text-base lg:text-lg font-semibold hover:shadow-2xl transition-all duration-300 transform hover:scale-105 hover-float w-full sm:w-auto"
+                                                            className="ripple-effect button-press bg-white px-4 sm:px-6 lg:px-8 py-3 sm:py-4 rounded-full text-sm sm:text-base lg:text-lg font-semibold hover:shadow-2xl transition-all duration-300 transform  hover-float w-full sm:w-auto"
                                                             style={{color: '#003C72'}}
                                                         >
                                                             {workshopStatus.text}
@@ -290,7 +290,7 @@ const Home = () => {
                                 return (
                                     <Link
                                         to={registrationToTrack ? registrationToTrack.url : "/hackathon"}
-                                        className="ripple-effect button-press inline-block text-white px-4 sm:px-6 lg:px-8 py-3 sm:py-4 rounded-full text-sm sm:text-base lg:text-lg font-semibold hover:shadow-xl transition-all duration-300 transform hover:scale-105 hover-pulse-glow animate-fade-in-up animate-delay-700 w-full sm:w-auto text-center"
+                                        className="ripple-effect button-press inline-block text-white px-4 sm:px-6 lg:px-8 py-3 sm:py-4 rounded-full text-sm sm:text-base lg:text-lg font-semibold hover:shadow-xl transition-all duration-300 transform  hover-pulse-glow animate-fade-in-up animate-delay-700 w-full sm:w-auto text-center"
                                         style={{background: 'linear-gradient(135deg, #F4A321 0%, #D85584 100%)'}}
                                     >
                                         {registrationToTrack 
@@ -438,7 +438,7 @@ const Home = () => {
                                 return (
                                     <Link
                                         to={workshopStatus.url}
-                                        className="ripple-effect button-press inline-block text-white px-4 sm:px-6 lg:px-8 py-3 sm:py-4 rounded-full text-sm sm:text-base lg:text-lg font-semibold hover:shadow-xl transition-all duration-300 transform hover:scale-105 hover-pulse-glow animate-fade-in-up animate-delay-700 w-full sm:w-auto text-center"
+                                        className="ripple-effect button-press inline-block text-white px-4 sm:px-6 lg:px-8 py-3 sm:py-4 rounded-full text-sm sm:text-base lg:text-lg font-semibold hover:shadow-xl transition-all duration-300 transform  hover-pulse-glow animate-fade-in-up animate-delay-700 w-full sm:w-auto text-center"
                                         style={{background: 'linear-gradient(135deg, #096289 0%, #003C72 100%)'}}
                                     >
                                         {workshopStatus.text}
@@ -481,7 +481,7 @@ const Home = () => {
                                 return (
                                     <Link
                                         to={conferenceStatus.url}
-                                        className="ripple-effect button-press inline-block text-white px-4 sm:px-6 lg:px-8 py-3 sm:py-4 rounded-full text-sm sm:text-base lg:text-lg font-semibold hover:shadow-xl transition-all duration-300 transform hover:scale-105 hover-pulse-glow animate-fade-in-up animate-delay-700 w-full sm:w-auto text-center"
+                                        className="ripple-effect button-press inline-block text-white px-4 sm:px-6 lg:px-8 py-3 sm:py-4 rounded-full text-sm sm:text-base lg:text-lg font-semibold hover:shadow-xl transition-all duration-300 transform  hover-pulse-glow animate-fade-in-up animate-delay-700 w-full sm:w-auto text-center"
                                         style={{background: 'linear-gradient(135deg, #003C72 0%, #096289 100%)'}}
                                     >
                                         {conferenceStatus.text}
@@ -568,7 +568,7 @@ const Home = () => {
                                     return (
                                         <Link
                                             to={registrationToTrack ? registrationToTrack.url : "/hackathon"}
-                                            className="ripple-effect button-press bg-white px-4 sm:px-6 lg:px-8 py-3 sm:py-4 rounded-full text-sm sm:text-base lg:text-lg font-semibold hover:shadow-2xl transition-all duration-300 transform hover:scale-105 hover-float w-full sm:w-auto"
+                                            className="ripple-effect button-press bg-white px-4 sm:px-6 lg:px-8 py-3 sm:py-4 rounded-full text-sm sm:text-base lg:text-lg font-semibold hover:shadow-2xl transition-all duration-300 transform  hover-float w-full sm:w-auto"
                                             style={{color: '#003C72'}}
                                         >
                                             {registrationToTrack 
@@ -583,7 +583,7 @@ const Home = () => {
                                     return (
                                         <Link
                                             to={workshopStatus.url}
-                                            className="ripple-effect button-press bg-white px-4 sm:px-6 lg:px-8 py-3 sm:py-4 rounded-full text-sm sm:text-base lg:text-lg font-semibold hover:shadow-2xl transition-all duration-300 transform hover:scale-105 hover-float w-full sm:w-auto"
+                                            className="ripple-effect button-press bg-white px-4 sm:px-6 lg:px-8 py-3 sm:py-4 rounded-full text-sm sm:text-base lg:text-lg font-semibold hover:shadow-2xl transition-all duration-300 transform  hover-float w-full sm:w-auto"
                                             style={{color: '#003C72'}}
                                         >
                                             {workshopStatus.text}
@@ -595,7 +595,7 @@ const Home = () => {
                             <>
                                 <Link
                                     to="/hackathon"
-                                    className="ripple-effect button-press text-white px-4 sm:px-6 lg:px-8 py-3 sm:py-4 rounded-full text-sm sm:text-base lg:text-lg font-semibold hover:shadow-2xl transition-all duration-300 transform hover:scale-105 hover-pulse-glow w-full sm:w-auto"
+                                    className="ripple-effect button-press text-white px-4 sm:px-6 lg:px-8 py-3 sm:py-4 rounded-full text-sm sm:text-base lg:text-lg font-semibold hover:shadow-2xl transition-all duration-300 transform  hover-pulse-glow w-full sm:w-auto"
                                     style={{background: 'linear-gradient(135deg, #F4A321 0%, #D85584 100%)'}}
                                 >
                                     {language === 'ar' ? 'ابدأ رحلتك الآن' : 'Start Your Journey Now'}
@@ -605,7 +605,7 @@ const Home = () => {
                                     return (
                                         <Link
                                             to={workshopStatus.url}
-                                            className="ripple-effect button-press bg-white px-4 sm:px-6 lg:px-8 py-3 sm:py-4 rounded-full text-sm sm:text-base lg:text-lg font-semibold hover:shadow-2xl transition-all duration-300 transform hover:scale-105 hover-float w-full sm:w-auto"
+                                            className="ripple-effect button-press bg-white px-4 sm:px-6 lg:px-8 py-3 sm:py-4 rounded-full text-sm sm:text-base lg:text-lg font-semibold hover:shadow-2xl transition-all duration-300 transform  hover-float w-full sm:w-auto"
                                             style={{color: '#003C72'}}
                                         >
                                             {workshopStatus.hasRegistration ? workshopStatus.text : (language === 'ar' ? 'تعلم المزيد' : 'Learn More')}

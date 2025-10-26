@@ -81,7 +81,7 @@ const AdminPortal = () => {
                         <div className="flex items-center space-x-2 lg:space-x-4 rtl:space-x-reverse">
                             <button
                                 onClick={toggleLanguage}
-                                className="bg-gradient-to-r from-teal-500 to-navy-600 text-white px-3 py-2 lg:px-4 lg:py-2 rounded-lg text-xs lg:text-sm font-medium transition-all duration-300 hover:shadow-lg hover:scale-105"
+                                className="bg-gradient-to-r from-teal-500 to-navy-600 text-white px-3 py-2 lg:px-4 lg:py-2 rounded-lg text-xs lg:text-sm font-medium transition-all duration-300 hover:shadow-lg"
                             >
                                 {language === 'ar' ? 'EN' : 'عربي'}
                             </button>
@@ -93,7 +93,7 @@ const AdminPortal = () => {
                             </div>
                             <button
                                 onClick={handleLogout}
-                                className="bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white px-3 py-2 lg:px-4 lg:py-2 rounded-lg text-xs lg:text-sm font-medium transition-all duration-300 hover:shadow-lg hover:scale-105"
+                                className="bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white px-3 py-2 lg:px-4 lg:py-2 rounded-lg text-xs lg:text-sm font-medium transition-all duration-300 hover:shadow-lg"
                             >
                                 {language === 'ar' ? 'خروج' : 'Logout'}
                             </button>

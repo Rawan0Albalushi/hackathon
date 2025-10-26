@@ -309,7 +309,7 @@ const Form = ({ onSubmit, fields, title, submitText, isLoading = false }) => {
                         className={`w-full py-3 sm:py-4 px-4 sm:px-6 rounded-lg font-semibold text-sm sm:text-base text-white transition-all duration-300 ${
                             isLoading 
                                 ? 'bg-gray-400 cursor-not-allowed' 
-                                : 'bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 hover:shadow-lg transform hover:scale-105'
+                                : 'bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 hover:shadow-lg'
                         }`}
                     >
                         {isLoading ? (

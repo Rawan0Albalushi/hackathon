@@ -315,7 +315,7 @@ const UserDashboard = () => {
                                 {registrations.hackathon.status !== 'rejected' && (
                                     <Link 
                                         to="/hackathon-registration"
-                                        className="block w-full text-white text-center py-3 rounded-2xl font-semibold transition-all duration-300 transform hover:scale-105 shadow-lg"
+                                        className="block w-full text-white text-center py-3 rounded-2xl font-semibold transition-all duration-300 transform  shadow-lg"
                                         style={{background: 'linear-gradient(135deg, #F4A321 0%, #D85584 100%)'}}
                                     >
                                         {language === 'ar' ? 'مراجعة الطلب' : 'Review Application'}
@@ -338,7 +338,7 @@ const UserDashboard = () => {
                                 </p>
                                 <Link 
                                     to="/hackathon-registration"
-                                    className="text-white px-8 py-3 rounded-2xl font-semibold transition-all duration-300 transform hover:scale-105 inline-block shadow-lg"
+                                    className="text-white px-8 py-3 rounded-2xl font-semibold transition-all duration-300 transform  inline-block shadow-lg"
                                     style={{background: 'linear-gradient(135deg, #F4A321 0%, #D85584 100%)'}}
                                 >
                                     {language === 'ar' ? 'سجل الآن' : 'Register Now'}
@@ -451,7 +451,7 @@ const UserDashboard = () => {
                                 {registrations.conference.status !== 'rejected' && (
                                     <Link 
                                         to="/conference-registration"
-                                        className="block w-full text-white text-center py-3 rounded-2xl font-semibold transition-all duration-300 transform hover:scale-105 shadow-lg"
+                                        className="block w-full text-white text-center py-3 rounded-2xl font-semibold transition-all duration-300 transform  shadow-lg"
                                         style={{background: 'linear-gradient(135deg, #096289 0%, #003C72 100%)'}}
                                     >
                                         {language === 'ar' ? 'مراجعة الطلب' : 'Review Application'}
@@ -474,7 +474,7 @@ const UserDashboard = () => {
                                 </p>
                                 <Link 
                                     to="/conference-registration"
-                                    className="text-white px-8 py-3 rounded-2xl font-semibold transition-all duration-300 transform hover:scale-105 inline-block shadow-lg"
+                                    className="text-white px-8 py-3 rounded-2xl font-semibold transition-all duration-300 transform  inline-block shadow-lg"
                                     style={{background: 'linear-gradient(135deg, #096289 0%, #003C72 100%)'}}
                                 >
                                     {language === 'ar' ? 'سجل الآن' : 'Register Now'}
@@ -562,7 +562,7 @@ const UserDashboard = () => {
                                     const cardStyle = getCardStyle(workshop.status);
 
                                     return (
-                                        <div key={index} className={`relative group ${cardStyle.bg} backdrop-blur-sm rounded-3xl p-8 border ${cardStyle.border} hover:shadow-2xl transition-all duration-700 transform hover:-translate-y-3 hover:scale-[1.02]`}>
+                                        <div key={index} className={`relative group ${cardStyle.bg} backdrop-blur-sm rounded-3xl p-8 border ${cardStyle.border} hover:shadow-2xl transition-all duration-700 transform hover:-translate-y-3 `}>
                                             {/* Animated Background */}
                                             <div className="absolute inset-0 rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-700" style={{background: cardStyle.gradient}}></div>
                                             
@@ -591,7 +591,7 @@ const UserDashboard = () => {
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    <div className="transform hover:scale-110 transition-transform duration-300">
+                                                    <div className="transform  transition-transform duration-300">
                                                         {getStatusBadge(workshop.status)}
                                                     </div>
                                                 </div>
@@ -739,7 +739,7 @@ const UserDashboard = () => {
                             </p>
                             <Link 
                                 to="/workshop-registration"
-                                className="inline-block text-white px-10 py-4 rounded-2xl font-semibold text-lg transition-all duration-300 transform hover:scale-105 shadow-xl hover:shadow-2xl"
+                                className="inline-block text-white px-10 py-4 rounded-2xl font-semibold text-lg transition-all duration-300 transform  shadow-xl hover:shadow-2xl"
                                 style={{background: 'linear-gradient(135deg, #D85584 0%, #F4A321 100%)'}}
                             >
                                 {language === 'ar' ? 'تصفح الورش المتاحة' : 'Browse Available Workshops'}
@@ -844,7 +844,7 @@ const UserDashboard = () => {
                                         
                                         <Link 
                                             to={`/workshop-registration?workshop_id=${workshop.id}`}
-                                            className="block w-full text-white text-center py-3 rounded-2xl font-semibold transition-all duration-300 transform hover:scale-105 shadow-lg"
+                                            className="block w-full text-white text-center py-3 rounded-2xl font-semibold transition-all duration-300 transform  shadow-lg"
                                             style={{background: 'linear-gradient(135deg, #F4A321 0%, #096289 100%)'}}
                                         >
                                             {language === 'ar' ? 'سجل في هذه الورشة' : 'Register for this Workshop'}

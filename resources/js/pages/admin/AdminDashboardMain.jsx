@@ -131,7 +131,7 @@ const AdminDashboardMain = () => {
                             }}
                             className={`w-full flex items-center space-x-3 rtl:space-x-reverse px-4 py-3 rounded-xl text-left transition-all duration-300 group admin-sidebar-item sidebar-button ${
                                 activeTab === item.id
-                                    ? `bg-gradient-to-r ${item.color} text-white shadow-lg transform scale-105 active`
+                                    ? `bg-gradient-to-r ${item.color} text-white shadow-lg active`
                                     : 'text-gray-700 hover:bg-gray-100 hover:text-gray-900 hover:shadow-md'
                             }`}
                         >
@@ -170,13 +170,13 @@ const AdminDashboardMain = () => {
                     <div className="flex space-x-2 rtl:space-x-reverse">
                         <button
                             onClick={toggleLanguage}
-                            className="flex-1 bg-gradient-to-r from-teal-500 to-navy-600 text-white px-3 py-2 rounded-lg text-sm font-medium transition-all duration-300 hover:shadow-lg hover:scale-105"
+                            className="flex-1 bg-gradient-to-r from-teal-500 to-navy-600 text-white px-3 py-2 rounded-lg text-sm font-medium transition-all duration-300 hover:shadow-lg"
                         >
                             {language === 'ar' ? 'English' : 'العربية'}
                         </button>
                         <button
                             onClick={handleLogout}
-                            className="flex-1 bg-gradient-to-r from-red-500 to-red-600 text-white px-3 py-2 rounded-lg text-sm font-medium transition-all duration-300 hover:shadow-lg hover:scale-105"
+                            className="flex-1 bg-gradient-to-r from-red-500 to-red-600 text-white px-3 py-2 rounded-lg text-sm font-medium transition-all duration-300 hover:shadow-lg"
                         >
                             {language === 'ar' ? 'خروج' : 'Logout'}
                         </button>

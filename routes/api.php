@@ -9,8 +9,8 @@ use App\Http\Controllers\Api\UserRegistrationController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\Api\AuthController;
 
-// CSRF token route (requires web middleware)
-Route::middleware(['web'])->group(function () {
+// CSRF token route (requires web middleware but no CSRF verification)
+Route::middleware(['web'])->withoutMiddleware([\App\Http\Middleware\VerifyCsrfToken::class])->group(function () {
     Route::get('/csrf-token', function () {
         return response()->json(['csrf_token' => csrf_token()]);
     });

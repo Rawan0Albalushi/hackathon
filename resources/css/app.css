@@ -48,6 +48,216 @@
     }
 }
 
+/* Enhanced Toast Animations */
+@keyframes toast-slide-in-right {
+    from {
+        opacity: 0;
+        transform: translateX(100%) scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0) scale(1);
+    }
+}
+
+@keyframes toast-slide-in-left {
+    from {
+        opacity: 0;
+        transform: translateX(-100%) scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0) scale(1);
+    }
+}
+
+@keyframes toast-slide-in-top {
+    from {
+        opacity: 0;
+        transform: translateY(-100%) scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+@keyframes toast-slide-in-bottom {
+    from {
+        opacity: 0;
+        transform: translateY(100%) scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+@keyframes toast-shimmer {
+    0% {
+        transform: translateX(-100%) skewX(-12deg);
+    }
+    100% {
+        transform: translateX(200%) skewX(-12deg);
+    }
+}
+
+@keyframes toast-bounce-gentle {
+    0%, 20%, 50%, 80%, 100% {
+        transform: translateY(0);
+    }
+    40% {
+        transform: translateY(-4px);
+    }
+    60% {
+        transform: translateY(-2px);
+    }
+}
+
+@keyframes toast-pulse-glow {
+    0%, 100% {
+        box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.4);
+    }
+    50% {
+        box-shadow: 0 0 0 8px rgba(59, 130, 246, 0);
+    }
+}
+
+@keyframes toast-progress-shrink {
+    from {
+        width: 100%;
+    }
+    to {
+        width: 0%;
+    }
+}
+
+/* Toast Animation Classes */
+.animate-toast-slide-in-right {
+    animation: toast-slide-in-right 0.5s ease-out;
+}
+
+.animate-toast-slide-in-left {
+    animation: toast-slide-in-left 0.5s ease-out;
+}
+
+.animate-toast-slide-in-top {
+    animation: toast-slide-in-top 0.5s ease-out;
+}
+
+.animate-toast-slide-in-bottom {
+    animation: toast-slide-in-bottom 0.5s ease-out;
+}
+
+.animate-toast-shimmer {
+    animation: toast-shimmer 2s infinite;
+}
+
+.animate-toast-bounce-gentle {
+    animation: toast-bounce-gentle 1s ease-in-out;
+}
+
+.animate-toast-pulse-glow {
+    animation: toast-pulse-glow 2s infinite;
+}
+
+.animate-toast-progress-shrink {
+    animation: toast-progress-shrink linear;
+}
+
+/* Mobile-specific toast improvements */
+@media (max-width: 640px) {
+    .toast-mobile-optimized {
+        max-width: calc(100vw - 1rem);
+        margin: 0 0.5rem;
+    }
+    
+    .toast-mobile-text {
+        font-size: 0.75rem;
+        line-height: 1.4;
+    }
+    
+    .toast-mobile-buttons {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+    
+    .toast-mobile-buttons button {
+        width: 100%;
+        padding: 0.5rem;
+        font-size: 0.75rem;
+    }
+}
+
+/* Touch-friendly improvements */
+@media (hover: none) and (pointer: coarse) {
+    .toast-touch-friendly button {
+        min-height: 44px;
+        min-width: 44px;
+    }
+    
+    .toast-touch-friendly .close-button {
+        padding: 0.5rem;
+    }
+}
+
+/* Safe area support for mobile devices */
+@supports (padding: max(0px)) {
+    .toast-safe-area {
+        padding-left: max(0.5rem, env(safe-area-inset-left));
+        padding-right: max(0.5rem, env(safe-area-inset-right));
+        padding-top: max(0.5rem, env(safe-area-inset-top));
+        padding-bottom: max(0.5rem, env(safe-area-inset-bottom));
+    }
+}
+
+/* Enhanced mobile responsiveness */
+@media (max-width: 480px) {
+    .toast-mobile-optimized {
+        max-width: calc(100vw - 0.5rem);
+        margin: 0 0.25rem;
+        padding: 0.75rem;
+    }
+    
+    .toast-mobile-text {
+        font-size: 0.7rem;
+        line-height: 1.3;
+    }
+    
+    .toast-mobile-buttons button {
+        padding: 0.75rem 1rem;
+        font-size: 0.7rem;
+        min-height: 48px;
+    }
+}
+
+/* Landscape mobile optimization */
+@media (max-height: 500px) and (orientation: landscape) {
+    .toast-safe-area {
+        padding-top: 0.25rem;
+        padding-bottom: 0.25rem;
+    }
+    
+    .toast-mobile-optimized {
+        max-height: calc(100vh - 1rem);
+        overflow-y: auto;
+    }
+}
+
+/* High DPI displays */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+    .toast-mobile-optimized {
+        border-width: 0.5px;
+    }
+}
+
+/* Dark mode support for mobile */
+@media (prefers-color-scheme: dark) {
+    .toast-mobile-optimized {
+        backdrop-filter: blur(20px);
+    }
+}
+
 @keyframes fade-in-down {
     from {
         opacity: 0;
@@ -532,7 +742,6 @@
 }
 
 .sidebar-user-avatar:hover {
-    transform: scale(1.1);
     box-shadow: 0 6px 20px rgba(9, 98, 137, 0.4);
 }
 
@@ -1152,11 +1361,9 @@
 /* Micro-interactions */
 @keyframes ripple {
     0% {
-        transform: scale(0);
         opacity: 1;
     }
     100% {
-        transform: scale(4);
         opacity: 0;
     }
 }
@@ -1203,22 +1410,12 @@
     box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
 }
 
-/* Button Animations */
-@keyframes button-press {
-    0% {
-        transform: scale(1);
-    }
-    50% {
-        transform: scale(0.95);
-    }
-    100% {
-        transform: scale(1);
-    }
+/* Button Animations - Removed scale effects */
+.button-press:active {
+    /* No scale animation - buttons maintain their size */
 }
 
-.button-press:active {
-    animation: button-press 0.1s ease-out;
-}
+/* Custom scale effects for buttons - Removed */
 
 /* Navigation Animations */
 @keyframes slide-down {
@@ -1324,7 +1521,7 @@
 }
 
 .modern-card:hover {
-    transform: translateY(-8px) scale(1.02);
+    transform: translateY(-8px);
     box-shadow: 
         0 32px 64px rgba(0, 0, 0, 0.15),
         0 0 0 1px rgba(255, 255, 255, 0.1),
@@ -1351,16 +1548,16 @@
     height: 100%;
     background: radial-gradient(circle, rgba(255, 255, 255, 0.3) 0%, transparent 70%);
     border-radius: 50%;
-    transform: translate(-50%, -50%) scale(0);
+    transform: translate(-50%, -50%);
     transition: transform 0.3s ease;
 }
 
 .modern-card:hover .card-icon::before {
-    transform: translate(-50%, -50%) scale(1.5);
+    transform: translate(-50%, -50%);
 }
 
 .modern-card:hover .card-icon {
-    transform: scale(1.1) rotate(5deg);
+    transform: rotate(5deg);
 }
 
 .feature-item {
@@ -1377,12 +1574,12 @@
     height: 8px;
     background: currentColor;
     border-radius: 50%;
-    transform: translateY(-50%) scale(0);
+    transform: translateY(-50%);
     transition: transform 0.3s ease;
 }
 
 .modern-card:hover .feature-item::before {
-    transform: translateY(-50%) scale(1);
+    transform: translateY(-50%);
 }
 
 .feature-item:hover {
@@ -1541,8 +1738,8 @@
 
 .login-button:hover {
     background: var(--gradient-card);
-    transform: translateY(-3px) scale(1.02);
-    box-shadow: 0 15px 35px rgba(216, 85, 132, 0.4);
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px rgba(216, 85, 132, 0.3);
 }
 
 /* Enhanced button styles with new colors */
@@ -1710,7 +1907,7 @@
 }
 
 .logo-icon:hover {
-    transform: rotate(5deg) scale(1.05);
+    transform: rotate(5deg);
     box-shadow: 0 8px 25px rgba(216, 85, 132, 0.3);
 }
 
@@ -1734,7 +1931,7 @@
 }
 
 .logo-icon-enhanced:hover {
-    transform: translateY(-2px) scale(1.1);
+    transform: translateY(-2px);
     box-shadow: 0 12px 30px rgba(244, 163, 33, 0.4);
 }
 
@@ -1747,7 +1944,6 @@
 }
 
 .logo-icon-enhanced:hover .w-1 {
-    transform: scaleY(1.2);
     box-shadow: 0 0 8px rgba(255, 255, 255, 0.6);
 }
 
@@ -1974,7 +2170,7 @@
 }
 
 .logout-button:hover {
-    transform: translateY(-2px) scale(1.05);
+    transform: translateY(-2px);
     box-shadow: 0 8px 25px rgba(239, 68, 68, 0.4);
 }
 
@@ -2099,10 +2295,9 @@
     box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
 }
 
-/* Enhanced Button Press Effect */
+/* Enhanced Button Press Effect - Removed scale */
 .button-press-enhanced:active {
-    transform: scale(0.98);
-    transition: transform 0.1s ease;
+    /* No scale effect - buttons maintain their size */
 }
 
 /* Smooth Transitions for All Navigation Elements */
@@ -2148,7 +2343,7 @@
 }
 
 .user-avatar-clean:hover {
-    transform: scale(1.05);
+    /* No scale effect */
 }
 
 /* Status Indicator */
@@ -2189,7 +2384,7 @@
 }
 
 .btn-logout-clean:hover {
-    transform: translateY(-2px) scale(1.02);
+    transform: translateY(-2px);
 }
 
 /* Clean Separator */
@@ -2378,7 +2573,7 @@
 
 /* Fix button clickability issues */
 .table-action-button:active {
-    transform: scale(0.98);
+    /* No scale effect */
 }
 
 .table-action-button:focus {
@@ -3565,7 +3760,6 @@ html, body {
 
 .table-wrapper::-webkit-scrollbar-thumb:hover {
     background: linear-gradient(135deg, #D85584 0%, #096289 100%);
-    transform: scale(1.1);
 }
 
 /* Fix table loading state */
@@ -3846,7 +4040,6 @@ html, body {
 }
 
 .modal-input-enhanced:focus {
-    transform: scale(1.02);
     box-shadow: 
         0 0 0 3px rgba(244, 163, 33, 0.1),
         0 4px 12px rgba(244, 163, 33, 0.15);
@@ -3899,7 +4092,7 @@ html, body {
 }
 
 .skill-tag-animated:hover {
-    transform: translateY(-2px) scale(1.05);
+    transform: translateY(-2px);
     box-shadow: 0 4px 12px rgba(244, 163, 33, 0.2);
 }
 
@@ -3941,7 +4134,7 @@ html, body {
 }
 
 .modal-button-enhanced:hover {
-    transform: translateY(-2px) scale(1.02);
+    transform: translateY(-2px);
     box-shadow: 0 8px 25px rgba(244, 163, 33, 0.3);
 }
 
@@ -3971,7 +4164,6 @@ html, body {
 }
 
 .modal-close-enhanced:hover {
-    transform: scale(1.1);
     color: #ef4444;
 }
 
@@ -4159,7 +4351,7 @@ html, body {
 }
 
 .logout-btn-enhanced:hover {
-    transform: translateY(-1px) scale(1.02);
+    transform: translateY(-1px);
     box-shadow: 0 4px 16px rgba(9, 98, 137, 0.3);
 }
 
@@ -4177,7 +4369,7 @@ html, body {
 }
 
 .lang-btn-enhanced:hover {
-    transform: translateY(-1px) scale(1.02);
+    transform: translateY(-1px);
     box-shadow: 0 4px 16px rgba(244, 163, 33, 0.3);
 }
 
@@ -4385,7 +4577,7 @@ html, body {
 }
 
 .admin-btn-view:active {
-    transform: translateY(0) scale(0.98) !important;
+    transform: translateY(0) !important;
 }
 
 .admin-btn-view:focus {
@@ -4445,7 +4637,7 @@ html, body {
 }
 
 .admin-btn-update:active {
-    transform: translateY(0) scale(0.98) !important;
+    transform: translateY(0) !important;
 }
 
 .admin-btn-update:focus {

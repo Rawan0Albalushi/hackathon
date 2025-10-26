@@ -4,7 +4,8 @@ import { useLanguage } from '../contexts/LanguageContext';
 import { useAuth } from '../contexts/AuthContext';
 import Form from '../components/Form';
 import ConferenceStatus from '../components/ConferenceStatus';
-import { submitConferenceRegistration } from '../utils/api';
+import { submitConferenceRegistration, handleApiErrorWithToast } from '../utils/api';
+import { showRegistrationSuccess, showFormLoading, showFormError, showValidationError } from '../utils/messageUtils';
 
 const ConferenceRegistration = () => {
     const { t, language } = useLanguage();
@@ -93,18 +94,40 @@ const ConferenceRegistration = () => {
 
     const handleSubmit = async (formData) => {
         setIsLoading(true);
+        const loadingToastId = showFormLoading(
+            language === 'ar' ? 'جاري تسجيل المؤتمر...' : 'Registering for conference...'
+        );
+
         try {
             const response = await submitConferenceRegistration(formData);
             if (response.success) {
+                // Hide loading toast
+                if (window.hideToast) window.hideToast(loadingToastId);
+                
+                // Show success message
+                showRegistrationSuccess('conference', 1, {
+                    position: 'top-center',
+                    duration: 5000
+                });
+                
                 // Update the existing registration state
                 setExistingRegistration(response.data);
                 // Don't navigate to success page, show the status instead
             } else {
-                alert(t('registrationFailed'));
+                // Hide loading toast
+                if (window.hideToast) window.hideToast(loadingToastId);
+                showFormError(response.message || t('registrationFailed'));
             }
         } catch (error) {
             console.error('Registration error:', error);
-            alert(t('networkError'));
+            // Hide loading toast
+            if (window.hideToast) window.hideToast(loadingToastId);
+            
+            // Use enhanced error handling
+            handleApiErrorWithToast(error, () => {
+                // Retry function
+                handleSubmit(formData);
+            });
         } finally {
             setIsLoading(false);
         }
@@ -167,7 +190,7 @@ const ConferenceRegistration = () => {
                             onEdit={handleEditRegistration}
                         />
                     ) : (
-                        <div className="bg-white rounded-2xl sm:rounded-3xl shadow-2xl overflow-hidden transform hover:scale-[1.02] transition-transform duration-300">
+                        <div className="bg-white rounded-2xl sm:rounded-3xl shadow-2xl overflow-hidden transition-transform duration-300">
                             <div className="h-2 sm:h-3" style={{background: 'linear-gradient(90deg, #F4A321 0%, #D85584 50%, #096289 100%)'}}></div>
                             <div className="p-4 sm:p-6 md:p-8 lg:p-12">
                                 <div className="text-center mb-6 sm:mb-8 lg:mb-10">

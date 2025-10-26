@@ -45,7 +45,7 @@ const AnimatedButton = ({
         </div>
     );
 
-    const loadingClasses = loading ? 'button-loading opacity-75 cursor-not-allowed' : 'hover:scale-105';
+    const loadingClasses = loading ? 'button-loading opacity-75 cursor-not-allowed' : '';
 
     return (
         <button

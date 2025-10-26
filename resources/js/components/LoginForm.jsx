@@ -124,8 +124,8 @@ const LoginForm = () => {
                             <AnimatedButton
                                 type="submit"
                                 disabled={isLoading}
-                                className={`group relative w-full flex justify-center items-center py-3 sm:py-4 lg:py-5 px-6 sm:px-8 border border-transparent text-sm sm:text-base lg:text-xl font-bold rounded-xl sm:rounded-2xl text-white bg-gradient-primary hover:bg-gradient-card focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-pink-primary transition-all duration-300 transform hover:scale-105 hover-pulse-glow shadow-2xl ${
-                                    isLoading ? 'opacity-75 cursor-not-allowed' : 'hover:scale-105'
+                                className={`group relative w-full flex justify-center items-center py-3 sm:py-4 lg:py-5 px-6 sm:px-8 border border-transparent text-sm sm:text-base lg:text-xl font-bold rounded-xl sm:rounded-2xl text-white bg-gradient-primary hover:bg-gradient-card focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-pink-primary transition-all duration-300 hover-pulse-glow shadow-2xl ${
+                                    isLoading ? 'opacity-75 cursor-not-allowed' : ''
                                 }`}
                                 style={{background: 'linear-gradient(135deg, #F4A321 0%, #D85584 100%)'}}
                             >

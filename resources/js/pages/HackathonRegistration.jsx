@@ -4,7 +4,8 @@ import { useLanguage } from '../contexts/LanguageContext';
 import { useAuth } from '../contexts/AuthContext';
 import Form from '../components/Form';
 import HackathonStatus from '../components/HackathonStatus';
-import { submitHackathonRegistration } from '../utils/api';
+import { submitHackathonRegistration, handleApiErrorWithToast } from '../utils/api';
+import { showRegistrationSuccess, showFormLoading, showFormError, showValidationError } from '../utils/messageUtils';
 
 const HackathonRegistration = () => {
     const { t, language } = useLanguage();
@@ -125,18 +126,40 @@ const HackathonRegistration = () => {
 
     const handleSubmit = async (formData) => {
         setIsLoading(true);
+        const loadingToastId = showFormLoading(
+            language === 'ar' ? 'جاري تسجيل الهاكاثون...' : 'Registering for hackathon...'
+        );
+
         try {
             const response = await submitHackathonRegistration(formData);
             if (response.success) {
+                // Hide loading toast
+                if (window.hideToast) window.hideToast(loadingToastId);
+                
+                // Show success message
+                showRegistrationSuccess('hackathon', 1, {
+                    position: 'top-center',
+                    duration: 5000
+                });
+                
                 // Update the existing registration state
                 setExistingRegistration(response.data);
                 // Don't navigate to success page, show the status instead
             } else {
-                alert(t('registrationFailed'));
+                // Hide loading toast
+                if (window.hideToast) window.hideToast(loadingToastId);
+                showFormError(response.message || t('registrationFailed'));
             }
         } catch (error) {
             console.error('Registration error:', error);
-            alert(t('networkError'));
+            // Hide loading toast
+            if (window.hideToast) window.hideToast(loadingToastId);
+            
+            // Use enhanced error handling
+            handleApiErrorWithToast(error, () => {
+                // Retry function
+                handleSubmit(formData);
+            });
         } finally {
             setIsLoading(false);
         }
@@ -204,7 +227,7 @@ const HackathonRegistration = () => {
                             onEdit={handleEditRegistration}
                         />
                     ) : (
-                        <div className="bg-white rounded-2xl sm:rounded-3xl shadow-2xl overflow-hidden transform hover:scale-[1.02] transition-transform duration-300">
+                        <div className="bg-white rounded-2xl sm:rounded-3xl shadow-2xl overflow-hidden transition-transform duration-300">
                             <div className="bg-gradient-to-r from-purple-500 via-pink-500 to-blue-500 h-2 sm:h-3"></div>
                             <div className="p-4 sm:p-6 md:p-8 lg:p-12">
                                 <div className="text-center mb-6 sm:mb-8 lg:mb-10">
@@ -254,7 +277,7 @@ const HackathonRegistration = () => {
                     
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
                         <div className="group bg-white rounded-2xl sm:rounded-3xl p-4 sm:p-6 lg:p-8 shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2">
-                            <div className="text-4xl sm:text-5xl lg:text-6xl mb-4 sm:mb-6 group-hover:scale-110 transition-transform duration-300">⏰</div>
+                            <div className="text-4xl sm:text-5xl lg:text-6xl mb-4 sm:mb-6 transition-transform duration-300">⏰</div>
                             <h3 className="text-lg sm:text-xl lg:text-2xl font-bold text-gray-900 mb-3 sm:mb-4">
                                 {language === 'ar' ? '4 ساعات مكثفة' : '4 Intensive Hours'}
                             </h3>
@@ -267,7 +290,7 @@ const HackathonRegistration = () => {
                         </div>
                         
                         <div className="group bg-white rounded-2xl sm:rounded-3xl p-4 sm:p-6 lg:p-8 shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2">
-                            <div className="text-4xl sm:text-5xl lg:text-6xl mb-4 sm:mb-6 group-hover:scale-110 transition-transform duration-300">🎯</div>
+                            <div className="text-4xl sm:text-5xl lg:text-6xl mb-4 sm:mb-6 transition-transform duration-300">🎯</div>
                             <h3 className="text-lg sm:text-xl lg:text-2xl font-bold text-gray-900 mb-3 sm:mb-4">
                                 {language === 'ar' ? 'تحديات مفاجئة' : 'Surprise Challenges'}
                             </h3>
@@ -280,7 +303,7 @@ const HackathonRegistration = () => {
                         </div>
                         
                         <div className="group bg-white rounded-2xl sm:rounded-3xl p-4 sm:p-6 lg:p-8 shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 sm:col-span-2 lg:col-span-1">
-                            <div className="text-4xl sm:text-5xl lg:text-6xl mb-4 sm:mb-6 group-hover:scale-110 transition-transform duration-300">🤖</div>
+                            <div className="text-4xl sm:text-5xl lg:text-6xl mb-4 sm:mb-6 transition-transform duration-300">🤖</div>
                             <h3 className="text-lg sm:text-xl lg:text-2xl font-bold text-gray-900 mb-3 sm:mb-4">
                                 {language === 'ar' ? 'ذكاء اصطناعي' : 'AI Technology'}
                             </h3>

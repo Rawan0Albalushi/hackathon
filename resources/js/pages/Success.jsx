@@ -170,14 +170,14 @@ const Success = () => {
                             <div className="flex flex-col sm:flex-row gap-4 justify-center">
                                 <Link
                                     to="/"
-                                    className={`inline-flex items-center justify-center px-8 py-4 border border-transparent text-lg font-semibold rounded-xl text-white bg-gradient-to-r ${eventInfo.color} hover:shadow-xl transition-all duration-300 transform hover:scale-105`}
+                                    className={`inline-flex items-center justify-center px-8 py-4 border border-transparent text-lg font-semibold rounded-xl text-white bg-gradient-to-r ${eventInfo.color} hover:shadow-xl transition-all duration-300`}
                                 >
                                     {t('backToHome')}
                                 </Link>
                                 
                                 <button
                                     onClick={() => window.print()}
-                                    className="inline-flex items-center justify-center px-8 py-4 border border-gray-300 text-lg font-semibold rounded-xl text-gray-700 bg-white hover:bg-gray-50 hover:shadow-lg transition-all duration-300 transform hover:scale-105"
+                                    className="inline-flex items-center justify-center px-8 py-4 border border-gray-300 text-lg font-semibold rounded-xl text-gray-700 bg-white hover:bg-gray-50 hover:shadow-lg transition-all duration-300"
                                 >
                                     {language === 'ar' ? 'طباعة' : 'Print'}
                                 </button>

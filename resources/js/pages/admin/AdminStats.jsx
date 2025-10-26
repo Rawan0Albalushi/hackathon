@@ -530,11 +530,11 @@ const AdminStats = () => {
                 {statCards.map((card, index) => (
                     <div 
                         key={index}
-                        className="bg-white/90 backdrop-blur-lg rounded-2xl shadow-xl p-6 border border-gray-200/50 hover:shadow-2xl transition-all duration-500 hover:scale-105 hover:-translate-y-2 group"
+                        className="bg-white/90 backdrop-blur-lg rounded-2xl shadow-xl p-6 border border-gray-200/50 hover:shadow-2xl transition-all duration-500  hover:-translate-y-2 group"
                         style={{ animationDelay: `${index * 0.1}s` }}
                     >
                         <div className="flex items-center justify-between mb-4">
-                            <div className={`w-12 h-12 bg-gradient-to-br ${card.color} rounded-xl flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-300`}>
+                            <div className={`w-12 h-12 bg-gradient-to-br ${card.color} rounded-xl flex items-center justify-center shadow-lg group- transition-transform duration-300`}>
                                 {getIcon(card.icon)}
                             </div>
                             <div className={`flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium ${

@@ -4,7 +4,8 @@ import { useLanguage } from '../contexts/LanguageContext';
 import { useAuth } from '../contexts/AuthContext';
 import Form from '../components/Form';
 import WorkshopStatus from '../components/WorkshopStatus';
-import { submitWorkshopRegistration } from '../utils/api';
+import { submitWorkshopRegistration, handleApiErrorWithToast } from '../utils/api';
+import { showRegistrationSuccess, showFormLoading, showFormError, showValidationError } from '../utils/messageUtils';
 
 const WorkshopRegistration = () => {
     const { t, language } = useLanguage();
@@ -191,7 +192,7 @@ const WorkshopRegistration = () => {
     const fields = [
         {
             name: 'workshop_ids',
-            label: language === 'ar' ? 'اختر الورش الجديدة' : 'Select New Workshops',
+            label: language === 'ar' ? 'الورش المختارة للتسجيل' : 'Selected Workshops for Registration',
             type: 'checkbox-group',
             required: true,
             options: workshopsWithStatus
@@ -263,11 +264,19 @@ const WorkshopRegistration = () => {
 
     const handleSubmit = async (formData) => {
         if (selectedWorkshops.length === 0) {
-            alert(language === 'ar' ? 'يرجى اختيار ورشة واحدة على الأقل' : 'Please select at least one workshop');
+            showValidationError(
+                language === 'ar' 
+                    ? 'يرجى اختيار ورشة واحدة على الأقل من الورش المتاحة أعلاه' 
+                    : 'Please select at least one workshop from the available workshops above'
+            );
             return;
         }
 
         setIsLoading(true);
+        const loadingToastId = showFormLoading(
+            language === 'ar' ? 'جاري تسجيل الورش...' : 'Registering workshops...'
+        );
+
         try {
             // Add workshop_ids to form data
             const dataWithWorkshops = {
@@ -277,6 +286,16 @@ const WorkshopRegistration = () => {
             
             const response = await submitWorkshopRegistration(dataWithWorkshops);
             if (response.success) {
+                // Hide loading toast
+                if (window.hideToast) window.hideToast(loadingToastId);
+                
+                // Show success message for multiple workshops
+                const workshopCount = selectedWorkshops.length;
+                showRegistrationSuccess('workshop', workshopCount, {
+                    position: 'top-center',
+                    duration: 5000
+                });
+                
                 // Update the existing registration state
                 setExistingRegistration(response.data);
                 // Refresh user registrations to update workshop status
@@ -285,11 +304,20 @@ const WorkshopRegistration = () => {
                 setSelectedWorkshops([]);
                 // Don't navigate to success page, show the status instead
             } else {
-                alert(response.message || t('registrationFailed'));
+                // Hide loading toast
+                if (window.hideToast) window.hideToast(loadingToastId);
+                showFormError(response.message || t('registrationFailed'));
             }
         } catch (error) {
             console.error('Registration error:', error);
-            alert(t('networkError'));
+            // Hide loading toast
+            if (window.hideToast) window.hideToast(loadingToastId);
+            
+            // Use enhanced error handling
+            handleApiErrorWithToast(error, () => {
+                // Retry function
+                handleSubmit(formData);
+            });
         } finally {
             setIsLoading(false);
         }
@@ -542,9 +570,29 @@ const WorkshopRegistration = () => {
 
                     {/* Available Workshops Section */}
                     <div className="mb-6 sm:mb-8">
-                        <h3 className="text-xl sm:text-2xl font-bold text-gray-900 mb-4 sm:mb-6 text-center px-2">
-                            {language === 'ar' ? 'الورش المتاحة للتسجيل' : 'Available Workshops for Registration'}
-                        </h3>
+                        <div className="text-center mb-4 sm:mb-6">
+                            <h3 className="text-xl sm:text-2xl font-bold text-gray-900 mb-2 px-2">
+                                {language === 'ar' ? 'الورش المتاحة للتسجيل' : 'Available Workshops for Registration'}
+                            </h3>
+                            {selectedWorkshops.length > 0 && (
+                                <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
+                                    <div className="inline-flex items-center px-4 py-2 bg-blue-100 text-blue-800 rounded-full text-sm font-medium">
+                                        <span className="mr-2">🎯</span>
+                                        {language === 'ar' 
+                                            ? `${selectedWorkshops.length} ورشة مختارة` 
+                                            : `${selectedWorkshops.length} workshop(s) selected`
+                                        }
+                                    </div>
+                                    <button
+                                        onClick={() => setSelectedWorkshops([])}
+                                        className="inline-flex items-center px-3 py-1.5 bg-red-100 text-red-700 rounded-full text-sm font-medium hover:bg-red-200 transition-colors duration-200"
+                                    >
+                                        <span className="mr-1">🗑️</span>
+                                        {language === 'ar' ? 'مسح الكل' : 'Clear All'}
+                                    </button>
+                                </div>
+                            )}
+                        </div>
 
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8">
                         {workshopsWithStatus
@@ -598,14 +646,11 @@ const WorkshopRegistration = () => {
                                         </div>
                                         <button
                                             onClick={() => {
-                                                if (selectedWorkshops.includes(workshop.id)) {
-                                                    toggleWorkshopSelection(workshop.id);
-                                                } else {
-                                                    // إضافة الورشة المختارة وفتح نموذج التسجيل
-                                                    setSelectedWorkshops([workshop.id]);
-                                                    // إزالة أي تسجيل موجود لفتح النموذج
-                                                    setExistingRegistration(null);
-                                                    // التمرير إلى نموذج التسجيل
+                                                toggleWorkshopSelection(workshop.id);
+                                                // إزالة أي تسجيل موجود لفتح النموذج
+                                                setExistingRegistration(null);
+                                                // التمرير إلى نموذج التسجيل إذا تم اختيار ورشة
+                                                if (!selectedWorkshops.includes(workshop.id)) {
                                                     setTimeout(() => {
                                                         const formSection = document.querySelector('.registration-form-section');
                                                         if (formSection) {
@@ -616,13 +661,13 @@ const WorkshopRegistration = () => {
                                             }}
                                             className={`px-3 sm:px-4 py-1.5 sm:py-2 text-xs sm:text-sm font-medium rounded-lg transition-colors duration-200 ${
                                                 selectedWorkshops.includes(workshop.id)
-                                                    ? 'bg-green-600 text-white'
+                                                    ? 'bg-green-600 text-white hover:bg-green-700'
                                                     : 'bg-blue-600 text-white hover:bg-blue-700'
                                             }`}
                                         >
                                             {selectedWorkshops.includes(workshop.id)
-                                                ? (language === 'ar' ? 'محدد' : 'Selected')
-                                                : (language === 'ar' ? 'سجل الآن' : 'Register Now')
+                                                ? (language === 'ar' ? '✓ محدد' : '✓ Selected')
+                                                : (language === 'ar' ? '+ اختر' : '+ Select')
                                             }
                                         </button>
                                     </div>
@@ -665,7 +710,7 @@ const WorkshopRegistration = () => {
                             onEdit={handleEditRegistration}
                         />
                     ) : (
-                        <div className="bg-white rounded-3xl shadow-2xl overflow-hidden transform hover:scale-[1.02] transition-transform duration-300">
+                        <div className="bg-white rounded-3xl shadow-2xl overflow-hidden transition-transform duration-300">
                             <div className="bg-gradient-to-r from-blue-500 to-cyan-500 h-3"></div>
                             <div className="p-8 md:p-12">
                                 <div className="text-center mb-10">
@@ -675,12 +720,12 @@ const WorkshopRegistration = () => {
                                         </div>
                                     </div>
                                     <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-                                        {language === 'ar' ? 'نموذج التسجيل في الورشة' : 'Workshop Registration Form'}
+                                        {language === 'ar' ? 'نموذج التسجيل في الورش' : 'Workshop Registration Form'}
                                     </h2>
                                     <p className="text-lg text-gray-600 max-w-2xl mx-auto leading-relaxed">
                                         {language === 'ar' 
-                                            ? 'املأ النموذج أدناه للمشاركة في الورشة التدريبية'
-                                            : 'Fill out the form below to participate in the training workshop'
+                                            ? 'املأ النموذج أدناه للمشاركة في الورش التدريبية المختارة'
+                                            : 'Fill out the form below to participate in the selected training workshops'
                                         }
                                     </p>
                                 </div>
@@ -688,8 +733,8 @@ const WorkshopRegistration = () => {
                                 <div className="mb-6 p-4 bg-blue-50 rounded-lg border border-blue-200">
                                     <p className="text-sm text-blue-700">
                                         {language === 'ar' 
-                                            ? '💡 يمكنك اختيار الورش الجديدة من القائمة أعلاه - الورش المسجلة فيها مسبقاً لا تظهر في النموذج'
-                                            : '💡 You can select new workshops from the list above - previously registered workshops will not appear in the form'
+                                            ? '💡 يمكنك اختيار عدة ورش من القائمة أعلاه - الورش المسجلة فيها مسبقاً لا تظهر في النموذج'
+                                            : '💡 You can select multiple workshops from the list above - previously registered workshops will not appear in the form'
                                         }
                                     </p>
                                 </div>
@@ -707,8 +752,8 @@ const WorkshopRegistration = () => {
                                         </div>
                                         <div className="mt-2 text-xs text-green-600">
                                             {language === 'ar' 
-                                                ? '💡 يمكنك إضافة ورش أخرى من القائمة أعلاه'
-                                                : '💡 You can add more workshops from the list above'
+                                                ? '💡 يمكنك إضافة ورش أخرى أو إزالة ورش من القائمة أعلاه'
+                                                : '💡 You can add more workshops or remove workshops from the list above'
                                             }
                                         </div>
                                     </div>
