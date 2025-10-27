@@ -118,18 +118,24 @@ const Form = ({ onSubmit, fields, title, submitText, isLoading = false }) => {
     };
 
     const renderField = (field) => {
-        const commonClasses = `w-full px-3 sm:px-4 py-2.5 sm:py-3 border rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors text-sm sm:text-base ${
+        const commonClasses = `w-full px-3 py-2 lg:py-2.5 border rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors text-sm ${
             errors[field.name] ? 'border-red-500' : 'border-gray-300'
         } ${field.readonly ? 'bg-gray-100 cursor-not-allowed' : ''}`;
         
-        const labelClasses = `block text-xs sm:text-sm font-medium text-gray-700 mb-1.5 sm:mb-2 ${
+        const labelClasses = `block text-xs lg:text-sm font-medium text-gray-700 mb-1 lg:mb-1.5 ${
             language === 'ar' ? 'text-right' : 'text-left'
         }`;
+
+        // Fields that should span full width on large screens
+        const fullWidthFields = ['checkbox-group', 'textarea', 'other_skills', 'reason'];
+        const fieldContainerClasses = fullWidthFields.includes(field.type) 
+            ? "mb-3 lg:mb-4 lg:col-span-2" 
+            : "mb-3 lg:mb-4";
 
         switch (field.type) {
             case 'select':
                 return (
-                    <div key={field.name} className="mb-4 sm:mb-6">
+                    <div key={field.name} className={fieldContainerClasses}>
                         <label className={labelClasses}>
                             {field.label} {field.required && <span className="text-red-500">*</span>}
                         </label>
@@ -149,18 +155,18 @@ const Form = ({ onSubmit, fields, title, submitText, isLoading = false }) => {
                             ))}
                         </select>
                         {errors[field.name] && (
-                            <p className="text-red-500 text-xs sm:text-sm mt-1">{errors[field.name]}</p>
+                            <p className="text-red-500 text-xs mt-1">{errors[field.name]}</p>
                         )}
                     </div>
                 );
 
             case 'checkbox-group':
                 return (
-                    <div key={field.name} className="mb-4 sm:mb-6">
+                    <div key={field.name} className={fieldContainerClasses}>
                         <label className={labelClasses}>
                             {field.label} {field.required && <span className="text-red-500">*</span>}
                         </label>
-                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-2 lg:gap-3">
                             {field.options.map(option => {
                                 const currentValues = formData[field.name] || [];
                                 const isChecked = currentValues.includes(option.value);
@@ -171,7 +177,7 @@ const Form = ({ onSubmit, fields, title, submitText, isLoading = false }) => {
                                     formData: formData[field.name]
                                 });
                                 return (
-                                    <label key={option.value} className={`flex items-center space-x-2 sm:space-x-3 rtl:space-x-reverse p-2.5 sm:p-3 border rounded-lg cursor-pointer transition-colors duration-200 ${
+                                    <label key={option.value} className={`flex items-center space-x-2 rtl:space-x-reverse p-2 lg:p-2.5 border rounded-lg cursor-pointer transition-colors duration-200 ${
                                     isChecked ? 'border-indigo-500 bg-indigo-50' : 'border-gray-200 hover:bg-gray-50'
                                 }`}>
                                         <input
@@ -192,20 +198,20 @@ const Form = ({ onSubmit, fields, title, submitText, isLoading = false }) => {
                                             style={{ pointerEvents: 'auto' }}
                                             key={`${field.name}-${option.value}`}
                                         />
-                                        <span className="text-xs sm:text-sm font-medium text-gray-700">{option.label}</span>
+                                        <span className="text-xs lg:text-sm font-medium text-gray-700">{option.label}</span>
                                     </label>
                                 );
                             })}
                         </div>
                         {errors[field.name] && (
-                            <p className="text-red-500 text-sm mt-1">{errors[field.name]}</p>
+                            <p className="text-red-500 text-xs mt-1">{errors[field.name]}</p>
                         )}
                     </div>
                 );
 
             case 'textarea':
                 return (
-                    <div key={field.name} className="mb-4 sm:mb-6">
+                    <div key={field.name} className={fieldContainerClasses}>
                         <label className={labelClasses}>
                             {field.label} {field.required && <span className="text-red-500">*</span>}
                         </label>
@@ -213,27 +219,27 @@ const Form = ({ onSubmit, fields, title, submitText, isLoading = false }) => {
                             name={field.name}
                             value={formData[field.name] || ''}
                             onChange={handleChange}
-                            rows={4}
+                            rows={3}
                             className={commonClasses}
                             placeholder={field.placeholder}
                             required={field.required}
                             readOnly={field.readonly}
                         />
                         {errors[field.name] && (
-                            <p className="text-red-500 text-xs sm:text-sm mt-1">{errors[field.name]}</p>
+                            <p className="text-red-500 text-xs mt-1">{errors[field.name]}</p>
                         )}
                     </div>
                 );
 
             case 'tel':
                 return (
-                    <div key={field.name} className="mb-4 sm:mb-6">
+                    <div key={field.name} className={fieldContainerClasses}>
                         <label className={labelClasses}>
                             {field.label} {field.required && <span className="text-red-500">*</span>}
                         </label>
                         {field.countryCode ? (
                             <div className="flex" dir="ltr">
-                                <div className="flex items-center px-2 sm:px-3 py-2.5 sm:py-3 bg-gray-100 border border-r-0 border-gray-300 rounded-l-lg text-gray-700 font-medium whitespace-nowrap text-xs sm:text-sm">
+                                <div className="flex items-center px-2 py-2 lg:py-2.5 bg-gray-100 border border-r-0 border-gray-300 rounded-l-lg text-gray-700 font-medium whitespace-nowrap text-xs lg:text-sm">
                                     {field.countryCode}
                                 </div>
                                 <input
@@ -262,14 +268,14 @@ const Form = ({ onSubmit, fields, title, submitText, isLoading = false }) => {
                             />
                         )}
                         {errors[field.name] && (
-                            <p className="text-red-500 text-xs sm:text-sm mt-1">{errors[field.name]}</p>
+                            <p className="text-red-500 text-xs mt-1">{errors[field.name]}</p>
                         )}
                     </div>
                 );
 
             default:
                 return (
-                    <div key={field.name} className="mb-4 sm:mb-6">
+                    <div key={field.name} className={fieldContainerClasses}>
                         <label className={labelClasses}>
                             {field.label} {field.required && <span className="text-red-500">*</span>}
                         </label>
@@ -284,7 +290,7 @@ const Form = ({ onSubmit, fields, title, submitText, isLoading = false }) => {
                             readOnly={field.readonly}
                         />
                         {errors[field.name] && (
-                            <p className="text-red-500 text-xs sm:text-sm mt-1">{errors[field.name]}</p>
+                            <p className="text-red-500 text-xs mt-1">{errors[field.name]}</p>
                         )}
                     </div>
                 );
@@ -292,35 +298,39 @@ const Form = ({ onSubmit, fields, title, submitText, isLoading = false }) => {
     };
 
     return (
-        <div className="max-w-2xl mx-auto">
-            <div className="bg-white rounded-xl sm:rounded-2xl shadow-xl p-4 sm:p-6 lg:p-8">
+        <div className="max-w-2xl lg:max-w-4xl xl:max-w-5xl mx-auto">
+            <div className="bg-white rounded-xl lg:rounded-2xl shadow-xl p-4 lg:p-6 xl:p-8">
                 {title && (
-                    <h2 className="text-2xl sm:text-3xl font-bold text-center text-gray-900 mb-6 sm:mb-8">
+                    <h2 className="text-xl lg:text-2xl xl:text-3xl font-bold text-center text-gray-900 mb-4 lg:mb-6">
                         {title}
                     </h2>
                 )}
                 
-                <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6">
-                    {fields.map(renderField)}
+                <form onSubmit={handleSubmit} className="space-y-3 lg:space-y-4">
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 lg:gap-4">
+                        {fields.map(renderField)}
+                    </div>
                     
-                    <button
-                        type="submit"
-                        disabled={isLoading}
-                        className={`w-full py-3 sm:py-4 px-4 sm:px-6 rounded-lg font-semibold text-sm sm:text-base text-white transition-all duration-300 ${
-                            isLoading 
-                                ? 'bg-gray-400 cursor-not-allowed' 
-                                : 'bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 hover:shadow-lg'
-                        }`}
-                    >
-                        {isLoading ? (
-                            <div className="flex items-center justify-center">
-                                <div className="animate-spin rounded-full h-4 w-4 sm:h-5 sm:w-5 border-b-2 border-white mr-2"></div>
-                                <span className="text-sm sm:text-base">{language === 'ar' ? 'جاري الإرسال...' : 'Submitting...'}</span>
-                            </div>
-                        ) : (
-                            submitText
-                        )}
-                    </button>
+                    <div className="mt-6 lg:mt-8">
+                        <button
+                            type="submit"
+                            disabled={isLoading}
+                            className={`w-full lg:w-auto lg:min-w-[200px] py-2.5 lg:py-3 px-4 lg:px-6 rounded-lg font-semibold text-sm lg:text-base text-white transition-all duration-300 ${
+                                isLoading 
+                                    ? 'bg-gray-400 cursor-not-allowed' 
+                                    : 'bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 hover:shadow-lg'
+                            }`}
+                        >
+                            {isLoading ? (
+                                <div className="flex items-center justify-center">
+                                    <div className="animate-spin rounded-full h-4 w-4 lg:h-5 lg:w-5 border-b-2 border-white mr-2"></div>
+                                    <span className="text-sm lg:text-base">{language === 'ar' ? 'جاري الإرسال...' : 'Submitting...'}</span>
+                                </div>
+                            ) : (
+                                submitText
+                            )}
+                        </button>
+                    </div>
                 </form>
             </div>
         </div>

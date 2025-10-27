@@ -695,12 +695,12 @@ const WorkshopRegistration = () => {
             </div>
 
             {/* Content Section */}
-            <div className="py-16 registration-form-section">
-                <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="py-8 lg:py-12 xl:py-16 registration-form-section">
+                <div className="max-w-4xl lg:max-w-6xl xl:max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     {loadingRegistration ? (
-                        <div className="flex justify-center items-center py-20">
-                            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
-                            <span className="ml-4 text-lg text-gray-600">
+                        <div className="flex justify-center items-center py-12 lg:py-16">
+                            <div className="animate-spin rounded-full h-8 w-8 lg:h-12 lg:w-12 border-b-2 border-blue-600"></div>
+                            <span className="ml-3 text-sm lg:text-base text-gray-600">
                                 {language === 'ar' ? 'جاري التحميل...' : 'Loading...'}
                             </span>
                         </div>
@@ -710,19 +710,19 @@ const WorkshopRegistration = () => {
                             onEdit={handleEditRegistration}
                         />
                     ) : (
-                        <div className="bg-white rounded-3xl shadow-2xl overflow-hidden transition-transform duration-300">
-                            <div className="bg-gradient-to-r from-blue-500 to-cyan-500 h-3"></div>
-                            <div className="p-8 md:p-12">
-                                <div className="text-center mb-10">
-                                    <div className="flex justify-center mb-6">
-                                        <div className="bg-gradient-to-r from-blue-500 to-cyan-500 text-white p-6 rounded-3xl shadow-lg">
-                                            <span className="text-4xl">🎓</span>
+                        <div className="bg-white rounded-xl lg:rounded-2xl xl:rounded-3xl shadow-2xl overflow-hidden transition-transform duration-300">
+                            <div className="bg-gradient-to-r from-blue-500 to-cyan-500 h-2 lg:h-3"></div>
+                            <div className="p-4 lg:p-6 xl:p-8">
+                                <div className="text-center mb-4 lg:mb-6 xl:mb-8">
+                                    <div className="flex justify-center mb-3 lg:mb-4">
+                                        <div className="bg-gradient-to-r from-blue-500 to-cyan-500 text-white p-3 lg:p-4 xl:p-5 rounded-xl lg:rounded-2xl shadow-lg">
+                                            <span className="text-2xl lg:text-3xl xl:text-4xl">🎓</span>
                                         </div>
                                     </div>
-                                    <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+                                    <h2 className="text-xl lg:text-2xl xl:text-3xl font-bold text-gray-900 mb-2 lg:mb-3">
                                         {language === 'ar' ? 'نموذج التسجيل في الورش' : 'Workshop Registration Form'}
                                     </h2>
-                                    <p className="text-lg text-gray-600 max-w-2xl mx-auto leading-relaxed">
+                                    <p className="text-sm lg:text-base xl:text-lg text-gray-600 max-w-2xl lg:max-w-3xl xl:max-w-4xl mx-auto">
                                         {language === 'ar' 
                                             ? 'املأ النموذج أدناه للمشاركة في الورش التدريبية المختارة'
                                             : 'Fill out the form below to participate in the selected training workshops'
@@ -730,8 +730,8 @@ const WorkshopRegistration = () => {
                                     </p>
                                 </div>
 
-                                <div className="mb-6 p-4 bg-blue-50 rounded-lg border border-blue-200">
-                                    <p className="text-sm text-blue-700">
+                                <div className="mb-4 lg:mb-6 p-3 lg:p-4 bg-blue-50 rounded-lg lg:rounded-xl border border-blue-200">
+                                    <p className="text-xs lg:text-sm text-blue-700">
                                         {language === 'ar' 
                                             ? '💡 يمكنك اختيار عدة ورش من القائمة أعلاه - الورش المسجلة فيها مسبقاً لا تظهر في النموذج'
                                             : '💡 You can select multiple workshops from the list above - previously registered workshops will not appear in the form'
@@ -740,17 +740,17 @@ const WorkshopRegistration = () => {
                                 </div>
 
                                 {selectedWorkshops.length > 0 && (
-                                    <div className="mb-6 p-4 bg-green-50 rounded-lg border border-green-200">
+                                    <div className="mb-4 lg:mb-6 p-3 lg:p-4 bg-green-50 rounded-lg lg:rounded-xl border border-green-200">
                                         <div className="flex items-center space-x-2 rtl:space-x-reverse">
-                                            <span className="text-green-600 text-lg">✅</span>
-                                            <p className="text-sm text-green-700 font-medium">
+                                            <span className="text-green-600 text-sm lg:text-base">✅</span>
+                                            <p className="text-xs lg:text-sm text-green-700 font-medium">
                                                 {language === 'ar' 
                                                     ? `تم اختيار ${selectedWorkshops.length} ورشة للتسجيل - املأ النموذج أدناه`
                                                     : `${selectedWorkshops.length} workshop(s) selected for registration - fill out the form below`
                                                 }
                                             </p>
                                         </div>
-                                        <div className="mt-2 text-xs text-green-600">
+                                        <div className="mt-1 text-xs lg:text-sm text-green-600">
                                             {language === 'ar' 
                                                 ? '💡 يمكنك إضافة ورش أخرى أو إزالة ورش من القائمة أعلاه'
                                                 : '💡 You can add more workshops or remove workshops from the list above'

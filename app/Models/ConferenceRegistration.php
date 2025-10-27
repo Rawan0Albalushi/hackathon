@@ -14,7 +14,10 @@ class ConferenceRegistration extends Model
         'organization',
         'session_choice',
         'status',
-        'rejection_reason'
+        'rejection_reason',
+        'qr_code',
+        'is_checked_in',
+        'checked_in_at'
     ];
 
     public function user()

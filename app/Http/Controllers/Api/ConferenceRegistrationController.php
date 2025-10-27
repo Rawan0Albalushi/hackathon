@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\ConferenceRegistration;
+use App\Services\QRCodeService;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Validator;
@@ -46,10 +47,14 @@ class ConferenceRegistrationController extends Controller
             
             $registration = ConferenceRegistration::create($registrationData);
             
+            // Generate QR code after registration is created
+            $qrCode = QRCodeService::generateQRCode('conference', $registration->id);
+            $registration->update(['qr_code' => $qrCode]);
+            
             return response()->json([
                 'success' => true,
                 'message' => 'Registration successful',
-                'data' => $registration
+                'data' => $registration->fresh()
             ], 201);
         } catch (\Exception $e) {
             return response()->json([

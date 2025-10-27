@@ -17,7 +17,10 @@ class HackathonRegistration extends Model
         'skills',
         'other_skills',
         'status',
-        'rejection_reason'
+        'rejection_reason',
+        'qr_code',
+        'is_checked_in',
+        'checked_in_at'
     ];
 
     protected $casts = [

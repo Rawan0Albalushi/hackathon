@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\HackathonRegistrationController;
 use App\Http\Controllers\Api\WorkshopRegistrationController;
 use App\Http\Controllers\Api\ConferenceRegistrationController;
 use App\Http\Controllers\Api\UserRegistrationController;
+use App\Http\Controllers\Api\QRCodeController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\Api\AuthController;
 
@@ -36,6 +37,10 @@ Route::middleware(['web', 'auth:web'])->group(function () {
     Route::get('/user/registrations', [UserRegistrationController::class, 'getMyRegistrations']);
     Route::get('/user/hackathon-status', [UserRegistrationController::class, 'getHackathonStatus']);
     Route::get('/user/workshops', [UserRegistrationController::class, 'getAvailableWorkshops']);
+    
+    // QR Code routes
+    Route::post('/qr/scan', [QRCodeController::class, 'scanQRCode']);
+    Route::post('/qr/info', [QRCodeController::class, 'getQRCodeInfo']);
     
     // Admin API routes (admin only)
     Route::middleware(['web', 'auth:web', 'admin'])->group(function () {
@@ -78,5 +83,8 @@ Route::middleware(['web', 'auth:web'])->group(function () {
         Route::put('/admin/users/{id}', [AdminController::class, 'updateUser']);
         Route::delete('/admin/users/{id}', [AdminController::class, 'deleteUser']);
         Route::post('/admin/users/bulk-action', [AdminController::class, 'bulkUserAction']);
+        
+        // QR Code admin routes
+        Route::get('/admin/qr/stats', [QRCodeController::class, 'getCheckInStats']);
     });
 });

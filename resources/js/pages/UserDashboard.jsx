@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import { useLanguage } from '../contexts/LanguageContext';
 import { Link } from 'react-router-dom';
+import QRCodeDisplay from '../components/QRCodeDisplay';
 
 const UserDashboard = () => {
     const { user } = useAuth();
@@ -312,6 +313,19 @@ const UserDashboard = () => {
                                     </div>
                                 )}
 
+                                {/* QR Code Display for Approved Hackathon Registration */}
+                                {registrations.hackathon.status === 'approved' && registrations.hackathon.qr_code && (
+                                    <div className="mt-6">
+                                        <QRCodeDisplay 
+                                            qrCode={registrations.hackathon.qr_code}
+                                            type="hackathon"
+                                            registrationId={registrations.hackathon.id}
+                                            isCheckedIn={registrations.hackathon.is_checked_in}
+                                            checkedInAt={registrations.hackathon.checked_in_at}
+                                        />
+                                    </div>
+                                )}
+
                                 {registrations.hackathon.status !== 'rejected' && (
                                     <Link 
                                         to="/hackathon-registration"
@@ -445,6 +459,19 @@ const UserDashboard = () => {
                                                 <p className="text-red-700 mt-1">{registrations.conference.rejection_reason}</p>
                                             </div>
                                         </div>
+                                    </div>
+                                )}
+
+                                {/* QR Code Display for Approved Conference Registration */}
+                                {registrations.conference.status === 'approved' && registrations.conference.qr_code && (
+                                    <div className="mt-6">
+                                        <QRCodeDisplay 
+                                            qrCode={registrations.conference.qr_code}
+                                            type="conference"
+                                            registrationId={registrations.conference.id}
+                                            isCheckedIn={registrations.conference.is_checked_in}
+                                            checkedInAt={registrations.conference.checked_in_at}
+                                        />
                                     </div>
                                 )}
 
@@ -696,6 +723,19 @@ const UserDashboard = () => {
                                                     )}
                                                 </div>
                                             
+                                                {/* QR Code Display for Approved Workshop Registration */}
+                                                {workshop.status === 'approved' && workshop.qr_code && (
+                                                    <div className="mt-6">
+                                                        <QRCodeDisplay 
+                                                            qrCode={workshop.qr_code}
+                                                            type="workshop"
+                                                            registrationId={workshop.id}
+                                                            isCheckedIn={workshop.is_checked_in}
+                                                            checkedInAt={workshop.checked_in_at}
+                                                        />
+                                                    </div>
+                                                )}
+
                                                 {/* Rejection Reason */}
                                                 {workshop.rejection_reason && (
                                                     <div className="mt-6 bg-red-50/80 group-hover:bg-red-50/90 backdrop-blur-sm border border-red-200/60 group-hover:border-red-200/80 rounded-2xl p-6 transition-all duration-500">

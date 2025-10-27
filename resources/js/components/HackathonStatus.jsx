@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useLanguage } from '../contexts/LanguageContext';
+import QRCodeDisplay from './QRCodeDisplay';
 
 const HackathonStatus = ({ registration, onEdit }) => {
     const { t, language } = useLanguage();
@@ -305,21 +306,78 @@ const HackathonStatus = ({ registration, onEdit }) => {
             )}
 
             {registration.status === 'approved' && (
-                <div className="mt-8 p-8 bg-gradient-to-r from-green-50 to-emerald-50 border border-green-200 rounded-3xl shadow-lg hover:shadow-xl transition-shadow duration-300">
-                    <div className="flex items-start space-x-4 rtl:space-x-reverse">
-                        <div className="bg-green-100 p-4 rounded-2xl">
-                            <span className="text-3xl animate-bounce">🎉</span>
+                <div className="mt-8 space-y-8">
+                    <div className="p-8 bg-gradient-to-r from-green-50 to-emerald-50 border border-green-200 rounded-3xl shadow-lg hover:shadow-xl transition-shadow duration-300">
+                        <div className="flex items-start space-x-4 rtl:space-x-reverse">
+                            <div className="bg-green-100 p-4 rounded-2xl">
+                                <span className="text-3xl animate-bounce">🎉</span>
+                            </div>
+                            <div className="flex-1">
+                                <h4 className="text-2xl font-bold text-green-800 mb-3">
+                                    {language === 'ar' ? 'مبروك!' : 'Congratulations!'}
+                                </h4>
+                                <p className="text-green-700 text-lg leading-relaxed">
+                                    {language === 'ar' 
+                                        ? 'تم قبولك للمشاركة في الهاكثون. ستتلقى مزيداً من التفاصيل حول الحدث قريباً.'
+                                        : 'You have been accepted to participate in the hackathon. You will receive more details about the event soon.'
+                                    }
+                                </p>
+                            </div>
                         </div>
-                        <div className="flex-1">
-                            <h4 className="text-2xl font-bold text-green-800 mb-3">
-                                {language === 'ar' ? 'مبروك!' : 'Congratulations!'}
-                            </h4>
-                            <p className="text-green-700 text-lg leading-relaxed">
-                                {language === 'ar' 
-                                    ? 'تم قبولك للمشاركة في الهاكثون. ستتلقى مزيداً من التفاصيل حول الحدث قريباً.'
-                                    : 'You have been accepted to participate in the hackathon. You will receive more details about the event soon.'
-                                }
-                            </p>
+                    </div>
+
+                    {/* QR Code Section */}
+                    <div className="bg-white rounded-3xl shadow-2xl overflow-hidden">
+                        <div className="bg-gradient-to-r from-purple-500 via-pink-500 to-blue-500 h-3"></div>
+                        <div className="p-8 lg:p-12">
+                            <div className="text-center mb-8">
+                                <div className="flex justify-center mb-4">
+                                    <div className="bg-gradient-to-r from-purple-500 to-pink-500 text-white p-4 rounded-2xl shadow-lg">
+                                        <span className="text-3xl">📱</span>
+                                    </div>
+                                </div>
+                                <h3 className="text-2xl lg:text-3xl font-bold text-gray-900 mb-3">
+                                    {language === 'ar' ? 'QR Code للتسجيل' : 'Registration QR Code'}
+                                </h3>
+                                <p className="text-gray-600 text-lg max-w-2xl mx-auto">
+                                    {language === 'ar' 
+                                        ? 'احتفظ بهذا QR Code لتسهيل عملية التسجيل والدخول للحدث'
+                                        : 'Keep this QR Code for easy registration and event access'
+                                    }
+                                </p>
+                            </div>
+
+                            <div className="flex justify-center">
+                                <QRCodeDisplay 
+                                    qrCode={registration.qr_code}
+                                    registrationId={registration.id}
+                                    type="hackathon"
+                                    isCheckedIn={registration.is_checked_in}
+                                    checkedInAt={registration.checked_in_at}
+                                />
+                            </div>
+
+                            <div className="mt-8 text-center">
+                                <div className="bg-gradient-to-r from-blue-50 to-indigo-50 p-6 rounded-2xl border border-blue-200">
+                                    <h4 className="text-lg font-bold text-blue-800 mb-3">
+                                        {language === 'ar' ? 'كيفية الاستخدام:' : 'How to Use:'}
+                                    </h4>
+                                    <div className="space-y-2 text-blue-700">
+                                        <p className="flex items-center justify-center space-x-2 rtl:space-x-reverse">
+                                            <span>1️⃣</span>
+                                            <span>{language === 'ar' ? 'احفظ الصورة على هاتفك' : 'Save the image to your phone'}</span>
+                                        </p>
+                                        <p className="flex items-center justify-center space-x-2 rtl:space-x-reverse">
+                                            <span>2️⃣</span>
+                                            <span>{language === 'ar' ? 'أظهرها عند وصولك للحدث' : 'Show it when you arrive at the event'}</span>
+                                        </p>
+                                        <p className="flex items-center justify-center space-x-2 rtl:space-x-reverse">
+                                            <span>3️⃣</span>
+                                            <span>{language === 'ar' ? 'سيتم مسحها للتحقق من هويتك' : 'It will be scanned to verify your identity'}</span>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>

@@ -212,12 +212,12 @@ const HackathonRegistration = () => {
             </div>
 
             {/* Content Section */}
-            <div className="py-16">
-                <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="py-8 lg:py-12 xl:py-16">
+                <div className="max-w-4xl lg:max-w-6xl xl:max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     {loadingRegistration ? (
-                        <div className="flex justify-center items-center py-20">
-                            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600"></div>
-                            <span className="ml-4 text-lg text-gray-600">
+                        <div className="flex justify-center items-center py-12 lg:py-16">
+                            <div className="animate-spin rounded-full h-8 w-8 lg:h-12 lg:w-12 border-b-2 border-purple-600"></div>
+                            <span className="ml-3 text-sm lg:text-base text-gray-600">
                                 {language === 'ar' ? 'جاري التحميل...' : 'Loading...'}
                             </span>
                         </div>
@@ -227,19 +227,19 @@ const HackathonRegistration = () => {
                             onEdit={handleEditRegistration}
                         />
                     ) : (
-                        <div className="bg-white rounded-2xl sm:rounded-3xl shadow-2xl overflow-hidden transition-transform duration-300">
-                            <div className="bg-gradient-to-r from-purple-500 via-pink-500 to-blue-500 h-2 sm:h-3"></div>
-                            <div className="p-4 sm:p-6 md:p-8 lg:p-12">
-                                <div className="text-center mb-6 sm:mb-8 lg:mb-10">
-                                    <div className="flex justify-center mb-4 sm:mb-6">
-                                        <div className="bg-gradient-to-r from-purple-500 to-pink-500 text-white p-4 sm:p-6 rounded-2xl sm:rounded-3xl shadow-lg">
-                                            <span className="text-2xl sm:text-3xl lg:text-4xl">🚀</span>
+                        <div className="bg-white rounded-xl lg:rounded-2xl xl:rounded-3xl shadow-2xl overflow-hidden transition-transform duration-300">
+                            <div className="bg-gradient-to-r from-purple-500 via-pink-500 to-blue-500 h-2 lg:h-3"></div>
+                            <div className="p-4 lg:p-6 xl:p-8">
+                                <div className="text-center mb-4 lg:mb-6 xl:mb-8">
+                                    <div className="flex justify-center mb-3 lg:mb-4">
+                                        <div className="bg-gradient-to-r from-purple-500 to-pink-500 text-white p-3 lg:p-4 xl:p-5 rounded-xl lg:rounded-2xl shadow-lg">
+                                            <span className="text-2xl lg:text-3xl xl:text-4xl">🚀</span>
                                         </div>
                                     </div>
-                                    <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-3 sm:mb-4 px-2">
+                                    <h2 className="text-xl lg:text-2xl xl:text-3xl font-bold text-gray-900 mb-2 lg:mb-3 px-2">
                                         {language === 'ar' ? 'نموذج التسجيل في الهاكثون' : 'Hackathon Registration Form'}
                                     </h2>
-                                    <p className="text-sm sm:text-base lg:text-lg text-gray-600 max-w-2xl mx-auto leading-relaxed px-2">
+                                    <p className="text-sm lg:text-base xl:text-lg text-gray-600 max-w-2xl lg:max-w-3xl xl:max-w-4xl mx-auto px-2">
                                         {language === 'ar' 
                                             ? 'املأ النموذج أدناه للمشاركة في الهاكثون وابدأ رحلتك نحو الابتكار'
                                             : 'Fill out the form below to participate in the hackathon and start your innovation journey'

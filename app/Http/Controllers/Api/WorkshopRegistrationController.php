@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\WorkshopRegistration;
+use App\Services\QRCodeService;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Validator;
@@ -64,7 +65,12 @@ class WorkshopRegistrationController extends Controller
                 ];
                 
                 $registration = WorkshopRegistration::create($registrationData);
-                $registrations[] = $registration;
+                
+                // Generate QR code for each workshop registration
+                $qrCode = QRCodeService::generateQRCode('workshop', $registration->id);
+                $registration->update(['qr_code' => $qrCode]);
+                
+                $registrations[] = $registration->fresh();
             }
             
             return response()->json([
