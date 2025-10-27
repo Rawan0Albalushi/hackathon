@@ -155,7 +155,7 @@ const Home = () => {
                 {/* Background Logo */}
                 <div className="absolute inset-0 opacity-10 flex items-center justify-center pointer-events-none">
                     <img 
-                        src="/images/الشعار طولي ملون.png" 
+                        src="/images/logo_vertical_colored.png" 
                         alt="Logo Background" 
                         className="h-full w-auto object-contain animate-pulse"
                         style={{filter: 'blur(20px)'}}
@@ -166,7 +166,7 @@ const Home = () => {
                     <div className="flex justify-center mb-1">
                         <div className="relative">
                             <img 
-                                src="/images/الشعار افقي ابيض.png" 
+                                src="/images/logo_horizontal_white.png" 
                                 alt={language === 'ar' ? 'ملتقى الابتكار' : 'Innovation Forum'} 
                                 className="h-48 sm:h-64 md:h-80 lg:h-96 xl:h-[28rem] 2xl:h-[32rem] w-auto object-contain logo-slide-in logo-glow logo-optimized"
                                 loading="eager"
@@ -298,7 +298,7 @@ const Home = () => {
                                 {/* Card Image */}
                                 <div className="absolute top-4 right-4 w-16 h-16 sm:w-20 sm:h-20 lg:w-28 lg:h-28 opacity-5 hover:opacity-20 transition-opacity duration-300">
                                     <img 
-                                        src="/images/الشعار افقي ابيض.png" 
+                                        src="/images/logo_horizontal_white.png" 
                                         alt="Hackathon" 
                                         className="w-full h-full object-contain filter blur-sm hover:blur-none transition-all duration-300"
                                     />
@@ -364,7 +364,7 @@ const Home = () => {
                                 {/* Card Image */}
                                 <div className="absolute bottom-4 left-4 w-16 h-16 sm:w-20 sm:h-20 lg:w-28 lg:h-28 opacity-5 hover:opacity-20 transition-opacity duration-300">
                                     <img 
-                                        src="/images/الشعار افقي ابيض.png" 
+                                        src="/images/logo_horizontal_white.png" 
                                         alt="Workshop" 
                                         className="w-full h-full object-contain filter blur-sm hover:blur-none transition-all duration-300"
                                     />
@@ -502,7 +502,7 @@ const Home = () => {
                                 {/* Card Image */}
                                 <div className="absolute top-4 left-4 w-16 h-16 sm:w-20 sm:h-20 lg:w-28 lg:h-28 opacity-5 hover:opacity-20 transition-opacity duration-300">
                                     <img 
-                                        src="/images/الشعار افقي ابيض (1).png" 
+                                        src="/images/logo_horizontal_white_1.png" 
                                         alt="Conference" 
                                         className="w-full h-full object-contain filter blur-sm hover:blur-none transition-all duration-300"
                                     />

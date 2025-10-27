@@ -632,57 +632,23 @@
 .admin-sidebar-item {
     position: relative;
     overflow: hidden;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .admin-sidebar-item::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-    transition: left 0.5s ease;
-}
-
-.admin-sidebar-item:hover::before {
-    left: 100%;
+    display: none;
 }
 
 .admin-sidebar-item.active {
     background: linear-gradient(135deg, var(--color-orange) 0%, var(--color-pink) 100%);
     color: white;
     box-shadow: 0 8px 25px rgba(244, 163, 33, 0.3);
-    transform: translateX(4px);
 }
 
 .admin-sidebar-item.active::before {
     display: none;
 }
 
-/* Sidebar Animation */
-.sidebar-enter {
-    transform: translateX(-100%);
-    opacity: 0;
-}
-
-.sidebar-enter-active {
-    transform: translateX(0);
-    opacity: 1;
-    transition: all 0.3s ease-out;
-}
-
-.sidebar-exit {
-    transform: translateX(0);
-    opacity: 1;
-}
-
-.sidebar-exit-active {
-    transform: translateX(-100%);
-    opacity: 0;
-    transition: all 0.3s ease-in;
-}
+/* Sidebar Animation - Removed */
 
 /* RTL Sidebar Support */
 [dir="rtl"] .admin-sidebar {
@@ -691,16 +657,10 @@
 }
 
 [dir="rtl"] .admin-sidebar-item.active {
-    transform: translateX(-4px);
+    /* No transform animation */
 }
 
-[dir="rtl"] .sidebar-enter {
-    transform: translateX(100%);
-}
-
-[dir="rtl"] .sidebar-exit-active {
-    transform: translateX(100%);
-}
+/* RTL sidebar animations removed */
 
 /* Mobile Sidebar Overlay */
 .mobile-sidebar-overlay {
@@ -749,25 +709,10 @@
 .sidebar-button {
     position: relative;
     overflow: hidden;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .sidebar-button::after {
-    content: '';
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 0;
-    height: 0;
-    background: rgba(255, 255, 255, 0.1);
-    border-radius: 50%;
-    transform: translate(-50%, -50%);
-    transition: width 0.6s, height 0.6s;
-}
-
-.sidebar-button:hover::after {
-    width: 300px;
-    height: 300px;
+    display: none;
 }
 
 /* Active Sidebar Item Indicator */
@@ -1786,7 +1731,7 @@
 /* Star floating elements */
 .star-floating {
     position: absolute;
-    background-image: url('/images/نجمة.png');
+    background-image: url('/images/star.png');
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center;

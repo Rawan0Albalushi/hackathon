@@ -6,13 +6,13 @@ This directory contains images used in the project.
 
 The following logo files are available for use:
 
-1. **الشعار افقي ملون.png** - Horizontal colored logo (used in navigation)
-2. **الشعار افقي ابيض.png** - Horizontal white logo
-3. **الشعار افقي ابيض (1).png** - Alternative horizontal white logo
-4. **الشعار ابيض صافي افقي.png** - Clean horizontal white logo
-5. **الشعار طولي ملون.png** - Vertical colored logo (used in hero section)
-6. **الشعار طولي ابيض.png** - Vertical white logo
-7. **الشعار ابيض صافي طولي.png** - Clean vertical white logo (used as background)
+1. **logo_horizontal_colored.png** - Horizontal colored logo (used in navigation)
+2. **logo_horizontal_white.png** - Horizontal white logo
+3. **logo_horizontal_white_1.png** - Alternative horizontal white logo
+4. **logo_horizontal_white_clean.png** - Clean horizontal white logo
+5. **logo_vertical_colored.png** - Vertical colored logo (used in hero section)
+6. **logo_vertical_white.png** - Vertical white logo
+7. **logo_vertical_white_clean.png** - Clean vertical white logo (used as background)
 
 ## Usage
 
@@ -42,17 +42,17 @@ For user-uploaded images, use `storage/app/public/images/` directory and access 
 ## Image Usage in Project
 
 ### Navigation (Layout.jsx)
-- **File**: الشعار افقي ملون.png
+- **File**: logo_horizontal_colored.png
 - **Size**: w-20 h-12 (mobile), w-24 h-16 (desktop)
 - **Location**: Top navigation bar
 
 ### Hero Section (Home.jsx)
-- **Main Logo**: الشعار افقي ابيض.png
-- **Background Logo**: الشعار طولي ملون.png
+- **Main Logo**: logo_horizontal_white.png
+- **Background Logo**: logo_vertical_colored.png
 - **Effect**: Floating animation with glow and shadow
 
 ### Cards (Home.jsx)
-- **Hackathon Card**: الشعار افقي ابيض.png
-- **Workshop Card**: الشعار افقي ابيض.png
-- **Conference Card**: الشعار افقي ابيض (1).png
+- **Hackathon Card**: logo_horizontal_white.png
+- **Workshop Card**: logo_horizontal_white.png
+- **Conference Card**: logo_horizontal_white_1.png
 - **Effect**: Blur effect that becomes clear on hover

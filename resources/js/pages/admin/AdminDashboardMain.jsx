@@ -90,7 +90,7 @@ const AdminDashboardMain = () => {
     return (
         <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 flex" dir={language === 'ar' ? 'rtl' : 'ltr'}>
             {/* Sidebar */}
-            <div className={`fixed inset-y-0 ${language === 'ar' ? 'right-0' : 'left-0'} z-50 w-64 admin-sidebar transform transition-transform duration-300 ease-in-out ${
+            <div className={`fixed inset-y-0 ${language === 'ar' ? 'right-0' : 'left-0'} z-50 w-64 admin-sidebar ${
                 sidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'
             }`}>
                 {/* Sidebar Header */}
@@ -111,8 +111,8 @@ const AdminDashboardMain = () => {
                         </div>
                     </div>
                     <button
-                        onClick={() => setSidebarOpen(false)}
-                        className="lg:hidden p-2 rounded-lg hover:bg-gray-100 transition-colors"
+onClick={() => setSidebarOpen(false)}
+                        className="lg:hidden p-2 rounded-lg hover:bg-gray-100"
                     >
                         <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -129,13 +129,13 @@ const AdminDashboardMain = () => {
                                 setActiveTab(item.id);
                                 setSidebarOpen(false);
                             }}
-                            className={`w-full flex items-center space-x-3 rtl:space-x-reverse px-4 py-3 rounded-xl text-left transition-all duration-300 group admin-sidebar-item sidebar-button ${
+                            className={`w-full flex items-center space-x-3 rtl:space-x-reverse px-4 py-3 rounded-xl text-left group admin-sidebar-item sidebar-button ${
                                 activeTab === item.id
                                     ? `bg-gradient-to-r ${item.color} text-white shadow-lg active`
                                     : 'text-gray-700 hover:bg-gray-100 hover:text-gray-900 hover:shadow-md'
                             }`}
                         >
-                            <div className={`p-2 rounded-lg transition-all duration-300 ${
+                            <div className={`p-2 rounded-lg ${
                                 activeTab === item.id 
                                     ? 'bg-white/20' 
                                     : 'bg-gray-100 group-hover:bg-white'
@@ -145,7 +145,7 @@ const AdminDashboardMain = () => {
                             <span className="font-medium">{item.label}</span>
                             {activeTab === item.id && (
                                 <div className="ml-auto rtl:ml-0 rtl:mr-auto">
-                                    <div className="w-2 h-2 bg-white rounded-full animate-pulse"></div>
+                                    <div className="w-2 h-2 bg-white rounded-full"></div>
                                 </div>
                             )}
                         </button>
@@ -170,13 +170,13 @@ const AdminDashboardMain = () => {
                     <div className="flex space-x-2 rtl:space-x-reverse">
                         <button
                             onClick={toggleLanguage}
-                            className="flex-1 bg-gradient-to-r from-teal-500 to-navy-600 text-white px-3 py-2 rounded-lg text-sm font-medium transition-all duration-300 hover:shadow-lg"
+                            className="flex-1 bg-gradient-to-r from-teal-500 to-navy-600 text-white px-3 py-2 rounded-lg text-sm font-medium hover:shadow-lg"
                         >
                             {language === 'ar' ? 'English' : 'العربية'}
                         </button>
                         <button
                             onClick={handleLogout}
-                            className="flex-1 bg-gradient-to-r from-red-500 to-red-600 text-white px-3 py-2 rounded-lg text-sm font-medium transition-all duration-300 hover:shadow-lg"
+                            className="flex-1 bg-gradient-to-r from-red-500 to-red-600 text-white px-3 py-2 rounded-lg text-sm font-medium hover:shadow-lg"
                         >
                             {language === 'ar' ? 'خروج' : 'Logout'}
                         </button>
@@ -201,7 +201,7 @@ const AdminDashboardMain = () => {
                             <div className="flex items-center space-x-4 rtl:space-x-reverse">
                                 <button
                                     onClick={() => setSidebarOpen(true)}
-                                    className="lg:hidden p-2 rounded-lg hover:bg-gray-100 transition-colors"
+                                    className="lg:hidden p-2 rounded-lg hover:bg-gray-100"
                                 >
                                     <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />

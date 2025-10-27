@@ -77,7 +77,7 @@ const Layout = ({ children }) => {
                                         {/* Logo Image */}
                                         <div className="w-56 h-32 lg:w-64 lg:h-36 flex items-center justify-center">
                                             <img 
-                                                src="/images/الشعار افقي ملون.png" 
+                                                src="/images/logo_horizontal_colored.png" 
                                                 alt={language === 'ar' ? 'ملتقى الابتكار' : 'Innovation Forum'} 
                                                 className="h-full w-full object-contain hover-float"
                                                 loading="lazy"
