@@ -171,13 +171,13 @@ const HackathonRegistration = () => {
             <div className="relative text-white overflow-hidden" style={{background: 'linear-gradient(135deg, #F4A321 0%, #D85584 100%)'}}>
                 <div className="absolute inset-0 bg-black opacity-10"></div>
                 
-                {/* Animated Background Elements - Responsive */}
+                {/* Animated Star Background Elements - Responsive */}
                 <div className="absolute inset-0">
-                    <div className="absolute top-10 sm:top-20 left-4 sm:left-10 w-12 h-12 sm:w-16 sm:h-16 lg:w-20 lg:h-20 rounded-full opacity-15 sm:opacity-20 animate-pulse" style={{background: '#D85584'}}></div>
-                    <div className="absolute bottom-10 sm:bottom-20 right-4 sm:right-10 w-20 h-20 sm:w-24 sm:h-24 lg:w-32 lg:h-32 rounded-full opacity-15 sm:opacity-20 animate-pulse delay-1000" style={{background: '#F4A321'}}></div>
-                    <div className="absolute top-1/2 left-1/6 sm:left-1/4 w-10 h-10 sm:w-12 sm:h-12 lg:w-16 lg:h-16 rounded-full opacity-15 sm:opacity-20 animate-pulse delay-500" style={{background: '#096289'}}></div>
-                    <div className="absolute top-1/3 right-1/4 sm:right-1/3 w-8 h-8 sm:w-10 sm:h-10 lg:w-12 lg:h-12 rounded-full opacity-15 sm:opacity-20 animate-pulse delay-700" style={{background: '#FF6B6B'}}></div>
-                    <div className="absolute bottom-1/3 left-1/4 sm:left-1/3 w-16 h-16 sm:w-20 sm:h-20 lg:w-24 lg:h-24 rounded-full opacity-15 sm:opacity-20 animate-pulse delay-300" style={{background: '#4ECDC4'}}></div>
+                    <div className="star-floating absolute top-10 sm:top-20 left-4 sm:left-10 w-12 h-12 sm:w-16 sm:h-16 lg:w-20 lg:h-20 opacity-15 sm:opacity-20 animate-pulse"></div>
+                    <div className="star-floating absolute bottom-10 sm:bottom-20 right-4 sm:right-10 w-20 h-20 sm:w-24 sm:h-24 lg:w-32 lg:h-32 opacity-15 sm:opacity-20 animate-pulse delay-1000"></div>
+                    <div className="star-floating absolute top-1/2 left-1/6 sm:left-1/4 w-10 h-10 sm:w-12 sm:h-12 lg:w-16 lg:h-16 opacity-15 sm:opacity-20 animate-pulse delay-500"></div>
+                    <div className="star-floating absolute top-1/3 right-1/4 sm:right-1/3 w-8 h-8 sm:w-10 sm:h-10 lg:w-12 lg:h-12 opacity-15 sm:opacity-20 animate-pulse delay-700"></div>
+                    <div className="star-floating absolute bottom-1/3 left-1/4 sm:left-1/3 w-16 h-16 sm:w-20 sm:h-20 lg:w-24 lg:h-24 opacity-15 sm:opacity-20 animate-pulse delay-300"></div>
                 </div>
                 
                 <div className="relative max-w-7xl mx-auto px-3 sm:px-4 lg:px-8 py-12 sm:py-16 lg:py-20">

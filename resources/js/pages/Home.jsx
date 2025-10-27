@@ -7,8 +7,6 @@ import { initScrollAnimations, staggerAnimation, typeWriter } from '../utils/scr
 const Home = () => {
     const { t, language } = useLanguage();
     const { user, isAuthenticated } = useAuth();
-    const titleRef = useRef(null);
-    const subtitleRef = useRef(null);
     const [hackathonRegistration, setHackathonRegistration] = useState(null);
     const [allRegistrations, setAllRegistrations] = useState({
         hackathon: null,
@@ -20,24 +18,6 @@ const Home = () => {
         // Initialize scroll animations
         const observer = initScrollAnimations();
         
-        // Typewriter effect for title
-        if (titleRef.current) {
-            const titleText = language === 'ar' ? 'ملتقى الابتكار 2025' : 'Innovation Forum 2025';
-            setTimeout(() => {
-                typeWriter(titleRef.current, titleText, 100);
-            }, 500);
-        }
-        
-        // Typewriter effect for subtitle
-        if (subtitleRef.current) {
-            const subtitleText = language === 'ar' 
-                ? 'منصة إبداعية تجمع المبرمجين والمصممين ورواد الأعمال لتطوير حلول حقيقية'
-                : 'Creative platform bringing together programmers, designers and entrepreneurs to develop real solutions';
-            setTimeout(() => {
-                typeWriter(subtitleRef.current, subtitleText, 50);
-            }, 2000);
-        }
-
         return () => {
             if (observer) observer.disconnect();
         };
@@ -172,20 +152,31 @@ const Home = () => {
             {/* Hero Section */}
             <div className="relative text-white overflow-hidden animate-gradient rounded-2xl sm:rounded-3xl mx-2 sm:mx-4 mt-2 sm:mt-4" style={{background: 'linear-gradient(135deg, #003C72 0%, #096289 50%, #D85584 100%)'}}>
                 <div className="absolute inset-0 bg-black opacity-20"></div>
-                <div className="relative max-w-7xl mx-auto px-3 sm:px-4 lg:px-8 py-12 sm:py-16 lg:py-24">
+                {/* Background Logo */}
+                <div className="absolute inset-0 opacity-10 flex items-center justify-center pointer-events-none">
+                    <img 
+                        src="/images/الشعار طولي ملون.png" 
+                        alt="Logo Background" 
+                        className="h-full w-auto object-contain animate-pulse"
+                        style={{filter: 'blur(20px)'}}
+                    />
+                </div>
+                <div className="relative max-w-7xl mx-auto px-3 sm:px-4 lg:px-8 py-2 sm:py-3 lg:py-4">
+                    {/* Hero Logo with Enhanced Animation */}
+                    <div className="flex justify-center mb-1">
+                        <div className="relative">
+                            <img 
+                                src="/images/الشعار افقي ابيض.png" 
+                                alt={language === 'ar' ? 'ملتقى الابتكار' : 'Innovation Forum'} 
+                                className="h-48 sm:h-64 md:h-80 lg:h-96 xl:h-[28rem] 2xl:h-[32rem] w-auto object-contain logo-slide-in logo-glow logo-optimized"
+                                loading="eager"
+                            />
+                            {/* Glow Effect */}
+                            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-orange-400 to-transparent opacity-20 blur-3xl animate-pulse pointer-events-none"></div>
+                        </div>
+                    </div>
                     <div className="text-center">
-                        <h1 
-                            ref={titleRef}
-                            className="text-2xl sm:text-3xl md:text-4xl lg:text-6xl xl:text-7xl font-bold mb-4 sm:mb-6 leading-tight gradient-text animate-fade-in-down"
-                            style={{lineHeight: '1.1', paddingBottom: '0.5rem'}}
-                        >
-                        </h1>
-                        <p 
-                            ref={subtitleRef}
-                            className="text-sm sm:text-base md:text-lg lg:text-xl xl:text-2xl text-orange-200 mb-6 sm:mb-8 max-w-4xl mx-auto px-2 animate-fade-in-up animate-delay-300 leading-relaxed"
-                        >
-                        </p>
-                        <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center animate-fade-in-up animate-delay-500 px-2">
+                        <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center animate-fade-in-up animate-delay-500 px-2 mt-2">
                             {!isAuthenticated() ? (
                                 <>
                                     <Link
@@ -247,16 +238,16 @@ const Home = () => {
                     </div>
                 </div>
                 
-                {/* Enhanced Floating Elements - Mobile Optimized */}
-                <div className="absolute top-8 sm:top-20 left-3 sm:left-10 w-8 h-8 sm:w-16 sm:h-16 lg:w-20 lg:h-20 rounded-full opacity-10 sm:opacity-15 lg:opacity-20 animate-pulse hover-float" style={{background: '#F4A321'}}></div>
-                <div className="absolute bottom-8 sm:bottom-20 right-3 sm:right-10 w-12 h-12 sm:w-24 sm:h-24 lg:w-32 lg:h-32 rounded-full opacity-10 sm:opacity-15 lg:opacity-20 animate-pulse delay-1000 hover-float" style={{background: '#D85584'}}></div>
-                <div className="absolute top-1/2 left-1/8 sm:left-1/4 w-6 h-6 sm:w-12 sm:h-12 lg:w-16 lg:h-16 rounded-full opacity-10 sm:opacity-15 lg:opacity-20 animate-pulse delay-500 hover-float" style={{background: '#096289'}}></div>
-                <div className="absolute top-1/3 right-1/8 sm:right-1/4 w-4 h-4 sm:w-8 sm:h-8 lg:w-12 lg:h-12 rounded-full opacity-15 sm:opacity-20 lg:opacity-30 animate-bounce delay-700" style={{background: '#F4A321'}}></div>
-                <div className="absolute bottom-1/3 left-1/6 sm:left-1/3 w-3 h-3 sm:w-6 sm:h-6 lg:w-8 lg:h-8 rounded-full opacity-20 sm:opacity-25 lg:opacity-40 animate-ping" style={{background: '#D85584'}}></div>
+                {/* Enhanced Floating Star Elements - Mobile Optimized */}
+                <div className="hero-star top-8 sm:top-20 left-3 sm:left-10 w-8 h-8 sm:w-16 sm:h-16 lg:w-20 lg:h-20 opacity-10 sm:opacity-15 lg:opacity-20 animate-pulse hover-float" style={{background: '#F4A321'}}></div>
+                <div className="hero-star bottom-8 sm:bottom-20 right-3 sm:right-10 w-12 h-12 sm:w-24 sm:h-24 lg:w-32 lg:h-32 opacity-10 sm:opacity-15 lg:opacity-20 animate-pulse delay-1000 hover-float" style={{background: '#D85584'}}></div>
+                <div className="hero-star top-1/2 left-1/8 sm:left-1/4 w-6 h-6 sm:w-12 sm:h-12 lg:w-16 lg:h-16 opacity-10 sm:opacity-15 lg:opacity-20 animate-pulse delay-500 hover-float" style={{background: '#096289'}}></div>
+                <div className="hero-star top-1/3 right-1/8 sm:right-1/4 w-4 h-4 sm:w-8 sm:h-8 lg:w-12 lg:h-12 opacity-15 sm:opacity-20 lg:opacity-30 animate-bounce delay-700" style={{background: '#F4A321'}}></div>
+                <div className="hero-star bottom-1/3 left-1/6 sm:left-1/3 w-3 h-3 sm:w-6 sm:h-6 lg:w-8 lg:h-8 opacity-20 sm:opacity-25 lg:opacity-40 animate-ping" style={{background: '#D85584'}}></div>
                 
-                {/* Additional Mobile-Friendly Floating Elements */}
-                <div className="absolute top-1/4 left-1/2 w-2 h-2 sm:w-4 sm:h-4 rounded-full opacity-30 sm:opacity-40 animate-ping delay-300" style={{background: '#096289'}}></div>
-                <div className="absolute bottom-1/4 right-1/2 w-3 h-3 sm:w-5 sm:h-5 rounded-full opacity-25 sm:opacity-35 animate-bounce delay-900" style={{background: '#F4A321'}}></div>
+                {/* Additional Mobile-Friendly Floating Star Elements */}
+                <div className="hero-star top-1/4 left-1/2 w-2 h-2 sm:w-4 sm:h-4 opacity-30 sm:opacity-40 animate-ping delay-300" style={{background: '#096289'}}></div>
+                <div className="hero-star bottom-1/4 right-1/2 w-3 h-3 sm:w-5 sm:h-5 opacity-25 sm:opacity-35 animate-bounce delay-900" style={{background: '#F4A321'}}></div>
             </div>
 
             {/* Hackathon Section */}
@@ -279,7 +270,7 @@ const Home = () => {
                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                                 {hackathonInfo.features.map((feature, index) => (
                                     <div key={index} className="flex items-center space-x-2 sm:space-x-3 rtl:space-x-reverse animate-fade-in-up hover-float" style={{animationDelay: `${400 + index * 100}ms`}}>
-                                        <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full animate-pulse flex-shrink-0" style={{background: '#D85584'}}></div>
+                                        <div className="w-2 h-2 sm:w-3 sm:h-3 flex-shrink-0 animate-pulse" style={{background: '#D85584', clipPath: 'polygon(50% 0%, 70% 30%, 100% 50%, 70% 70%, 50% 100%, 30% 70%, 0% 50%, 30% 30%)'}}></div>
                                         <span className="text-xs sm:text-sm lg:text-base text-gray-700 font-medium">{feature}</span>
                                     </div>
                                 ))}
@@ -303,7 +294,15 @@ const Home = () => {
                         </div>
                         
                         <div className="relative animate-fade-in-right mt-8 lg:mt-0">
-                            <div className="modern-card card-glow bg-white rounded-xl sm:rounded-2xl lg:rounded-3xl p-3 sm:p-4 lg:p-6 xl:p-8 transform rotate-1 sm:rotate-2 lg:rotate-3 hover:rotate-0 transition-all duration-500 hover-float">
+                            <div className="modern-card card-glow bg-white rounded-xl sm:rounded-2xl lg:rounded-3xl p-3 sm:p-4 lg:p-6 xl:p-8 transform rotate-1 sm:rotate-2 lg:rotate-3 hover:rotate-0 transition-all duration-500 hover-float overflow-hidden relative">
+                                {/* Card Image */}
+                                <div className="absolute top-4 right-4 w-16 h-16 sm:w-20 sm:h-20 lg:w-28 lg:h-28 opacity-5 hover:opacity-20 transition-opacity duration-300">
+                                    <img 
+                                        src="/images/الشعار افقي ابيض.png" 
+                                        alt="Hackathon" 
+                                        className="w-full h-full object-contain filter blur-sm hover:blur-none transition-all duration-300"
+                                    />
+                                </div>
                                 {/* Floating Elements - Mobile Optimized */}
                                 <div className="floating-element w-6 h-6 sm:w-8 sm:h-8 lg:w-12 lg:h-12 xl:w-16 xl:h-16 top-1 sm:top-2 lg:top-4 right-1 sm:right-2 lg:right-4"></div>
                                 <div className="floating-element w-3 h-3 sm:w-4 sm:h-4 lg:w-6 lg:h-6 xl:w-8 xl:h-8 bottom-2 sm:bottom-4 lg:bottom-8 left-2 sm:left-4 lg:left-8"></div>
@@ -330,15 +329,15 @@ const Home = () => {
                                             
                                             <div className="space-y-2 sm:space-y-3 lg:space-y-4">
                                                 <div className="feature-item flex items-center space-x-2 sm:space-x-3 rtl:space-x-reverse animate-fade-in-left animate-delay-200 hover-float">
-                                                    <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 lg:w-3 lg:h-3 bg-white rounded-full animate-pulse flex-shrink-0"></div>
+                                                    <div className="w-2 h-2 sm:w-3 sm:h-3 lg:w-4 lg:h-4 bg-white animate-pulse flex-shrink-0" style={{clipPath: 'polygon(50% 0%, 70% 30%, 100% 50%, 70% 70%, 50% 100%, 30% 70%, 0% 50%, 30% 30%)'}}></div>
                                                     <span className="font-medium text-xs sm:text-sm lg:text-base">{language === 'ar' ? 'تحديات مفاجئة' : 'Surprise Challenges'}</span>
                                                 </div>
                                                 <div className="feature-item flex items-center space-x-2 sm:space-x-3 rtl:space-x-reverse animate-fade-in-left animate-delay-300 hover-float">
-                                                    <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 lg:w-3 lg:h-3 bg-white rounded-full animate-pulse flex-shrink-0"></div>
+                                                    <div className="w-2 h-2 sm:w-3 sm:h-3 lg:w-4 lg:h-4 bg-white animate-pulse flex-shrink-0" style={{clipPath: 'polygon(50% 0%, 70% 30%, 100% 50%, 70% 70%, 50% 100%, 30% 70%, 0% 50%, 30% 30%)'}}></div>
                                                     <span className="font-medium text-xs sm:text-sm lg:text-base">{language === 'ar' ? 'ذكاء اصطناعي' : 'Artificial Intelligence'}</span>
                                                 </div>
                                                 <div className="feature-item flex items-center space-x-2 sm:space-x-3 rtl:space-x-reverse animate-fade-in-left animate-delay-400 hover-float">
-                                                    <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 lg:w-3 lg:h-3 bg-white rounded-full animate-pulse flex-shrink-0"></div>
+                                                    <div className="w-2 h-2 sm:w-3 sm:h-3 lg:w-4 lg:h-4 bg-white animate-pulse flex-shrink-0" style={{clipPath: 'polygon(50% 0%, 70% 30%, 100% 50%, 70% 70%, 50% 100%, 30% 70%, 0% 50%, 30% 30%)'}}></div>
                                                     <span className="font-medium text-xs sm:text-sm lg:text-base">{language === 'ar' ? 'حلول قابلة للتطبيق' : 'Practical Solutions'}</span>
                                                 </div>
                                             </div>
@@ -361,7 +360,15 @@ const Home = () => {
                 <div className="max-w-7xl mx-auto px-3 sm:px-4 lg:px-8">
                     <div className="grid lg:grid-cols-2 gap-8 sm:gap-10 lg:gap-12 items-center">
                         <div className="relative order-2 lg:order-1 animate-fade-in-left">
-                            <div className="modern-card card-glow bg-white rounded-2xl sm:rounded-3xl p-4 sm:p-6 lg:p-8 transform -rotate-1 sm:-rotate-3 hover:rotate-0 transition-all duration-500">
+                            <div className="modern-card card-glow bg-white rounded-2xl sm:rounded-3xl p-4 sm:p-6 lg:p-8 transform -rotate-1 sm:-rotate-3 hover:rotate-0 transition-all duration-500 overflow-hidden relative">
+                                {/* Card Image */}
+                                <div className="absolute bottom-4 left-4 w-16 h-16 sm:w-20 sm:h-20 lg:w-28 lg:h-28 opacity-5 hover:opacity-20 transition-opacity duration-300">
+                                    <img 
+                                        src="/images/الشعار افقي ابيض.png" 
+                                        alt="Workshop" 
+                                        className="w-full h-full object-contain filter blur-sm hover:blur-none transition-all duration-300"
+                                    />
+                                </div>
                                 {/* Floating Elements */}
                                 <div className="floating-element w-6 h-6 sm:w-8 sm:h-8 lg:w-12 lg:h-12 top-3 sm:top-6 left-3 sm:left-6"></div>
                                 <div className="floating-element w-10 h-10 sm:w-16 sm:h-16 lg:w-20 lg:h-20 bottom-3 sm:bottom-6 right-3 sm:right-6"></div>
@@ -388,15 +395,15 @@ const Home = () => {
                                             
                                             <div className="space-y-3 sm:space-y-4">
                                                 <div className="feature-item flex items-center space-x-3 rtl:space-x-reverse animate-fade-in-right animate-delay-200">
-                                                    <div className="w-2 h-2 sm:w-3 sm:h-3 bg-white rounded-full animate-pulse flex-shrink-0"></div>
+                                                    <div className="w-2 h-2 sm:w-3 sm:h-3 lg:w-4 lg:h-4 bg-white animate-pulse flex-shrink-0" style={{clipPath: 'polygon(50% 0%, 70% 30%, 100% 50%, 70% 70%, 50% 100%, 30% 70%, 0% 50%, 30% 30%)'}}></div>
                                                     <span className="font-medium text-sm sm:text-base">{language === 'ar' ? 'تحليل المشكلات' : 'Problem Analysis'}</span>
                                                 </div>
                                                 <div className="feature-item flex items-center space-x-3 rtl:space-x-reverse animate-fade-in-right animate-delay-300">
-                                                    <div className="w-2 h-2 sm:w-3 sm:h-3 bg-white rounded-full animate-pulse flex-shrink-0"></div>
+                                                    <div className="w-2 h-2 sm:w-3 sm:h-3 lg:w-4 lg:h-4 bg-white animate-pulse flex-shrink-0" style={{clipPath: 'polygon(50% 0%, 70% 30%, 100% 50%, 70% 70%, 50% 100%, 30% 70%, 0% 50%, 30% 30%)'}}></div>
                                                     <span className="font-medium text-sm sm:text-base">{language === 'ar' ? 'تطوير الحلول' : 'Solution Development'}</span>
                                                 </div>
                                                 <div className="feature-item flex items-center space-x-3 rtl:space-x-reverse animate-fade-in-right animate-delay-400">
-                                                    <div className="w-2 h-2 sm:w-3 sm:h-3 bg-white rounded-full animate-pulse flex-shrink-0"></div>
+                                                    <div className="w-2 h-2 sm:w-3 sm:h-3 lg:w-4 lg:h-4 bg-white animate-pulse flex-shrink-0" style={{clipPath: 'polygon(50% 0%, 70% 30%, 100% 50%, 70% 70%, 50% 100%, 30% 70%, 0% 50%, 30% 30%)'}}></div>
                                                     <span className="font-medium text-sm sm:text-base">{language === 'ar' ? 'العمل الجماعي' : 'Teamwork'}</span>
                                                 </div>
                                             </div>
@@ -427,7 +434,7 @@ const Home = () => {
                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                                 {workshopInfo.features.map((feature, index) => (
                                     <div key={index} className="flex items-center space-x-3 rtl:space-x-reverse animate-fade-in-up" style={{animationDelay: `${400 + index * 100}ms`}}>
-                                        <div className="w-2 h-2 rounded-full animate-pulse flex-shrink-0" style={{background: '#096289'}}></div>
+                                        <div className="w-2 h-2 sm:w-3 sm:h-3 flex-shrink-0 animate-pulse" style={{background: '#096289', clipPath: 'polygon(50% 0%, 70% 30%, 100% 50%, 70% 70%, 50% 100%, 30% 70%, 0% 50%, 30% 30%)'}}></div>
                                         <span className="text-sm sm:text-base text-gray-700 font-medium">{feature}</span>
                                     </div>
                                 ))}
@@ -470,7 +477,7 @@ const Home = () => {
                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                                 {conferenceInfo.features.map((feature, index) => (
                                     <div key={index} className="flex items-center space-x-3 rtl:space-x-reverse animate-fade-in-up" style={{animationDelay: `${400 + index * 100}ms`}}>
-                                        <div className="w-2 h-2 rounded-full animate-pulse flex-shrink-0" style={{background: '#003C72'}}></div>
+                                        <div className="w-2 h-2 sm:w-3 sm:h-3 flex-shrink-0 animate-pulse" style={{background: '#003C72', clipPath: 'polygon(50% 0%, 70% 30%, 100% 50%, 70% 70%, 50% 100%, 30% 70%, 0% 50%, 30% 30%)'}}></div>
                                         <span className="text-sm sm:text-base text-gray-700 font-medium">{feature}</span>
                                     </div>
                                 ))}
@@ -491,7 +498,15 @@ const Home = () => {
                         </div>
                         
                         <div className="relative animate-fade-in-right mt-8 lg:mt-0">
-                            <div className="modern-card card-glow bg-white rounded-2xl sm:rounded-3xl p-4 sm:p-6 lg:p-8 transform rotate-1 sm:rotate-3 hover:rotate-0 transition-all duration-500">
+                            <div className="modern-card card-glow bg-white rounded-2xl sm:rounded-3xl p-4 sm:p-6 lg:p-8 transform rotate-1 sm:rotate-3 hover:rotate-0 transition-all duration-500 overflow-hidden relative">
+                                {/* Card Image */}
+                                <div className="absolute top-4 left-4 w-16 h-16 sm:w-20 sm:h-20 lg:w-28 lg:h-28 opacity-5 hover:opacity-20 transition-opacity duration-300">
+                                    <img 
+                                        src="/images/الشعار افقي ابيض (1).png" 
+                                        alt="Conference" 
+                                        className="w-full h-full object-contain filter blur-sm hover:blur-none transition-all duration-300"
+                                    />
+                                </div>
                                 {/* Floating Elements */}
                                 <div className="floating-element w-7 h-7 sm:w-10 sm:h-10 lg:w-14 lg:h-14 top-4 sm:top-8 right-4 sm:right-8"></div>
                                 <div className="floating-element w-3 h-3 sm:w-4 sm:h-4 lg:w-6 lg:h-6 bottom-6 sm:bottom-12 left-6 sm:left-12"></div>
@@ -520,15 +535,15 @@ const Home = () => {
                                             
                                             <div className="space-y-3 sm:space-y-4">
                                                 <div className="feature-item flex items-center space-x-3 rtl:space-x-reverse animate-fade-in-left animate-delay-200">
-                                                    <div className="w-2 h-2 sm:w-3 sm:h-3 bg-white rounded-full animate-pulse flex-shrink-0"></div>
+                                                    <div className="w-2 h-2 sm:w-3 sm:h-3 lg:w-4 lg:h-4 bg-white animate-pulse flex-shrink-0" style={{clipPath: 'polygon(50% 0%, 70% 30%, 100% 50%, 70% 70%, 50% 100%, 30% 70%, 0% 50%, 30% 30%)'}}></div>
                                                     <span className="font-medium text-sm sm:text-base">{language === 'ar' ? 'مؤسسات حكومية وخاصة' : 'Government & Private Institutions'}</span>
                                                 </div>
                                                 <div className="feature-item flex items-center space-x-3 rtl:space-x-reverse animate-fade-in-left animate-delay-300">
-                                                    <div className="w-2 h-2 sm:w-3 sm:h-3 bg-white rounded-full animate-pulse flex-shrink-0"></div>
+                                                    <div className="w-2 h-2 sm:w-3 sm:h-3 lg:w-4 lg:h-4 bg-white animate-pulse flex-shrink-0" style={{clipPath: 'polygon(50% 0%, 70% 30%, 100% 50%, 70% 70%, 50% 100%, 30% 70%, 0% 50%, 30% 30%)'}}></div>
                                                     <span className="font-medium text-sm sm:text-base">{language === 'ar' ? 'تحفيز العقول الشابة' : 'Stimulating Young Minds'}</span>
                                                 </div>
                                                 <div className="feature-item flex items-center space-x-3 rtl:space-x-reverse animate-fade-in-left animate-delay-400">
-                                                    <div className="w-2 h-2 sm:w-3 sm:h-3 bg-white rounded-full animate-pulse flex-shrink-0"></div>
+                                                    <div className="w-2 h-2 sm:w-3 sm:h-3 lg:w-4 lg:h-4 bg-white animate-pulse flex-shrink-0" style={{clipPath: 'polygon(50% 0%, 70% 30%, 100% 50%, 70% 70%, 50% 100%, 30% 70%, 0% 50%, 30% 30%)'}}></div>
                                                     <span className="font-medium text-sm sm:text-base">{language === 'ar' ? 'تحويل الأفكار إلى مشاريع' : 'Transforming Ideas into Projects'}</span>
                                                 </div>
                                             </div>

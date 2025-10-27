@@ -80,10 +80,10 @@ const Success = () => {
                     </div>
                 </div>
                 
-                {/* Floating Elements */}
-                <div className="absolute top-20 left-10 w-16 h-16 bg-purple-400 rounded-full opacity-30 animate-pulse"></div>
-                <div className="absolute bottom-20 right-10 w-24 h-24 bg-indigo-400 rounded-full opacity-30 animate-pulse delay-1000"></div>
-                <div className="absolute top-1/2 left-1/4 w-12 h-12 bg-pink-400 rounded-full opacity-30 animate-pulse delay-500"></div>
+                {/* Floating Star Elements */}
+                <div className="star-floating absolute top-20 left-10 w-16 h-16 opacity-30 animate-pulse"></div>
+                <div className="star-floating absolute bottom-20 right-10 w-24 h-24 opacity-30 animate-pulse delay-1000"></div>
+                <div className="star-floating absolute top-1/2 left-1/4 w-12 h-12 opacity-30 animate-pulse delay-500"></div>
             </div>
 
             {/* Success Content */}

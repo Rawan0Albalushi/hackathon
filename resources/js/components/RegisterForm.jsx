@@ -64,15 +64,15 @@ const RegisterForm = () => {
         <div className="min-h-screen flex items-center justify-center py-8 sm:py-12 px-3 sm:px-4 lg:px-8 relative overflow-hidden" style={{background: 'linear-gradient(135deg, #003C72 0%, #096289 50%, #D85584 100%)'}}>
             {/* Background Elements */}
             <div className="absolute inset-0 bg-black opacity-20"></div>
-            {/* Floating elements positioned to avoid text overlap - responsive */}
-            <div className="login-floating-bg absolute top-6 sm:top-10 right-6 sm:right-10 w-8 h-8 sm:w-12 sm:h-12 lg:w-16 lg:h-16 rounded-full opacity-15 animate-pulse hover-float" style={{background: '#D85584'}}></div>
-            <div className="login-floating-bg absolute bottom-6 sm:bottom-10 left-6 sm:left-10 w-10 h-10 sm:w-16 sm:h-16 lg:w-20 lg:h-20 rounded-full opacity-15 animate-pulse delay-1000 hover-float" style={{background: '#F4A321'}}></div>
-            <div className="login-floating-bg absolute top-1/2 right-1/6 sm:right-1/4 w-6 h-6 sm:w-8 sm:h-8 lg:w-12 lg:h-12 rounded-full opacity-15 animate-pulse delay-500 hover-float" style={{background: '#096289'}}></div>
+            {/* Floating star elements positioned to avoid text overlap - responsive */}
+            <div className="star-floating absolute top-6 sm:top-10 right-6 sm:right-10 w-8 h-8 sm:w-12 sm:h-12 lg:w-16 lg:h-16 opacity-15 animate-pulse hover-float"></div>
+            <div className="star-floating absolute bottom-6 sm:bottom-10 left-6 sm:left-10 w-10 h-10 sm:w-16 sm:h-16 lg:w-20 lg:h-20 opacity-15 animate-pulse delay-1000 hover-float"></div>
+            <div className="star-floating absolute top-1/2 right-1/6 sm:right-1/4 w-6 h-6 sm:w-8 sm:h-8 lg:w-12 lg:h-12 opacity-15 animate-pulse delay-500 hover-float"></div>
             
-            {/* Additional floating elements for large screens - positioned away from text areas */}
-            <div className="login-floating-bg hidden lg:block absolute top-1/4 left-1/6 w-18 h-18 rounded-full opacity-10 animate-pulse delay-300 hover-float" style={{background: '#F4A321'}}></div>
-            <div className="login-floating-bg hidden lg:block absolute bottom-1/4 right-1/6 w-22 h-22 rounded-full opacity-10 animate-pulse delay-700 hover-float" style={{background: '#D85584'}}></div>
-            <div className="login-floating-bg hidden xl:block absolute top-1/3 left-1/5 w-14 h-14 rounded-full opacity-10 animate-pulse delay-900 hover-float" style={{background: '#096289'}}></div>
+            {/* Additional floating star elements for large screens - positioned away from text areas */}
+            <div className="star-floating hidden lg:block absolute top-1/4 left-1/6 w-18 h-18 opacity-10 animate-pulse delay-300 hover-float"></div>
+            <div className="star-floating hidden lg:block absolute bottom-1/4 right-1/6 w-22 h-22 opacity-10 animate-pulse delay-700 hover-float"></div>
+            <div className="star-floating hidden xl:block absolute top-1/3 left-1/5 w-14 h-14 opacity-10 animate-pulse delay-900 hover-float"></div>
             
             <div className="w-full max-w-md mx-auto">
                 <div className="space-y-6 sm:space-y-8 relative z-10">

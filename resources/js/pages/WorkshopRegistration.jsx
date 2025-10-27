@@ -358,10 +358,10 @@ const WorkshopRegistration = () => {
                     </div>
                 </div>
                 
-                {/* Floating Elements - Responsive */}
-                <div className="absolute top-10 sm:top-20 left-4 sm:left-10 w-8 h-8 sm:w-12 sm:h-12 lg:w-16 lg:h-16 rounded-full opacity-20 sm:opacity-30 animate-pulse" style={{background: '#096289'}}></div>
-                <div className="absolute bottom-10 sm:bottom-20 right-4 sm:right-10 w-12 h-12 sm:w-18 sm:h-18 lg:w-24 lg:h-24 rounded-full opacity-20 sm:opacity-30 animate-pulse delay-1000" style={{background: '#003C72'}}></div>
-                <div className="absolute top-1/2 left-1/6 sm:left-1/4 w-6 h-6 sm:w-8 sm:h-8 lg:w-12 lg:h-12 rounded-full opacity-20 sm:opacity-30 animate-pulse delay-500" style={{background: '#D85584'}}></div>
+                {/* Floating Star Elements - Responsive */}
+                <div className="star-floating absolute top-10 sm:top-20 left-4 sm:left-10 w-8 h-8 sm:w-12 sm:h-12 lg:w-16 lg:h-16 opacity-20 sm:opacity-30 animate-pulse"></div>
+                <div className="star-floating absolute bottom-10 sm:bottom-20 right-4 sm:right-10 w-12 h-12 sm:w-18 sm:h-18 lg:w-24 lg:h-24 opacity-20 sm:opacity-30 animate-pulse delay-1000"></div>
+                <div className="star-floating absolute top-1/2 left-1/6 sm:left-1/4 w-6 h-6 sm:w-8 sm:h-8 lg:w-12 lg:h-12 opacity-20 sm:opacity-30 animate-pulse delay-500"></div>
             </div>
 
             {/* Available Workshops Section */}

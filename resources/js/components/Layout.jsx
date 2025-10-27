@@ -74,17 +74,14 @@ const Layout = ({ children }) => {
                             <div className="flex items-center">
                                 <Link to="/" className="flex-shrink-0" onClick={handleLinkClick}>
                                     <div className="flex items-center space-x-4 rtl:space-x-reverse">
-                                        {/* Square icon with gradient */}
-                                        <div className="w-10 h-10 rounded-xl flex items-center justify-center shadow-lg" style={{background: 'linear-gradient(135deg, #F4A321 0%, #D85584 100%)'}}>
-                                            <div className="w-1 h-6 bg-white rounded-full"></div>
-                                        </div>
-                                        <div>
-                                            <h1 className="text-xl lg:text-2xl font-bold" style={{background: 'linear-gradient(135deg, #F4A321 0%, #D85584 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent'}}>
-                                                {language === 'ar' ? 'ملتقى الابتكار 2025' : 'Innovation Forum 2025'}
-                                            </h1>
-                                            <p className="text-xs font-medium text-gray-600">
-                                                {language === 'ar' ? 'منصة إبداعية' : 'Creative Platform'}
-                                            </p>
+                                        {/* Logo Image */}
+                                        <div className="w-56 h-32 lg:w-64 lg:h-36 flex items-center justify-center">
+                                            <img 
+                                                src="/images/الشعار افقي ملون.png" 
+                                                alt={language === 'ar' ? 'ملتقى الابتكار' : 'Innovation Forum'} 
+                                                className="h-full w-full object-contain hover-float"
+                                                loading="lazy"
+                                            />
                                         </div>
                                     </div>
                                 </Link>

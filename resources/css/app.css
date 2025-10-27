@@ -1587,13 +1587,19 @@
     color: #F4A321;
 }
 
-/* Floating Elements for Cards */
+/* Floating Elements for Cards - Star Shape (4-pointed rounded diamond) */
 .floating-element {
     position: absolute;
-    border-radius: 50%;
     background: linear-gradient(45deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
     backdrop-filter: blur(10px);
     animation: float 6s ease-in-out infinite;
+    clip-path: polygon(50% 0%, 70% 30%, 100% 50%, 70% 70%, 50% 100%, 30% 70%, 0% 50%, 30% 30%);
+}
+
+/* Hero Star Elements (4-pointed rounded diamond) */
+.hero-star {
+    position: absolute;
+    clip-path: polygon(50% 0%, 70% 30%, 100% 50%, 70% 70%, 50% 100%, 30% 70%, 0% 50%, 30% 30%);
 }
 
 .floating-element:nth-child(2) {
@@ -1775,6 +1781,26 @@
     background: linear-gradient(45deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
     backdrop-filter: blur(10px);
     animation: float 6s ease-in-out infinite;
+}
+
+/* Star floating elements */
+.star-floating {
+    position: absolute;
+    background-image: url('/images/نجمة.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    animation: float 6s ease-in-out infinite;
+}
+
+.star-floating:nth-child(odd) {
+    animation-delay: -2s;
+    animation-duration: 8s;
+}
+
+.star-floating:nth-child(even) {
+    animation-delay: -4s;
+    animation-duration: 10s;
 }
 
 .login-floating-element:nth-child(odd) {
@@ -4993,4 +5019,300 @@ html, body {
     border-radius: 1rem !important;
     box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15) !important;
     margin: 0 !important;
+}
+
+/* ===== LOGO IMAGE ANIMATIONS ===== */
+
+/* Logo Hover Float Animation */
+@keyframes logoFloat {
+    0%, 100% {
+        transform: translateY(0) rotate(0deg);
+    }
+    50% {
+        transform: translateY(-10px) rotate(2deg);
+    }
+}
+
+.logo-hover-float:hover {
+    animation: logoFloat 3s ease-in-out infinite;
+}
+
+/* Logo Glow Effect */
+@keyframes logoGlow {
+    0%, 100% {
+        filter: drop-shadow(0 0 10px rgba(244, 163, 33, 0.3));
+    }
+    50% {
+        filter: drop-shadow(0 0 20px rgba(244, 163, 33, 0.6));
+    }
+}
+
+.logo-glow {
+    animation: logoGlow 3s ease-in-out infinite;
+}
+
+/* Logo Pulse Animation */
+@keyframes logoPulse {
+    0%, 100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+    50% {
+        transform: scale(1.05);
+        opacity: 0.9;
+    }
+}
+
+.logo-pulse {
+    animation: logoPulse 2s ease-in-out infinite;
+}
+
+/* Logo Slide In Animation */
+@keyframes logoSlideIn {
+    from {
+        opacity: 0;
+        transform: translateY(-30px) scale(0.9);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+.logo-slide-in {
+    animation: logoSlideIn 0.8s ease-out forwards;
+}
+
+/* Logo Fade In Animation */
+@keyframes logoFadeIn {
+    from {
+        opacity: 0;
+        transform: scale(0.8);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.logo-fade-in {
+    animation: logoFadeIn 0.6s ease-out forwards;
+}
+
+/* Logo Rotate on Hover */
+.logo-rotate:hover {
+    animation: logoRotate 1s ease-in-out;
+}
+
+@keyframes logoRotate {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+/* Logo Spin Animation */
+@keyframes logoSpin {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.logo-spin {
+    animation: logoSpin 20s linear infinite;
+}
+
+.logo-spin-fast {
+    animation: logoSpin 5s linear infinite;
+}
+
+/* Logo Shimmer Effect */
+@keyframes logoShimmer {
+    0% {
+        background-position: -100% 0;
+    }
+    100% {
+        background-position: 100% 0;
+    }
+}
+
+.logo-shimmer {
+    background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(255, 255, 255, 0.3),
+        transparent
+    );
+    background-size: 200% 100%;
+    animation: logoShimmer 3s infinite;
+    position: relative;
+}
+
+.logo-shimmer::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(244, 163, 33, 0.2),
+        transparent
+    );
+    animation: logoShimmer 3s infinite;
+}
+
+/* Logo Bounce Animation */
+@keyframes logoBounce {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-20px);
+    }
+}
+
+.logo-bounce {
+    animation: logoBounce 2s ease-in-out infinite;
+}
+
+/* Logo Scale Animation */
+@keyframes logoScale {
+    0%, 100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.1);
+    }
+}
+
+.logo-scale {
+    animation: logoScale 2s ease-in-out infinite;
+}
+
+/* Logo Wave Animation */
+@keyframes logoWave {
+    0%, 100% {
+        transform: rotate(0deg) translateY(0);
+    }
+    25% {
+        transform: rotate(-5deg) translateY(-5px);
+    }
+    75% {
+        transform: rotate(5deg) translateY(-5px);
+    }
+}
+
+.logo-wave {
+    animation: logoWave 3s ease-in-out infinite;
+}
+
+/* Responsive Logo Sizes */
+@media (max-width: 640px) {
+    .logo-responsive {
+        width: 100%;
+        max-width: 200px;
+        height: auto;
+    }
+}
+
+@media (min-width: 641px) and (max-width: 1024px) {
+    .logo-responsive {
+        width: 100%;
+        max-width: 300px;
+        height: auto;
+    }
+}
+
+@media (min-width: 1025px) {
+    .logo-responsive {
+        width: 100%;
+        max-width: 400px;
+        height: auto;
+    }
+}
+
+/* Logo Image Optimization */
+.logo-optimized {
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: crisp-edges;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    transform: translateZ(0);
+    will-change: transform;
+}
+
+/* Card Logo Background Effect */
+.card-logo-bg {
+    position: absolute;
+    opacity: 0.05;
+    transition: all 0.3s ease;
+    filter: blur(10px);
+}
+
+.card-logo-bg:hover {
+    opacity: 0.15;
+    filter: blur(5px);
+    transform: scale(1.1);
+}
+
+/* Logo Container with Gradient Border */
+.logo-container-gradient {
+    position: relative;
+    padding: 1rem;
+    border-radius: 1rem;
+    background: linear-gradient(135deg, rgba(244, 163, 33, 0.1) 0%, rgba(216, 85, 132, 0.1) 100%);
+    background-clip: padding-box;
+    border: 2px solid transparent;
+}
+
+.logo-container-gradient::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 1rem;
+    padding: 2px;
+    background: linear-gradient(135deg, #F4A321, #D85584, #096289);
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+}
+
+/* Logo Shadow Effect */
+.logo-shadow {
+    filter: drop-shadow(0 10px 20px rgba(0, 0, 0, 0.1));
+    transition: filter 0.3s ease;
+}
+
+.logo-shadow:hover {
+    filter: drop-shadow(0 15px 30px rgba(244, 163, 33, 0.3));
+}
+
+/* Logo Dark Mode Support */
+@media (prefers-color-scheme: dark) {
+    .logo-responsive {
+        filter: brightness(1.1) contrast(1.1);
+    }
+}
+
+/* Logo Loading State */
+.logo-loading {
+    opacity: 0;
+    animation: logoFadeIn 0.6s ease-out 0.2s forwards;
+}
+
+/* Logo Error State */
+.logo-error {
+    background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #9ca3af;
 }
