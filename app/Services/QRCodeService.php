@@ -16,10 +16,11 @@ class QRCodeService
     public static function generateQRCode(string $type, int $registrationId): string
     {
         $prefix = self::getTypePrefix($type);
-        $timestamp = now()->format('YmdHis');
-        $randomString = Str::random(8);
+        // $timestamp = now()->format('YmdHis');
+        $randomNumber = rand(12345, 98769);
+        // $randomString = Str::random(8);
         
-        return $prefix . $timestamp . $randomString . $registrationId;
+        return $prefix . $randomNumber . $registrationId;
     }
 
     /**
