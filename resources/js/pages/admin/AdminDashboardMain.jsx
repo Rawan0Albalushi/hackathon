@@ -121,7 +121,7 @@ const AdminDashboardMain = () => {
         <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 flex" dir={language === 'ar' ? 'rtl' : 'ltr'}>
             {/* Sidebar */}
             <div className={`fixed inset-y-0 ${language === 'ar' ? 'right-0' : 'left-0'} z-50 w-64 admin-sidebar ${
-                sidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'
+                sidebarOpen ? 'translate-x-0' : `${language === 'ar' ? 'translate-x-full' : '-translate-x-full'} lg:translate-x-0`
             }`}>
                 {/* Sidebar Header */}
                 <div className="flex items-center justify-between p-6 border-b border-gray-200/50">
@@ -141,7 +141,7 @@ const AdminDashboardMain = () => {
                         </div>
                     </div>
                     <button
-onClick={() => setSidebarOpen(false)}
+                        onClick={() => setSidebarOpen(false)}
                         className="lg:hidden p-2 rounded-lg hover:bg-gray-100"
                     >
                         <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">

@@ -189,7 +189,7 @@ const AdminQRScanner = () => {
                             disabled={loading || !qrCode.trim()}
                             className="px-4 py-2 bg-gray-600 text-white rounded-lg font-medium hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
                         >
-                            {language === 'ar' ? 'معلومات فقط' : 'Info Only'}
+                            {language === 'ar' ? 'قراءة بيانات الكود' : 'Read Code Data'}
                         </button>
                     </div>
                 </div>

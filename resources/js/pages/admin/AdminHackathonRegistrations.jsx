@@ -37,7 +37,7 @@ const AdminHackathonRegistrations = () => {
             
             if (!csrfToken) {
                 console.error('CSRF token not found');
-                setError('رمز CSRF غير موجود - يرجى تحديث الصفحة');
+                setError(language === 'ar' ? 'رمز CSRF غير موجود - يرجى تحديث الصفحة' : 'CSRF token not found - please refresh');
                 return;
             }
             
@@ -62,7 +62,7 @@ const AdminHackathonRegistrations = () => {
             }
         } catch (err) {
             console.error('Error fetching registrations:', err);
-            setError('فشل في تحميل بيانات التسجيل');
+            setError(language === 'ar' ? 'فشل في تحميل بيانات التسجيل' : 'Failed to load registrations');
         } finally {
             setLoading(false);
         }
@@ -73,13 +73,13 @@ const AdminHackathonRegistrations = () => {
             // التحقق من صحة البيانات
             if (!selectedRegistration || !selectedRegistration.id) {
                 console.error('No registration selected');
-                setError('لم يتم اختيار تسجيل للتحديث');
+                setError(language === 'ar' ? 'لم يتم اختيار تسجيل للتحديث' : 'No registration selected');
                 return;
             }
             
             if (!newStatus) {
                 console.error('No status selected');
-                setError('يرجى اختيار حالة جديدة');
+                setError(language === 'ar' ? 'يرجى اختيار حالة جديدة' : 'Please select a new status');
                 return;
             }
             
@@ -105,7 +105,7 @@ const AdminHackathonRegistrations = () => {
             
             if (!csrfToken) {
                 console.error('CSRF token not found for update request');
-                setError('رمز CSRF غير موجود - يرجى تحديث الصفحة');
+                setError(language === 'ar' ? 'رمز CSRF غير موجود - يرجى تحديث الصفحة' : 'CSRF token not found - please refresh');
                 setLoading(false);
                 return;
             }
@@ -166,7 +166,7 @@ const AdminHackathonRegistrations = () => {
                     console.error('Failed to parse JSON:', jsonError);
                     const text = await response.text();
                     console.log('Raw response text:', text);
-                    throw new Error('فشل في تحليل استجابة الخادم');
+                    throw new Error(language === 'ar' ? 'فشل في تحليل استجابة الخادم' : 'Failed to parse server response');
                 }
             } else {
                 // إذا لم تكن JSON، احصل على النص
@@ -174,7 +174,7 @@ const AdminHackathonRegistrations = () => {
                 console.log('Non-JSON response:', text);
                 console.log('Response status:', response.status);
                 console.log('Response headers:', Object.fromEntries(response.headers.entries()));
-                throw new Error('الخادم لم يعد استجابة JSON صحيحة');
+                throw new Error(language === 'ar' ? 'الخادم لم يعد استجابة JSON صحيحة' : 'Server did not return valid JSON');
             }
             
             console.log('Response data:', data);
@@ -191,42 +191,42 @@ const AdminHackathonRegistrations = () => {
             } else {
                 console.error('Update failed:', data.message);
                 console.error('Full data object:', data);
-                setError(data.message || 'فشل في تحديث حالة التسجيل');
+                setError(data.message || (language === 'ar' ? 'فشل في تحديث حالة التسجيل' : 'Failed to update registration status'));
             }
         } catch (err) {
             console.error('Error updating status:', err);
             console.error('Error message:', err.message);
             console.error('Error stack:', err.stack);
             if (err.message.includes('JSON')) {
-                setError('خطأ في استجابة الخادم - يرجى المحاولة مرة أخرى');
+                setError(language === 'ar' ? 'خطأ في استجابة الخادم - يرجى المحاولة مرة أخرى' : 'Server response error - please try again');
             } else if (err.message.includes('Network')) {
-                setError('خطأ في الاتصال بالخادم - تحقق من اتصال الإنترنت');
+                setError(language === 'ar' ? 'خطأ في الاتصال بالخادم - تحقق من اتصال الإنترنت' : 'Network error - check your connection');
             } else if (err.message.includes('HTTP error')) {
                 if (err.message.includes('404')) {
-                    setError('التسجيل غير موجود - يرجى تحديث الصفحة');
+                    setError(language === 'ar' ? 'التسجيل غير موجود - يرجى تحديث الصفحة' : 'Registration not found - please refresh');
                 } else if (err.message.includes('403')) {
-                    setError('ليس لديك صلاحية لتحديث هذا التسجيل');
+                    setError(language === 'ar' ? 'ليس لديك صلاحية لتحديث هذا التسجيل' : 'You are not authorized to update this registration');
                 } else if (err.message.includes('500')) {
-                    setError('خطأ في الخادم - يرجى المحاولة مرة أخرى');
+                    setError(language === 'ar' ? 'خطأ في الخادم - يرجى المحاولة مرة أخرى' : 'Server error - please try again');
                 } else {
-                    setError('خطأ في الخادم - يرجى المحاولة مرة أخرى');
+                    setError(language === 'ar' ? 'خطأ في الخادم - يرجى المحاولة مرة أخرى' : 'Server error - please try again');
                 }
             } else if (err.message.includes('Unexpected token')) {
-                setError('خطأ في استجابة الخادم - يرجى المحاولة مرة أخرى');
+                setError(language === 'ar' ? 'خطأ في استجابة الخادم - يرجى المحاولة مرة أخرى' : 'Server response error - please try again');
             } else if (err.message.includes('<!DOCTYPE')) {
-                setError('خطأ في استجابة الخادم - يرجى المحاولة مرة أخرى');
+                setError(language === 'ar' ? 'خطأ في استجابة الخادم - يرجى المحاولة مرة أخرى' : 'Server response error - please try again');
             } else if (err.message.includes('Method Not Allowed')) {
-                setError('خطأ في الطريقة - يرجى المحاولة مرة أخرى');
+                setError(language === 'ar' ? 'خطأ في الطريقة - يرجى المحاولة مرة أخرى' : 'Method error - please try again');
             } else if (err.message.includes('CSRF')) {
-                setError('خطأ في الأمان - يرجى تحديث الصفحة والمحاولة مرة أخرى');
+                setError(language === 'ar' ? 'خطأ في الأمان - يرجى تحديث الصفحة والمحاولة مرة أخرى' : 'Security error - please refresh and try again');
             } else if (err.message.includes('419')) {
-                setError('انتهت صلاحية الجلسة - يرجى تحديث الصفحة');
+                setError(language === 'ar' ? 'انتهت صلاحية الجلسة - يرجى تحديث الصفحة' : 'Session expired - please refresh');
             } else if (err.message.includes('رمز CSRF غير موجود')) {
-                setError('رمز CSRF غير موجود - يرجى تحديث الصفحة');
+                setError(language === 'ar' ? 'رمز CSRF غير موجود - يرجى تحديث الصفحة' : 'CSRF token not found - please refresh');
             } else if (err.message.includes('token mismatch')) {
-                setError('خطأ في رمز الأمان - يرجى تحديث الصفحة');
+                setError(language === 'ar' ? 'خطأ في رمز الأمان - يرجى تحديث الصفحة' : 'Security token mismatch - please refresh');
             } else {
-                setError('فشل في تحديث حالة التسجيل: ' + err.message);
+                setError((language === 'ar' ? 'فشل في تحديث حالة التسجيل: ' : 'Failed to update registration status: ') + err.message);
             }
         } finally {
             setLoading(false);
@@ -241,9 +241,9 @@ const AdminHackathonRegistrations = () => {
         };
 
         const statusText = {
-            'pending': 'قيد المراجعة',
-            'approved': 'مقبول',
-            'rejected': 'mرفوض'
+            'pending': language === 'ar' ? 'قيد المراجعة' : 'Pending',
+            'approved': language === 'ar' ? 'مقبول' : 'Approved',
+            'rejected': language === 'ar' ? 'مرفوض' : 'Rejected'
         };
 
         return (
@@ -254,7 +254,7 @@ const AdminHackathonRegistrations = () => {
     };
 
     const formatDate = (dateString) => {
-        return new Date(dateString).toLocaleDateString('en-US', {
+        return new Date(dateString).toLocaleDateString(language === 'ar' ? 'ar-EG' : 'en-US', {
             year: 'numeric',
             month: 'long',
             day: 'numeric',
@@ -266,9 +266,12 @@ const AdminHackathonRegistrations = () => {
     const getAttendanceBadge = (isCheckedIn, checkedInAt) => {
         const isPresent = Boolean(isCheckedIn);
         const classes = isPresent ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800';
-        const text = isPresent ? 'حاضر' : 'غير حاضر';
+        const text = isPresent ? (language === 'ar' ? 'حاضر' : 'Present') : (language === 'ar' ? 'غير حاضر' : 'Absent');
+        const title = isPresent && checkedInAt
+            ? (language === 'ar' ? `وقت الدخول: ${formatDate(checkedInAt)}` : `Checked in at: ${formatDate(checkedInAt)}`)
+            : '';
         return (
-            <span title={isPresent && checkedInAt ? `وقت الدخول: ${formatDate(checkedInAt)}` : ''} className={`px-2 py-1 rounded-full text-xs font-medium ${classes}`}>
+            <span title={title} className={`px-2 py-1 rounded-full text-xs font-medium ${classes}`}>
                 {text}
             </span>
         );
@@ -279,7 +282,7 @@ const AdminHackathonRegistrations = () => {
             <div className="admin-table-container">
                 <div className="table-loading">
                     <div className="table-loading-spinner"></div>
-                    <p className="mt-4 text-gray-600">جاري التحميل...</p>
+                    <p className="mt-4 text-gray-600">{language === 'ar' ? 'جاري التحميل...' : 'Loading...'}</p>
                 </div>
             </div>
         );
@@ -341,34 +344,34 @@ const AdminHackathonRegistrations = () => {
                     )}
 
                     {/* Registrations Table */}
-                    <div className="admin-table-container" data-table="hackathon" dir="rtl">
+                    <div className="admin-table-container" data-table="hackathon" dir={language === 'ar' ? 'rtl' : 'ltr'}>
                         <div className="table-wrapper">
                             <table className="table-fade-in">
                             <thead className="bg-gray-50">
                                 <tr>
                                     <th className="px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                        الاسم
+                                        {language === 'ar' ? 'الاسم' : 'Name'}
                                     </th>
                                     <th className="px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                        البريد الإلكتروني
+                                        {language === 'ar' ? 'البريد الإلكتروني' : 'Email'}
                                     </th>
                                     <th className="px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                        الهاتف
+                                        {language === 'ar' ? 'الهاتف' : 'Phone'}
                                     </th>
                                     <th className="px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                        المهارات
+                                        {language === 'ar' ? 'المهارات' : 'Skills'}
                                     </th>
                                     <th className="px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                        الحالة
+                                        {language === 'ar' ? 'الحالة' : 'Status'}
                                     </th>
                                     <th className="px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                        الحضور
+                                        {language === 'ar' ? 'الحضور' : 'Attendance'}
                                     </th>
                                     <th className="px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                        تاريخ التسجيل
+                                        {language === 'ar' ? 'تاريخ التسجيل' : 'Registered At'}
                                     </th>
                                     <th className="px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                        الإجراءات
+                                        {language === 'ar' ? 'الإجراءات' : 'Actions'}
                                     </th>
                                 </tr>
                             </thead>
@@ -418,7 +421,7 @@ const AdminHackathonRegistrations = () => {
                                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
                                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
                                                     </svg>
-                                                    عرض
+                                                    {language === 'ar' ? 'عرض' : 'View'}
                                                 </button>
                                                 <button
                                                     type="button"
@@ -435,7 +438,7 @@ const AdminHackathonRegistrations = () => {
                                                     <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
                                                     </svg>
-                                                    تحديث
+                                                    {language === 'ar' ? 'تحديث' : 'Update'}
                                                 </button>
                                             </div>
                                         </td>
@@ -449,7 +452,7 @@ const AdminHackathonRegistrations = () => {
                         {totalPages > 1 && (
                             <div className="table-pagination">
                                 <div className="table-pagination-info">
-                                    صفحة {currentPage} من {totalPages}
+                                    {language === 'ar' ? 'صفحة' : 'Page'} {currentPage} {language === 'ar' ? 'من' : 'of'} {totalPages}
                                 </div>
                                 <div className="table-pagination-controls">
                                     <button
@@ -457,7 +460,7 @@ const AdminHackathonRegistrations = () => {
                                         disabled={currentPage === 1}
                                         className="table-pagination-button"
                                     >
-                                        السابق
+                                        {language === 'ar' ? 'السابق' : 'Prev'}
                                     </button>
                                     {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
                                         <button
@@ -473,7 +476,7 @@ const AdminHackathonRegistrations = () => {
                                         disabled={currentPage === totalPages}
                                         className="table-pagination-button"
                                     >
-                                        التالي
+                                        {language === 'ar' ? 'التالي' : 'Next'}
                                     </button>
                                 </div>
                             </div>
@@ -485,7 +488,7 @@ const AdminHackathonRegistrations = () => {
             {/* Simple Status Update Modal */}
             {showStatusModal && (
                 <div className="absolute inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
-                    <div className="bg-white rounded-lg shadow-lg w-full max-w-md mx-auto max-h-[80vh] overflow-y-auto">
+                    <div className="bg-white rounded-lg shadow-lg w-full max-w-md mx-auto max-h-[80vh] overflow-y-auto" dir={language === 'ar' ? 'rtl' : 'ltr'}>
                         {/* Modal Header */}
                         <div className="px-6 py-4 border-b border-gray-200 bg-gradient-to-r from-orange-50 to-pink-50">
                             <div className="flex items-center justify-between">
@@ -497,9 +500,9 @@ const AdminHackathonRegistrations = () => {
                                     </div>
                                     <div>
                                         <h3 className="text-lg font-semibold bg-gradient-to-r from-orange-600 to-pink-600 bg-clip-text text-transparent">
-                                            تحديث حالة التسجيل
+                                            {language === 'ar' ? 'تحديث حالة التسجيل' : 'Update Registration Status'}
                                         </h3>
-                                        <p className="text-sm text-gray-600">تحديث حالة تسجيل الهاكثون</p>
+                                        <p className="text-sm text-gray-600">{language === 'ar' ? 'تحديث حالة تسجيل الهاكثون' : 'Update hackathon registration status'}</p>
                                     </div>
                                 </div>
                                 <button
@@ -530,7 +533,7 @@ const AdminHackathonRegistrations = () => {
                             {/* Status Selection */}
                             <div className="space-y-2">
                                 <label className="block text-sm font-medium text-gray-700">
-                                    الحالة الجديدة
+                                    {language === 'ar' ? 'الحالة الجديدة' : 'New Status'}
                                 </label>
                                 <select
                                     value={newStatus}
@@ -538,10 +541,10 @@ const AdminHackathonRegistrations = () => {
                                     disabled={loading}
                                     className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-colors duration-200 disabled:bg-gray-100 disabled:cursor-not-allowed"
                                 >
-                                    <option value="">اختر الحالة</option>
-                                    <option value="pending">قيد المراجعة</option>
-                                    <option value="approved">مقبول</option>
-                                    <option value="rejected">مرفوض</option>
+                                    <option value="">{language === 'ar' ? 'اختر الحالة' : 'Select status'}</option>
+                                    <option value="pending">{language === 'ar' ? 'قيد المراجعة' : 'Pending'}</option>
+                                    <option value="approved">{language === 'ar' ? 'مقبول' : 'Approved'}</option>
+                                    <option value="rejected">{language === 'ar' ? 'مرفوض' : 'Rejected'}</option>
                                 </select>
                             </div>
 
@@ -549,7 +552,7 @@ const AdminHackathonRegistrations = () => {
                             {newStatus === 'rejected' && (
                                 <div className="space-y-2">
                                     <label className="block text-sm font-medium text-gray-700">
-                                        سبب الرفض (اختياري)
+                                        {language === 'ar' ? 'سبب الرفض (اختياري)' : 'Rejection reason (optional)'}
                                     </label>
                                     <textarea
                                         value={rejectionReason}
@@ -557,7 +560,7 @@ const AdminHackathonRegistrations = () => {
                                         disabled={loading}
                                         rows={3}
                                         className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-pink-500 resize-none transition-colors duration-200 disabled:bg-gray-100 disabled:cursor-not-allowed"
-                                        placeholder="أدخل سبب الرفض..."
+                                        placeholder={language === 'ar' ? 'أدخل سبب الرفض...' : 'Enter rejection reason...'}
                                     />
                                 </div>
                             )}
@@ -565,14 +568,14 @@ const AdminHackathonRegistrations = () => {
                             {/* Status Preview */}
                             <div className="bg-gradient-to-r from-orange-50 to-pink-50 rounded-md p-3 border border-orange-200">
                                 <div className="flex items-center space-x-2 rtl:space-x-reverse">
-                                    <span className="text-sm font-medium text-gray-700">معاينة الحالة:</span>
+                                    <span className="text-sm font-medium text-gray-700">{language === 'ar' ? 'معاينة الحالة:' : 'Status preview:'}</span>
                                     <span className={`px-3 py-1 rounded-full text-xs font-medium ${
                                         newStatus === 'pending' ? 'bg-gradient-to-r from-yellow-100 to-orange-100 text-yellow-800 border border-yellow-300' :
                                         newStatus === 'approved' ? 'bg-gradient-to-r from-green-100 to-teal-100 text-green-800 border border-green-300' :
                                         'bg-gradient-to-r from-red-100 to-pink-100 text-red-800 border border-red-300'
                                     }`}>
-                                        {newStatus === 'pending' ? 'قيد المراجعة' :
-                                         newStatus === 'approved' ? 'مقبول' : 'مرفوض'}
+                                        {newStatus === 'pending' ? (language === 'ar' ? 'قيد المراجعة' : 'Pending') :
+                                         newStatus === 'approved' ? (language === 'ar' ? 'مقبول' : 'Approved') : (language === 'ar' ? 'مرفوض' : 'Rejected')}
                                     </span>
                                 </div>
                             </div>
@@ -585,7 +588,7 @@ const AdminHackathonRegistrations = () => {
                                     onClick={() => setShowStatusModal(false)}
                                     className="px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 transition-colors duration-200"
                                 >
-                                    إلغاء
+                                    {language === 'ar' ? 'إلغاء' : 'Cancel'}
                                 </button>
                                 <button
                                     onClick={handleStatusUpdate}
@@ -599,10 +602,10 @@ const AdminHackathonRegistrations = () => {
                                     {loading ? (
                                         <div className="flex items-center space-x-2 rtl:space-x-reverse">
                                             <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                                            <span>جاري التحديث...</span>
+                                            <span>{language === 'ar' ? 'جاري التحديث...' : 'Updating...'}</span>
                                         </div>
                                     ) : (
-                                        'تحديث الحالة'
+                                        language === 'ar' ? 'تحديث الحالة' : 'Update Status'
                                     )}
                                 </button>
                             </div>
@@ -613,7 +616,7 @@ const AdminHackathonRegistrations = () => {
 
             {/* Simple View Modal */}
             {showViewModal && selectedRegistration && (
-                <div className="absolute inset-0 bg-black/50 z-50 flex items-center justify-center p-4" dir="rtl">
+                <div className="absolute inset-0 bg-black/50 z-50 flex items-center justify-center p-4" dir={language === 'ar' ? 'rtl' : 'ltr'}>
                     <div className="bg-white rounded-lg shadow-lg w-full max-w-2xl mx-auto max-h-[80vh] overflow-y-auto">
                         {/* Modal Header */}
                         <div className="px-6 py-4 border-b border-gray-200 bg-gradient-to-r from-teal-50 to-navy-50">
@@ -626,9 +629,9 @@ const AdminHackathonRegistrations = () => {
                                     </div>
                                     <div>
                                         <h3 className="text-lg font-semibold bg-gradient-to-r from-teal-600 to-navy-600 bg-clip-text text-transparent">
-                                            تفاصيل تسجيل الهاكثون
+                                            {language === 'ar' ? 'تفاصيل تسجيل الهاكثون' : 'Hackathon Registration Details'}
                                         </h3>
-                                        <p className="text-sm text-gray-600">معلومات شاملة عن المتسجل</p>
+                                        <p className="text-sm text-gray-600">{language === 'ar' ? 'معلومات شاملة عن المتسجل' : 'Comprehensive participant information'}</p>
                                     </div>
                                 </div>
                                 <button
@@ -652,7 +655,7 @@ const AdminHackathonRegistrations = () => {
                                         <svg className="w-4 h-4 text-pink-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                                         </svg>
-                                        <span>الاسم الكامل</span>
+                                        <span>{language === 'ar' ? 'الاسم الكامل' : 'Full Name'}</span>
                                     </label>
                                     <div className="bg-gray-50 rounded-xl p-4 border border-gray-200">
                                         <p className="text-gray-900 font-medium">{selectedRegistration.full_name}</p>
@@ -665,7 +668,7 @@ const AdminHackathonRegistrations = () => {
                                         <svg className="w-4 h-4 text-pink-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                                         </svg>
-                                        <span>البريد الإلكتروني</span>
+                                        <span>{language === 'ar' ? 'البريد الإلكتروني' : 'Email'}</span>
                                     </label>
                                     <div className="bg-gray-50 rounded-xl p-4 border border-gray-200">
                                         <p className="text-gray-900 font-medium">{selectedRegistration.email}</p>
@@ -678,7 +681,7 @@ const AdminHackathonRegistrations = () => {
                                         <svg className="w-4 h-4 text-pink-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1.091.091 0 01.091.091v3.858a1.091.091 0 01-.091.091H5a2 2 0 00-2 2v6a2 2 0 002 2h3.28a1.091.091 0 01.091.091v3.858a1.091.091 0 01-.091.091H5a2 2 0 01-2-2v-6z" />
                                         </svg>
-                                        <span>رقم الهاتف</span>
+                                        <span>{language === 'ar' ? 'رقم الهاتف' : 'Phone Number'}</span>
                                     </label>
                                     <div className="bg-gray-50 rounded-xl p-4 border border-gray-200">
                                         <p className="text-gray-900 font-medium">{selectedRegistration.phone}</p>
@@ -691,7 +694,7 @@ const AdminHackathonRegistrations = () => {
                                         <svg className="w-4 h-4 text-pink-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                                         </svg>
-                                        <span>حالة التسجيل</span>
+                                        <span>{language === 'ar' ? 'حالة التسجيل' : 'Registration Status'}</span>
                                     </label>
                                     <div className="bg-gray-50 rounded-xl p-4 border border-gray-200">
                                         <span className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-semibold status-badge-animated ${
@@ -704,11 +707,11 @@ const AdminHackathonRegistrations = () => {
                                                 selectedRegistration.status === 'approved' ? 'bg-green-500' :
                                                 'bg-red-500'
                                             }`}></div>
-                                            {selectedRegistration.status === 'pending' ? 'قيد المراجعة' :
-                                             selectedRegistration.status === 'approved' ? 'مقبول' : 'مرفوض'}
+                                            {selectedRegistration.status === 'pending' ? (language === 'ar' ? 'قيد المراجعة' : 'Pending') :
+                                             selectedRegistration.status === 'approved' ? (language === 'ar' ? 'مقبول' : 'Approved') : (language === 'ar' ? 'مرفوض' : 'Rejected')}
                                         </span>
-                            </div>
-                            </div>
+                                    </div>
+                                </div>
                             </div>
 
                             {/* Skills Section */}
@@ -717,7 +720,7 @@ const AdminHackathonRegistrations = () => {
                                     <svg className="w-4 h-4 text-pink-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
                                     </svg>
-                                    <span>المهارات التقنية</span>
+                                    <span>{language === 'ar' ? 'المهارات التقنية' : 'Technical Skills'}</span>
                                 </label>
                                 <div className="bg-gray-50 rounded-xl p-4 border border-gray-200">
                                     {selectedRegistration.skills && selectedRegistration.skills.length > 0 ? (
@@ -736,7 +739,7 @@ const AdminHackathonRegistrations = () => {
                                             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4" />
                                             </svg>
-                                            <span>لا توجد مهارات مسجلة</span>
+                                            <span>{language === 'ar' ? 'لا توجد مهارات مسجلة' : 'No skills provided'}</span>
                                         </div>
                                     )}
                                 </div>
@@ -748,7 +751,7 @@ const AdminHackathonRegistrations = () => {
                                     <svg className="w-4 h-4 text-pink-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                                     </svg>
-                                    <span>تاريخ التسجيل</span>
+                                    <span>{language === 'ar' ? 'تاريخ التسجيل' : 'Registration Date'}</span>
                                 </label>
                                 <div className="bg-gray-50 rounded-xl p-4 border border-gray-200">
                                     <div className="flex items-center space-x-2 rtl:space-x-reverse">
@@ -768,7 +771,7 @@ const AdminHackathonRegistrations = () => {
                                     onClick={() => setShowViewModal(false)}
                                     className="px-4 py-2 bg-gradient-to-r from-teal-500 to-navy-500 text-white rounded-md hover:from-teal-600 hover:to-navy-600 transition-all duration-200 shadow-lg hover:shadow-xl"
                                 >
-                                    إغلاق
+                                    {language === 'ar' ? 'إغلاق' : 'Close'}
                                 </button>
                             </div>
                         </div>
