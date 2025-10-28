@@ -50,6 +50,34 @@ export const AuthProvider = ({ children }) => {
         initAuth();
     }, []);
 
+    const refreshUser = async () => {
+        try {
+            const response = await fetch('/api/auth/me', {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'Accept': 'application/json',
+                },
+                credentials: 'include',
+            });
+            if (response.ok) {
+                const data = await response.json();
+                setUser(data.data.user);
+                setToken('session');
+                localStorage.setItem('token', 'session');
+                return data;
+            } else {
+                setUser(null);
+                setToken(null);
+                localStorage.removeItem('token');
+                return null;
+            }
+        } catch (error) {
+            return null;
+        }
+    };
+
     const register = async (name, email, password, password_confirmation) => {
         try {
             const requestData = {
@@ -86,10 +114,12 @@ export const AuthProvider = ({ children }) => {
                 throw error;
             }
 
-            // Auto login after registration
-            setToken('session');
-            setUser(data.data.user);
-            localStorage.setItem('token', 'session');
+            // Only auto login if OTP was not sent (email already verified)
+            if (!data.data.otp_sent) {
+                setToken('session');
+                setUser(data.data.user);
+                localStorage.setItem('token', 'session');
+            }
             
             return data;
         } catch (error) {
@@ -123,7 +153,9 @@ export const AuthProvider = ({ children }) => {
             const data = await response.json();
 
             if (!response.ok) {
-                throw new Error(data.message || 'Login failed');
+                const error = new Error(data.message || 'Login failed');
+                error.response = { data };
+                throw error;
             }
 
             setToken('session');
@@ -184,6 +216,7 @@ export const AuthProvider = ({ children }) => {
         user,
         token,
         loading,
+        refreshUser,
         register,
         login,
         logout,

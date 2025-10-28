@@ -87,8 +87,7 @@ class AuthController extends Controller
                 ], 500);
             }
 
-            // Login the user automatically after registration
-            Auth::login($user);
+            // Don't login automatically - user needs to verify email first
 
             return response()->json([
                 'success' => true,
@@ -300,6 +299,17 @@ class AuthController extends Controller
             // Login the user after successful verification
             $user = User::where('email', $request->email)->first();
             Auth::login($user);
+            
+            // Add user data to response
+            $result['data'] = [
+                'user' => [
+                    'id' => $user->id,
+                    'name' => $user->name,
+                    'email' => $user->email,
+                    'role' => $user->role,
+                    'email_verified' => $user->email_verified
+                ]
+            ];
         }
         
         return response()->json($result, $result['success'] ? 200 : 400);

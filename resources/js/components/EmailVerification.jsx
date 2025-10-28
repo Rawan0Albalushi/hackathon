@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useLanguage } from '../contexts/LanguageContext';
+import { useAuth } from '../contexts/AuthContext';
 import OtpInput from './OtpInput';
 import LoadingSpinner from './LoadingSpinner';
 import ErrorMessage from './ErrorMessage';
@@ -16,6 +17,7 @@ const EmailVerification = ({ email, onVerificationComplete, onBack, initialOtpSe
     const [otpSent, setOtpSent] = useState(initialOtpSent);
 
     const { language, t } = useLanguage();
+    const { refreshUser } = useAuth();
     const navigate = useNavigate();
 
     // Countdown timer
@@ -149,6 +151,9 @@ const EmailVerification = ({ email, onVerificationComplete, onBack, initialOtpSe
 
             if (data.success) {
                 setSuccess('تم التحقق من بريدك الإلكتروني بنجاح!');
+                // Ensure session is established then refresh current user
+                await refreshUser();
+                
                 setTimeout(() => {
                     if (onVerificationComplete) {
                         onVerificationComplete();
