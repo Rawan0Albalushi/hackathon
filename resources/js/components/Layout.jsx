@@ -67,19 +67,61 @@ const Layout = ({ children }) => {
             <ScrollToTop />
             {/* Modern Navigation - Hidden for Admin */}
             {!location.pathname.startsWith('/admin') && (
-                <nav className="bg-white/95 backdrop-blur-md shadow-lg sticky top-0 z-50 border-b border-gray-200/50">
-                    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <nav className="bg-white/95 backdrop-blur-md shadow-lg sticky top-0 z-50 border-b border-gray-200/50 relative overflow-hidden">
+                    {/* Occasional Pattern Background */}
+                    <div className="absolute inset-0 opacity-5 pointer-events-none">
+                        <img 
+                            src="/images/Occasional pattern.png" 
+                            alt="Pattern" 
+                            className="w-full h-full object-cover"
+                        />
+                    </div>
+                    
+                    {/* Decorative Pattern Elements */}
+                    <div className="absolute top-0 right-0 w-32 h-20 opacity-10 pointer-events-none">
+                        <img 
+                            src="/images/Occasional pattern.png" 
+                            alt="Pattern" 
+                            className="w-full h-full object-cover transform rotate-12"
+                        />
+                    </div>
+                    <div className="absolute bottom-0 left-0 w-24 h-16 opacity-8 pointer-events-none">
+                        <img 
+                            src="/images/Occasional pattern.png" 
+                            alt="Pattern" 
+                            className="w-full h-full object-cover transform -rotate-12"
+                        />
+                    </div>
+                    
+                    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
                         <div className="flex justify-between items-center h-20">
                             {/* Logo with gradient bar design */}
-                            <div className="flex items-center">
-                                <Link to="/" className="flex-shrink-0" onClick={handleLinkClick}>
+                            <div className="flex items-center relative">
+                                {/* Decorative Pattern behind Logo */}
+                                <div className="absolute -left-4 top-1/2 transform -translate-y-1/2 w-16 h-12 opacity-15 pointer-events-none">
+                                    <img 
+                                        src="/images/Occasional pattern.png" 
+                                        alt="Pattern" 
+                                        className="w-full h-full object-cover transform rotate-45"
+                                    />
+                                </div>
+                                
+                                <Link to="/" className="flex-shrink-0 relative z-10" onClick={handleLinkClick}>
                                     <div className="flex items-center space-x-4 rtl:space-x-reverse">
                                         {/* Logo Image */}
-                                        <div className="w-56 h-32 lg:w-64 lg:h-36 flex items-center justify-center">
+                                        <div className="w-56 h-32 lg:w-64 lg:h-36 flex items-center justify-center relative">
+                                            {/* Subtle pattern overlay on logo */}
+                                            <div className="absolute inset-0 opacity-5 pointer-events-none">
+                                                <img 
+                                                    src="/images/Occasional pattern.png" 
+                                                    alt="Pattern" 
+                                                    className="w-full h-full object-cover"
+                                                />
+                                            </div>
                                             <img 
                                                 src="/images/logo_horizontal_colored.png" 
                                                 alt={language === 'ar' ? 'ملتقى الابتكار' : 'Innovation Forum'} 
-                                                className="h-full w-full object-contain hover-float"
+                                                className="h-full w-full object-contain hover-float relative z-10"
                                                 loading="lazy"
                                             />
                                         </div>
@@ -88,20 +130,39 @@ const Layout = ({ children }) => {
                             </div>
                             
                             {/* Desktop Navigation */}
-                            <div className="hidden lg:flex items-center space-x-2 rtl:space-x-reverse">
+                            <div className="hidden lg:flex items-center space-x-2 rtl:space-x-reverse relative">
+                                {/* Decorative Pattern behind Navigation */}
+                                <div className="absolute -right-8 top-1/2 transform -translate-y-1/2 w-20 h-16 opacity-8 pointer-events-none">
+                                    <img 
+                                        src="/images/Occasional pattern.png" 
+                                        alt="Pattern" 
+                                        className="w-full h-full object-cover transform -rotate-30"
+                                    />
+                                </div>
+                                
                                 {navigationItems.map((item) => (
                                     <Link
                                         key={item.path}
                                         to={item.path}
                                         onClick={handleLinkClick}
-                                        className={`px-5 py-3 rounded-2xl text-sm font-semibold transition-colors duration-200 ${
+                                        className={`px-5 py-3 rounded-2xl text-sm font-semibold transition-colors duration-200 relative overflow-hidden ${
                                             isActive(item.path) 
                                                 ? 'text-white' 
                                                 : 'text-gray-700 hover:text-orange-600 hover:bg-gray-100'
                                         }`}
                                         style={isActive(item.path) ? {background: 'linear-gradient(135deg, #F4A321 0%, #D85584 100%)'} : {}}
                                     >
-                                        {item.label}
+                                        {/* Subtle pattern overlay for active items */}
+                                        {isActive(item.path) && (
+                                            <div className="absolute inset-0 opacity-10 pointer-events-none">
+                                                <img 
+                                                    src="/images/Occasional pattern.png" 
+                                                    alt="Pattern" 
+                                                    className="w-full h-full object-cover"
+                                                />
+                                            </div>
+                                        )}
+                                        <span className="relative z-10">{item.label}</span>
                                     </Link>
                                 ))}
                                 
@@ -214,13 +275,37 @@ const Layout = ({ children }) => {
 
                             {/* Mobile Navigation Menu */}
                         <div className={`${isMobileMenuOpen ? 'block' : 'hidden'} md:hidden`}>
-                            <div className="px-4 pt-4 pb-6 space-y-2 bg-white rounded-lg mt-4 mb-4 shadow-lg border border-gray-200">
+                            <div className="px-4 pt-4 pb-6 space-y-2 bg-white rounded-lg mt-4 mb-4 shadow-lg border border-gray-200 relative overflow-hidden">
+                                {/* Occasional Pattern Background for Mobile Menu */}
+                                <div className="absolute inset-0 opacity-3 pointer-events-none">
+                                    <img 
+                                        src="/images/Occasional pattern.png" 
+                                        alt="Pattern" 
+                                        className="w-full h-full object-cover"
+                                    />
+                                </div>
+                                
+                                {/* Decorative Pattern Elements */}
+                                <div className="absolute top-0 right-0 w-16 h-12 opacity-8 pointer-events-none">
+                                    <img 
+                                        src="/images/Occasional pattern.png" 
+                                        alt="Pattern" 
+                                        className="w-full h-full object-cover transform rotate-45"
+                                    />
+                                </div>
+                                <div className="absolute bottom-0 left-0 w-12 h-8 opacity-6 pointer-events-none">
+                                    <img 
+                                        src="/images/Occasional pattern.png" 
+                                        alt="Pattern" 
+                                        className="w-full h-full object-cover transform -rotate-45"
+                                    />
+                                </div>
                                 {navigationItems.map((item) => (
                                     <Link
                                         key={item.path}
                                         to={item.path}
                                         onClick={handleLinkClick}
-                                        className={`flex items-center px-5 py-4 rounded-lg text-base font-semibold transition-colors duration-200 ${
+                                        className={`flex items-center px-5 py-4 rounded-lg text-base font-semibold transition-colors duration-200 relative z-10 ${
                                             isActive(item.path) 
                                                 ? 'text-white' 
                                                 : 'text-gray-700 hover:text-orange-600 hover:bg-gray-50'
@@ -236,7 +321,7 @@ const Layout = ({ children }) => {
                                 
                                 {/* User Info in Mobile Menu */}
                                 {user && (
-                                    <div className="pt-4 border-t border-gray-200">
+                                    <div className="pt-4 border-t border-gray-200 relative z-10">
                                         <div className="flex items-center space-x-3 rtl:space-x-reverse px-4 py-3 bg-gray-50 rounded-lg">
                                             <div className="w-10 h-10 rounded-full flex items-center justify-center text-white font-bold" style={{background: 'linear-gradient(135deg, #F4A321 0%, #D85584 100%)'}}>
                                                 {user.name.charAt(0).toUpperCase()}
@@ -255,7 +340,7 @@ const Layout = ({ children }) => {
                                     </div>
                                 )}
                                 
-                                <div className="pt-4 border-t border-gray-200">
+                                <div className="pt-4 border-t border-gray-200 relative z-10">
                                     <div className="text-xs text-gray-500 text-center font-medium">
                                         {language === 'ar' ? 'منصة إبداعية للابتكار' : 'Creative Innovation Platform'}
                                     </div>
