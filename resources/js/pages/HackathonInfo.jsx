@@ -87,19 +87,19 @@ const HackathonInfo = () => {
             <div className="absolute inset-0" style={{background: 'linear-gradient(to bottom, #FFF5EB 0%, #FFE5F0 25%, #E8F4F8 50%, #F0E8F5 75%, #FFF5EB 100%)'}}></div>
             
             {/* Hero Section */}
-            <section className="relative py-12 sm:py-16 lg:py-20 overflow-hidden">
+            <section className="relative py-8 sm:py-10 lg:py-12 overflow-hidden">
                 <div className="max-w-7xl mx-auto px-3 sm:px-4 lg:px-8">
                     <div className="text-center mb-8 sm:mb-12">
-                        <div className="inline-flex items-center justify-center w-20 h-20 sm:w-24 sm:h-24 lg:w-32 lg:h-32 bg-gradient-to-br from-purple-500 to-pink-500 rounded-full mb-6 animate-bounce">
+                        <div className="inline-flex items-center justify-center w-20 h-20 sm:w-24 sm:h-24 lg:w-32 lg:h-32 bg-gradient-to-br from-purple-500 to-pink-500 rounded-full mb-4 animate-bounce">
                             <span className="text-3xl sm:text-4xl lg:text-5xl">🚀</span>
                         </div>
                         <h1 className="text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-bold text-gray-900 mb-4 animate-fade-in-down">
                             {hackathonData.title}
                         </h1>
-                        <p className="text-lg sm:text-xl lg:text-2xl text-gray-600 mb-8 animate-fade-in-up animate-delay-200">
+                        <p className="text-lg sm:text-xl lg:text-2xl text-gray-600 mb-6 animate-fade-in-up animate-delay-200">
                             {hackathonData.subtitle}
                         </p>
-                        <div className="flex flex-col sm:flex-row gap-4 justify-center animate-fade-in-up animate-delay-400">
+                        <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center animate-fade-in-up animate-delay-400">
                             <Link
                                 to="/hackathon"
                                 className="ripple-effect button-press text-white px-6 sm:px-8 py-3 sm:py-4 rounded-full text-sm sm:text-base lg:text-lg font-semibold hover:shadow-xl transition-all duration-300 transform hover:scale-105"
@@ -119,10 +119,10 @@ const HackathonInfo = () => {
             </section>
 
             {/* Description Section */}
-            <section className="py-12 sm:py-16 lg:py-20 relative scroll-animate">
+            <section className="py-8 sm:py-10 lg:py-12 relative scroll-animate">
                 <div className="max-w-7xl mx-auto px-3 sm:px-4 lg:px-8">
                     <div className="bg-white rounded-2xl sm:rounded-3xl p-6 sm:p-8 lg:p-12 shadow-xl">
-                        <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 mb-6 text-center">
+                        <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 mb-4 text-center">
                             {language === 'ar' ? 'عن الهاكثون' : 'About the Hackathon'}
                         </h2>
                         <p className="text-base sm:text-lg lg:text-xl text-gray-700 leading-relaxed text-center max-w-4xl mx-auto">
@@ -133,9 +133,9 @@ const HackathonInfo = () => {
             </section>
 
             {/* Features Section */}
-            <section className="py-12 sm:py-16 lg:py-20 relative scroll-animate">
+            <section className="py-8 sm:py-10 lg:py-12 relative scroll-animate">
                 <div className="max-w-7xl mx-auto px-3 sm:px-4 lg:px-8">
-                    <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 mb-8 sm:mb-12 text-center">
+                    <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 mb-6 sm:mb-8 text-center">
                         {language === 'ar' ? 'المميزات الرئيسية' : 'Key Features'}
                     </h2>
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
@@ -153,9 +153,9 @@ const HackathonInfo = () => {
             </section>
 
             {/* Schedule Section */}
-            <section className="py-12 sm:py-16 lg:py-20 relative scroll-animate bg-gradient-to-br from-blue-50 to-indigo-50">
+            <section className="py-8 sm:py-10 lg:py-12 relative scroll-animate bg-gradient-to-br from-blue-50 to-indigo-50">
                 <div className="max-w-7xl mx-auto px-3 sm:px-4 lg:px-8">
-                    <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 mb-8 sm:mb-12 text-center">
+                    <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 mb-6 sm:mb-8 text-center">
                         {language === 'ar' ? 'البرنامج الزمني' : 'Schedule'}
                     </h2>
                     <div className="bg-white rounded-2xl sm:rounded-3xl p-6 sm:p-8 shadow-xl">
@@ -179,9 +179,9 @@ const HackathonInfo = () => {
             </section>
 
             {/* Requirements Section */}
-            <section className="py-12 sm:py-16 lg:py-20 relative scroll-animate">
+            <section className="py-8 sm:py-10 lg:py-12 relative scroll-animate">
                 <div className="max-w-7xl mx-auto px-3 sm:px-4 lg:px-8">
-                    <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 mb-8 sm:mb-12 text-center">
+                    <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 mb-6 sm:mb-8 text-center">
                         {language === 'ar' ? 'المتطلبات' : 'Requirements'}
                     </h2>
                     <div className="bg-white rounded-2xl sm:rounded-3xl p-6 sm:p-8 shadow-xl">
@@ -202,9 +202,9 @@ const HackathonInfo = () => {
             </section>
 
             {/* Prizes Section */}
-            <section className="py-12 sm:py-16 lg:py-20 relative scroll-animate bg-gradient-to-br from-yellow-50 to-orange-50">
+            <section className="py-8 sm:py-10 lg:py-12 relative scroll-animate bg-gradient-to-br from-yellow-50 to-orange-50">
                 <div className="max-w-7xl mx-auto px-3 sm:px-4 lg:px-8">
-                    <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 mb-8 sm:mb-12 text-center">
+                    <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 mb-6 sm:mb-8 text-center">
                         {language === 'ar' ? 'الجوائز' : 'Prizes'}
                     </h2>
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
@@ -220,13 +220,13 @@ const HackathonInfo = () => {
             </section>
 
             {/* Call to Action */}
-            <section className="py-12 sm:py-16 lg:py-20 text-white relative scroll-animate rounded-2xl sm:rounded-3xl mx-2 sm:mx-4 mb-2 sm:mb-4" style={{background: 'linear-gradient(135deg, #F4A321 0%, #D85584 100%)'}}>
+            <section className="py-8 sm:py-10 lg:py-12 text-white relative scroll-animate rounded-2xl sm:rounded-3xl mx-2 sm:mx-4 mb-2 sm:mb-4" style={{background: 'linear-gradient(135deg, #F4A321 0%, #D85584 100%)'}}>
                 <div className="absolute inset-0 bg-black opacity-20"></div>
                 <div className="relative max-w-4xl mx-auto text-center px-3 sm:px-4 lg:px-8">
-                    <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-4 sm:mb-6 animate-fade-in-down">
+                    <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-3 sm:mb-4 animate-fade-in-down">
                         {language === 'ar' ? 'انضم إلى الهاكثون الآن' : 'Join the Hackathon Now'}
                     </h2>
-                    <p className="text-sm sm:text-base md:text-lg lg:text-xl mb-6 sm:mb-8 animate-fade-in-up animate-delay-200">
+                    <p className="text-sm sm:text-base md:text-lg lg:text-xl mb-5 sm:mb-6 animate-fade-in-up animate-delay-200">
                         {language === 'ar' 
                             ? 'لا تفوت فرصة المشاركة في هذا الحدث المميز وتطوير مهاراتك في مجال التكنولوجيا'
                             : 'Don\'t miss the opportunity to participate in this special event and develop your technology skills'
