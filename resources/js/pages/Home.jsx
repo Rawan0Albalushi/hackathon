@@ -276,21 +276,29 @@ const Home = () => {
                                 ))}
                             </div>
                             
-                            {(() => {
-                                const registrationToTrack = getRegistrationToTrack();
-                                return (
-                                    <Link
-                                        to={registrationToTrack ? registrationToTrack.url : "/hackathon"}
-                                        className="ripple-effect button-press inline-block text-white px-4 sm:px-6 lg:px-8 py-3 sm:py-4 rounded-full text-sm sm:text-base lg:text-lg font-semibold hover:shadow-xl transition-all duration-300 transform  hover-pulse-glow animate-fade-in-up animate-delay-700 w-full sm:w-auto text-center"
-                                        style={{background: 'linear-gradient(135deg, #F4A321 0%, #D85584 100%)'}}
-                                    >
-                                        {registrationToTrack 
-                                            ? registrationToTrack.text
-                                            : (language === 'ar' ? 'سجل الآن في الهاكثون' : 'Register Now for Hackathon')
-                                        }
-                                    </Link>
-                                );
-                            })()}
+                            <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 animate-fade-in-up animate-delay-700">
+                                <Link
+                                    to="/hackathon-info"
+                                    className="ripple-effect button-press inline-block bg-white text-gray-700 px-4 sm:px-6 lg:px-8 py-3 sm:py-4 rounded-full text-sm sm:text-base lg:text-lg font-semibold hover:shadow-xl transition-all duration-300 transform hover:scale-105 w-full sm:w-auto text-center border-2 border-gray-200"
+                                >
+                                    {language === 'ar' ? 'معرفة المزيد' : 'Learn More'}
+                                </Link>
+                                {(() => {
+                                    const registrationToTrack = getRegistrationToTrack();
+                                    return (
+                                        <Link
+                                            to={registrationToTrack ? registrationToTrack.url : "/hackathon"}
+                                            className="ripple-effect button-press inline-block text-white px-4 sm:px-6 lg:px-8 py-3 sm:py-4 rounded-full text-sm sm:text-base lg:text-lg font-semibold hover:shadow-xl transition-all duration-300 transform  hover-pulse-glow w-full sm:w-auto text-center"
+                                            style={{background: 'linear-gradient(135deg, #F4A321 0%, #D85584 100%)'}}
+                                        >
+                                            {registrationToTrack 
+                                                ? registrationToTrack.text
+                                                : (language === 'ar' ? 'سجل الآن' : 'Register Now')
+                                            }
+                                        </Link>
+                                    );
+                                })()}
+                            </div>
                         </div>
                         
                         <div className="relative animate-fade-in-right mt-8 lg:mt-0">
@@ -432,18 +440,26 @@ const Home = () => {
                                 ))}
                             </div>
                             
-                            {(() => {
-                                const workshopStatus = getWorkshopRegistrationStatus();
-                                return (
-                                    <Link
-                                        to={workshopStatus.url}
-                                        className="ripple-effect button-press inline-block text-white px-4 sm:px-6 lg:px-8 py-3 sm:py-4 rounded-full text-sm sm:text-base lg:text-lg font-semibold hover:shadow-xl transition-all duration-300 transform  hover-pulse-glow animate-fade-in-up animate-delay-700 w-full sm:w-auto text-center"
-                                        style={{background: 'linear-gradient(135deg, #096289 0%, #003C72 100%)'}}
-                                    >
-                                        {workshopStatus.text}
-                                    </Link>
-                                );
-                            })()}
+                            <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 animate-fade-in-up animate-delay-700">
+                                <Link
+                                    to="/workshop-info"
+                                    className="ripple-effect button-press inline-block bg-white text-gray-700 px-4 sm:px-6 lg:px-8 py-3 sm:py-4 rounded-full text-sm sm:text-base lg:text-lg font-semibold hover:shadow-xl transition-all duration-300 transform hover:scale-105 w-full sm:w-auto text-center border-2 border-gray-200"
+                                >
+                                    {language === 'ar' ? 'معرفة المزيد' : 'Learn More'}
+                                </Link>
+                                {(() => {
+                                    const workshopStatus = getWorkshopRegistrationStatus();
+                                    return (
+                                        <Link
+                                            to={workshopStatus.url}
+                                            className="ripple-effect button-press inline-block text-white px-4 sm:px-6 lg:px-8 py-3 sm:py-4 rounded-full text-sm sm:text-base lg:text-lg font-semibold hover:shadow-xl transition-all duration-300 transform  hover-pulse-glow w-full sm:w-auto text-center"
+                                            style={{background: 'linear-gradient(135deg, #096289 0%, #003C72 100%)'}}
+                                        >
+                                            {workshopStatus.text}
+                                        </Link>
+                                    );
+                                })()}
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -475,18 +491,26 @@ const Home = () => {
                                 ))}
                             </div>
                             
-                            {(() => {
-                                const conferenceStatus = getConferenceRegistrationStatus();
-                                return (
-                                    <Link
-                                        to={conferenceStatus.url}
-                                        className="ripple-effect button-press inline-block text-white px-4 sm:px-6 lg:px-8 py-3 sm:py-4 rounded-full text-sm sm:text-base lg:text-lg font-semibold hover:shadow-xl transition-all duration-300 transform  hover-pulse-glow animate-fade-in-up animate-delay-700 w-full sm:w-auto text-center"
-                                        style={{background: 'linear-gradient(135deg, #003C72 0%, #096289 100%)'}}
-                                    >
-                                        {conferenceStatus.text}
-                                    </Link>
-                                );
-                            })()}
+                            <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 animate-fade-in-up animate-delay-700">
+                                <Link
+                                    to="/conference-info"
+                                    className="ripple-effect button-press inline-block bg-white text-gray-700 px-4 sm:px-6 lg:px-8 py-3 sm:py-4 rounded-full text-sm sm:text-base lg:text-lg font-semibold hover:shadow-xl transition-all duration-300 transform hover:scale-105 w-full sm:w-auto text-center border-2 border-gray-200"
+                                >
+                                    {language === 'ar' ? 'معرفة المزيد' : 'Learn More'}
+                                </Link>
+                                {(() => {
+                                    const conferenceStatus = getConferenceRegistrationStatus();
+                                    return (
+                                        <Link
+                                            to={conferenceStatus.url}
+                                            className="ripple-effect button-press inline-block text-white px-4 sm:px-6 lg:px-8 py-3 sm:py-4 rounded-full text-sm sm:text-base lg:text-lg font-semibold hover:shadow-xl transition-all duration-300 transform  hover-pulse-glow w-full sm:w-auto text-center"
+                                            style={{background: 'linear-gradient(135deg, #003C72 0%, #096289 100%)'}}
+                                        >
+                                            {conferenceStatus.text}
+                                        </Link>
+                                    );
+                                })()}
+                            </div>
                         </div>
                         
                         <div className="relative animate-fade-in-right mt-8 lg:mt-0">
@@ -563,37 +587,33 @@ const Home = () => {
                     <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center animate-fade-in-up animate-delay-400 px-2">
                         {isAuthenticated ? (
                             <>
-                                {/* Dashboard link hidden */}
-                                {(() => {
-                                    const registrationToTrack = getRegistrationToTrack();
-                                    return (
-                                        <Link
-                                            to={registrationToTrack ? registrationToTrack.url : "/hackathon"}
-                                            className="ripple-effect button-press bg-white px-4 sm:px-6 lg:px-8 py-3 sm:py-4 rounded-full text-sm sm:text-base lg:text-lg font-semibold hover:shadow-2xl transition-all duration-300 transform  hover-float w-full sm:w-auto"
-                                            style={{color: '#003C72'}}
-                                        >
-                                            {registrationToTrack 
-                                                ? registrationToTrack.text
-                                                : (language === 'ar' ? 'سجل في الهاكثون' : 'Register for Hackathon')
-                                            }
-                                        </Link>
-                                    );
-                                })()}
-                                {(() => {
-                                    const workshopStatus = getWorkshopRegistrationStatus();
-                                    return (
-                                        <Link
-                                            to={workshopStatus.url}
-                                            className="ripple-effect button-press bg-white px-4 sm:px-6 lg:px-8 py-3 sm:py-4 rounded-full text-sm sm:text-base lg:text-lg font-semibold hover:shadow-2xl transition-all duration-300 transform  hover-float w-full sm:w-auto"
-                                            style={{color: '#003C72'}}
-                                        >
-                                            {workshopStatus.text}
-                                        </Link>
-                                    );
-                                })()}
+                                <Link
+                                    to="/hackathon-info"
+                                    className="ripple-effect button-press border-2 border-white text-white px-4 sm:px-6 lg:px-8 py-3 sm:py-4 rounded-full text-sm sm:text-base lg:text-lg font-semibold hover:bg-white hover:text-gray-700 transition-all duration-300 transform hover:scale-105 w-full sm:w-auto"
+                                >
+                                    {language === 'ar' ? 'معرفة المزيد عن الهاكثون' : 'Learn More About Hackathon'}
+                                </Link>
+                                <Link
+                                    to="/workshop-info"
+                                    className="ripple-effect button-press border-2 border-white text-white px-4 sm:px-6 lg:px-8 py-3 sm:py-4 rounded-full text-sm sm:text-base lg:text-lg font-semibold hover:bg-white hover:text-gray-700 transition-all duration-300 transform hover:scale-105 w-full sm:w-auto"
+                                >
+                                    {language === 'ar' ? 'معرفة المزيد عن الورش' : 'Learn More About Workshops'}
+                                </Link>
+                                <Link
+                                    to="/conference-info"
+                                    className="ripple-effect button-press border-2 border-white text-white px-4 sm:px-6 lg:px-8 py-3 sm:py-4 rounded-full text-sm sm:text-base lg:text-lg font-semibold hover:bg-white hover:text-gray-700 transition-all duration-300 transform hover:scale-105 w-full sm:w-auto"
+                                >
+                                    {language === 'ar' ? 'معرفة المزيد عن المؤتمر' : 'Learn More About Conference'}
+                                </Link>
                             </>
                         ) : (
                             <>
+                                <Link
+                                    to="/hackathon-info"
+                                    className="ripple-effect button-press border-2 border-white text-white px-4 sm:px-6 lg:px-8 py-3 sm:py-4 rounded-full text-sm sm:text-base lg:text-lg font-semibold hover:bg-white hover:text-gray-700 transition-all duration-300 transform hover:scale-105 w-full sm:w-auto"
+                                >
+                                    {language === 'ar' ? 'معرفة المزيد' : 'Learn More'}
+                                </Link>
                                 <Link
                                     to="/hackathon"
                                     className="ripple-effect button-press text-white px-4 sm:px-6 lg:px-8 py-3 sm:py-4 rounded-full text-sm sm:text-base lg:text-lg font-semibold hover:shadow-2xl transition-all duration-300 transform  hover-pulse-glow w-full sm:w-auto"
@@ -601,18 +621,6 @@ const Home = () => {
                                 >
                                     {language === 'ar' ? 'ابدأ رحلتك الآن' : 'Start Your Journey Now'}
                                 </Link>
-                                {(() => {
-                                    const workshopStatus = getWorkshopRegistrationStatus();
-                                    return (
-                                        <Link
-                                            to={workshopStatus.url}
-                                            className="ripple-effect button-press bg-white px-4 sm:px-6 lg:px-8 py-3 sm:py-4 rounded-full text-sm sm:text-base lg:text-lg font-semibold hover:shadow-2xl transition-all duration-300 transform  hover-float w-full sm:w-auto"
-                                            style={{color: '#003C72'}}
-                                        >
-                                            {workshopStatus.hasRegistration ? workshopStatus.text : (language === 'ar' ? 'تعلم المزيد' : 'Learn More')}
-                                        </Link>
-                                    );
-                                })()}
                             </>
                         )}
                     </div>

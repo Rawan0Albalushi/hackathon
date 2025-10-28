@@ -8,6 +8,9 @@ import Home from './pages/Home.jsx';
 import HackathonRegistration from './pages/HackathonRegistration.jsx';
 import WorkshopRegistration from './pages/WorkshopRegistration.jsx';
 import ConferenceRegistration from './pages/ConferenceRegistration.jsx';
+import HackathonInfo from './pages/HackathonInfo.jsx';
+import WorkshopInfo from './pages/WorkshopInfo.jsx';
+import ConferenceInfo from './pages/ConferenceInfo.jsx';
 import Success from './pages/Success.jsx';
 import UserDashboard from './pages/UserDashboard.jsx';
 import AdminDashboardMain from './pages/admin/AdminDashboardMain.jsx';
@@ -81,6 +84,24 @@ const App = () => {
                                 </Layout>
                             </ProtectedRoute>
                         } />
+                        
+                        {/* Info pages */}
+                        <Route path="/hackathon-info" element={
+                            <Layout>
+                                <HackathonInfo />
+                            </Layout>
+                        } />
+                        <Route path="/workshop-info" element={
+                            <Layout>
+                                <WorkshopInfo />
+                            </Layout>
+                        } />
+                        <Route path="/conference-info" element={
+                            <Layout>
+                                <ConferenceInfo />
+                            </Layout>
+                        } />
+                        
                         <Route path="/success" element={
                             <ProtectedRoute>
                                 <Layout>
