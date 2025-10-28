@@ -52,9 +52,9 @@ const Layout = ({ children }) => {
 
     const navigationItems = [
         { path: '/', label: t('home') },
-        { path: '/hackathon', label: t('hackathon') },
-        { path: '/workshop', label: t('workshop') },
-        { path: '/conference', label: t('conference') }
+        { path: '/hackathon-info', label: t('hackathon') },
+        { path: '/workshop-info', label: t('workshop') },
+        { path: '/conference-info', label: t('conference') }
     ];
 
     // Admin portal hidden from navigation
