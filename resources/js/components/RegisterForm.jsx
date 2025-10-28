@@ -111,8 +111,8 @@ const RegisterForm = () => {
             <div className="w-full max-w-md mx-auto">
                 <div className="space-y-6 sm:space-y-8 relative z-10">
                     <div className="text-center">
-                        <div className="mx-auto w-16 h-16 sm:w-20 sm:h-20 lg:w-24 lg:h-24 rounded-2xl sm:rounded-3xl flex items-center justify-center mb-6 sm:mb-8 shadow-2xl animate-fade-in-down" style={{background: 'linear-gradient(135deg, #F4A321 0%, #D85584 100%)'}}>
-                            <span className="text-white text-2xl sm:text-3xl lg:text-4xl font-bold">✨</span>
+                        <div className="mx-auto flex items-center justify-center mb-6 sm:mb-8 animate-fade-in-down">
+                            <img src="/images/star.png" alt="Star" className="w-16 h-16 sm:w-24 sm:h-24 lg:w-28 lg:h-28 object-contain" />
                         </div>
                         <h2 className="text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-bold text-white mb-3 sm:mb-4 animate-fade-in-up gradient-text">
                             {t('registerTitle')}

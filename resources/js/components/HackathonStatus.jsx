@@ -232,7 +232,7 @@ const HackathonStatus = ({ registration, onEdit }) => {
                                     {registration.other_skills && (
                                         <div className="bg-gradient-to-r from-emerald-50 to-teal-50 p-4 rounded-2xl border border-emerald-100 hover:shadow-md transition-shadow duration-200">
                                             <span className="font-semibold text-gray-700 flex items-center mb-3">
-                                                <span className="mr-2">✨</span>
+                                                <img src="/images/star.png" alt="Star" className="mr-2 w-5 h-5 object-contain" />
                                                 {language === 'ar' ? 'مهارات أخرى:' : 'Other Skills:'}
                                             </span>
                                             <p className="text-gray-900 font-medium bg-white/50 px-3 py-2 rounded-lg">
