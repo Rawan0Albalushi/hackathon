@@ -361,7 +361,7 @@ const WorkshopRegistration = () => {
     };
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-blue-50 to-cyan-50">
+        <div className="min-h-screen bg-gradient-to-br from-blue-50 to-cyan-50 overflow-x-hidden">
             {/* Hero Section */}
             <div className="relative text-white overflow-hidden" style={{background: 'linear-gradient(135deg, #096289 0%, #003C72 100%)'}}>
                 <div className="absolute inset-0 bg-black opacity-20"></div>
@@ -405,7 +405,7 @@ const WorkshopRegistration = () => {
 
             {/* Content Section */}
             <div className="py-8 lg:py-12 xl:py-16 registration-form-section">
-                <div className="max-w-4xl lg:max-w-6xl xl:max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div className="max-w-4xl lg:max-w-6xl xl:max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
                     {loadingRegistration ? (
                         <div className="flex justify-center items-center py-12 lg:py-16">
                             <div className="animate-spin rounded-full h-8 w-8 lg:h-12 lg:w-12 border-b-2 border-blue-600"></div>
@@ -629,24 +629,24 @@ const WorkshopRegistration = () => {
                             <p className="text-gray-600">
                                 {language === 'ar' 
                                     ? 'تعلم مهارات العمل الجماعي والتعاون الفعال'
-                                    : 'Learn teamwork skills and effective collaboration'
-                                }
+                                    : 'Learn teamwork skills and effective collaboration'}
                             </p>
+                        </div>
                     </div>
                 </div>
 
                 {/* QR Modal */}
                 {showQR && qrRegistration && (
-                    <div className="fixed inset-0 z-50 grid place-items-center p-4">
+                    <div className="fixed inset-0 z-50 grid place-items-center p-3 sm:p-4">
                         <div className="absolute inset-0 bg-transparent" onClick={() => { setShowQR(false); setQrRegistration(null); }}></div>
                         <div className="relative z-10 w-full max-w-2xl md:max-w-3xl">
                             <div
                                 role="dialog"
                                 aria-modal="true"
-                                className="bg-white rounded-3xl shadow-2xl overflow-auto animate-fade-in-up w-[95%] sm:w-[85%] md:w-[80%] max-h-[92vh] mx-auto"
+                                className="bg-white rounded-3xl shadow-2xl overflow-auto animate-fade-in-up w-[96%] sm:w-[85%] md:w-[80%] max-h-[92vh] mx-auto"
                             >
-                                <div className="flex items-center justify-between px-5 py-3" style={{background: 'linear-gradient(135deg, #0ea5e9 0%, #22d3ee 100%)'}}>
-                                    <h3 className="text-white font-bold text-base sm:text-lg">
+                                <div className="flex items-center justify-between px-4 sm:px-5 py-3" style={{background: 'linear-gradient(135deg, #0ea5e9 0%, #22d3ee 100%)'}}>
+                                    <h3 className="text-white font-bold text-sm sm:text-lg">
                                         {language === 'ar' ? 'عرض رمز QR' : 'Show QR Code'}
                                     </h3>
                                     <button type="button" onClick={() => { setShowQR(false); setQrRegistration(null); }} className="text-white/90 hover:text-white text-xl leading-none">
@@ -667,7 +667,6 @@ const WorkshopRegistration = () => {
                     </div>
                 )}
             </div>
-        </div>
         </div>
     );
 };

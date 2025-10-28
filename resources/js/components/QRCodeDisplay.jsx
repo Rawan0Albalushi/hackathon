@@ -12,10 +12,42 @@ const QRCodeDisplay = ({ qrCode, qrCodeData, qrCodeImage, type, registrationId, 
         } else if (qrCode || qrCodeData) {
             // Generate QR code using a simple QR code generator
             const data = qrCode || qrCodeData;
-            const qrCodeDataUrl = `https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=${encodeURIComponent(data)}`;
+            const qrCodeDataUrl = `https://api.qrserver.com/v1/create-qr-code/?size=512x512&data=${encodeURIComponent(data)}`;
             setQrCodeUrl(qrCodeDataUrl);
         }
     }, [qrCode, qrCodeData, qrCodeImage]);
+
+    const handleDownload = () => {
+        if (!qrCodeUrl) return;
+        const link = document.createElement('a');
+        link.href = qrCodeUrl;
+        link.download = `${type || 'qr'}-${registrationId || 'code'}.png`;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    };
+
+    const handleOpen = () => {
+        if (!qrCodeUrl) return;
+        window.open(qrCodeUrl, '_blank');
+    };
+
+    const handleShare = async () => {
+        try {
+            if (navigator.share) {
+                await navigator.share({
+                    title: 'QR Code',
+                    text: (qrCode || qrCodeData) ? String(qrCode || qrCodeData) : 'QR Code',
+                    url: qrCodeUrl
+                });
+            } else {
+                await navigator.clipboard.writeText(qrCodeUrl);
+                alert(language === 'ar' ? 'تم نسخ رابط الصورة' : 'Image link copied');
+            }
+        } catch (_) {
+            // no-op
+        }
+    };
 
     const getTypeInfo = (type) => {
         switch(type) {
@@ -74,18 +106,18 @@ const QRCodeDisplay = ({ qrCode, qrCodeData, qrCodeImage, type, registrationId, 
     }
 
     return (
-        <div className="bg-white rounded-2xl p-6 shadow-lg border border-gray-200 max-w-md mx-auto">
+        <div className="bg-white rounded-2xl p-4 sm:p-6 shadow-lg border border-gray-200 max-w-sm sm:max-w-md mx-auto">
             {/* Header */}
-            <div className="text-center mb-6">
-                <div className="flex justify-center mb-3">
+            <div className="text-center mb-4 sm:mb-6">
+                <div className="flex justify-center mb-2 sm:mb-3">
                     <div className="p-3 rounded-xl" style={{background: typeInfo.color}}>
                         <span className="text-white text-2xl">{typeInfo.icon}</span>
                     </div>
                 </div>
-                <h3 className="text-lg font-bold text-gray-900 mb-1">
+                <h3 className="text-base sm:text-lg font-bold text-gray-900 mb-1">
                     {language === 'ar' ? `QR Code - ${typeInfo.title}` : `QR Code - ${typeInfo.title}`}
                 </h3>
-                <p className="text-sm text-gray-600">
+                <p className="text-xs sm:text-sm text-gray-600">
                     {language === 'ar' 
                         ? 'قم بمسح هذا الكود عند الوصول للحدث'
                         : 'Scan this code when you arrive at the event'
@@ -94,17 +126,17 @@ const QRCodeDisplay = ({ qrCode, qrCodeData, qrCodeImage, type, registrationId, 
             </div>
 
             {/* QR Code */}
-            <div className="flex justify-center mb-6">
-                <div className="bg-white p-4 rounded-xl shadow-md border-2 border-gray-100">
+            <div className="flex justify-center mb-4 sm:mb-6">
+                <div className="bg-white p-3 sm:p-4 rounded-xl shadow-md border-2 border-gray-100">
                     {qrCodeUrl ? (
                         <img 
                             src={qrCodeUrl} 
                             alt="QR Code" 
-                            className="w-48 h-48 mx-auto"
+                            className="w-40 h-40 sm:w-56 sm:h-56 md:w-64 md:h-64 mx-auto"
                         />
                     ) : (
-                        <div className="w-48 h-48 bg-gray-100 rounded-lg flex items-center justify-center">
-                            <div className="text-gray-400 text-sm">
+                        <div className="w-40 h-40 sm:w-56 sm:h-56 bg-gray-100 rounded-lg flex items-center justify-center">
+                            <div className="text-gray-400 text-xs sm:text-sm">
                                 {language === 'ar' ? 'جاري التحميل...' : 'Loading...'}
                             </div>
                         </div>
@@ -112,20 +144,33 @@ const QRCodeDisplay = ({ qrCode, qrCodeData, qrCodeImage, type, registrationId, 
                 </div>
             </div>
 
+            {/* Quick actions for mobile */}
+            <div className="grid grid-cols-3 gap-2 sm:gap-3 mb-3 sm:mb-4">
+                <button type="button" onClick={handleDownload} className="px-3 py-2 rounded-xl text-white text-xs sm:text-sm font-semibold" style={{background: 'linear-gradient(135deg, #0ea5e9 0%, #22d3ee 100%)'}}>
+                    {language === 'ar' ? 'تنزيل' : 'Download'}
+                </button>
+                <button type="button" onClick={handleOpen} className="px-3 py-2 rounded-xl text-white text-xs sm:text-sm font-semibold" style={{background: 'linear-gradient(135deg, #10b981 0%, #22c55e 100%)'}}>
+                    {language === 'ar' ? 'فتح' : 'Open'}
+                </button>
+                <button type="button" onClick={handleShare} className="px-3 py-2 rounded-xl text-white text-xs sm:text-sm font-semibold" style={{background: 'linear-gradient(135deg, #f59e0b 0%, #ef4444 100%)'}}>
+                    {language === 'ar' ? 'مشاركة' : 'Share'}
+                </button>
+            </div>
+
             {/* Registration Info */}
-            <div className="bg-gray-50 rounded-xl p-4 mb-4">
+            <div className="bg-gray-50 rounded-xl p-3 sm:p-4 mb-3 sm:mb-4">
                 <div className="text-center">
-                    <p className="text-sm text-gray-600 mb-1">
+                    <p className="text-xs sm:text-sm text-gray-600 mb-1">
                         {language === 'ar' ? 'رقم التسجيل' : 'Registration ID'}
                     </p>
-                    <p className="text-lg font-bold text-gray-900">#{registrationId}</p>
+                    <p className="text-base sm:text-lg font-bold text-gray-900">#{registrationId}</p>
                 </div>
             </div>
 
             {/* QR Code Text (copyable) */}
             {(qrCode || qrCodeData) && (
-                <div className="mb-4">
-                    <label className="block text-sm text-gray-600 mb-2">
+                <div className="mb-3 sm:mb-4">
+                    <label className="block text-xs sm:text-sm text-gray-600 mb-1.5 sm:mb-2">
                         {language === 'ar' ? 'نص الكود' : 'QR Code Text'}
                     </label>
                     <div className="flex items-center gap-2">
@@ -133,12 +178,12 @@ const QRCodeDisplay = ({ qrCode, qrCodeData, qrCodeImage, type, registrationId, 
                             type="text"
                             readOnly
                             value={qrCode || qrCodeData}
-                            className="flex-1 border border-gray-200 rounded-xl px-3 py-2 text-gray-900 bg-gray-50 focus:outline-none"
+                            className="flex-1 border border-gray-200 rounded-xl px-2.5 py-2 text-gray-900 bg-gray-50 focus:outline-none text-xs sm:text-sm"
                         />
                         <button
                             type="button"
                             onClick={() => navigator.clipboard.writeText(qrCode || qrCodeData)}
-                            className="px-4 py-2 rounded-xl text-white font-semibold"
+                            className="px-3 sm:px-4 py-2 rounded-xl text-white font-semibold text-xs sm:text-sm"
                             style={{background: 'linear-gradient(135deg, #F4A321 0%, #D85584 100%)'}}
                         >
                             {language === 'ar' ? 'نسخ' : 'Copy'}

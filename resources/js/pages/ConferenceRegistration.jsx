@@ -149,7 +149,7 @@ const ConferenceRegistration = () => {
     };
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-green-50 to-teal-50">
+        <div className="min-h-screen bg-gradient-to-br from-green-50 to-teal-50 overflow-x-hidden">
             {/* Hero Section */}
             <div className="relative text-white overflow-hidden" style={{background: 'linear-gradient(135deg, #003C72 0%, #096289 100%)'}}>
                 <div className="absolute inset-0 bg-black opacity-20"></div>
@@ -250,8 +250,7 @@ const ConferenceRegistration = () => {
                             <p className="text-sm sm:text-base text-gray-600">
                                 {language === 'ar' 
                                     ? 'لقاء مع نخبة من المؤسسات الحكومية والخاصة والأكاديمية'
-                                    : 'Meet with elite government, private and academic institutions'
-                                }
+                                    : 'Meet with elite government, private and academic institutions'}
                             </p>
                         </div>
                         
@@ -263,8 +262,7 @@ const ConferenceRegistration = () => {
                             <p className="text-sm sm:text-base text-gray-600">
                                 {language === 'ar' 
                                     ? 'تحفيز العقول الشابة وتحويل الأفكار الإبداعية إلى مشاريع واقعية'
-                                    : 'Stimulating young minds and transforming creative ideas into real projects'
-                                }
+                                    : 'Stimulating young minds and transforming creative ideas into real projects'}
                             </p>
                         </div>
                         
@@ -276,8 +274,7 @@ const ConferenceRegistration = () => {
                             <p className="text-sm sm:text-base text-gray-600">
                                 {language === 'ar' 
                                     ? 'تحويل الأفكار الإبداعية إلى مشاريع قابلة للتطبيق'
-                                    : 'Transforming creative ideas into practical projects'
-                                }
+                                    : 'Transforming creative ideas into practical projects'}
                             </p>
                         </div>
                     </div>

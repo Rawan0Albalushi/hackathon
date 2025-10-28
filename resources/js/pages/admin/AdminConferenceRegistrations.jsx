@@ -146,16 +146,19 @@ const AdminConferenceRegistrations = () => {
             }
             
             console.log('Response data:', data);
+            console.log('Data success value:', data.success);
+            console.log('Data success type:', typeof data.success);
             
             if (data.success) {
-                console.log('Status updated successfully');
+                console.log('Conference status updated successfully');
                 setShowStatusModal(false);
                 setSelectedRegistration(null);
                 setNewStatus('');
                 setRejectionReason('');
                 fetchRegistrations();
             } else {
-                console.error('Update failed:', data.message);
+                console.error('Conference update failed:', data.message);
+                console.error('Full data object:', data);
                 setError(data.message || 'فشل في تحديث حالة التسجيل');
             }
         } catch (err) {

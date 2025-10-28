@@ -200,11 +200,19 @@ const ScannerDashboard = () => {
         setSuccess(false);
 
         try {
+            // Ensure session + fresh CSRF token
+            const csrfResponse = await fetch('/api/csrf-token', {
+                credentials: 'include'
+            });
+            const csrfData = await csrfResponse.json();
+
             const response = await fetch('/api/scanner/qr/scan', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || ''
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'Accept': 'application/json',
+                    'X-CSRF-TOKEN': csrfData.csrf_token
                 },
                 credentials: 'include',
                 body: JSON.stringify({ qr_code: codeToScan })
@@ -244,11 +252,19 @@ const ScannerDashboard = () => {
         setSuccess(false);
 
         try {
+            // Ensure session + fresh CSRF token
+            const csrfResponse = await fetch('/api/csrf-token', {
+                credentials: 'include'
+            });
+            const csrfData = await csrfResponse.json();
+
             const response = await fetch('/api/scanner/qr/info', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || ''
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'Accept': 'application/json',
+                    'X-CSRF-TOKEN': csrfData.csrf_token
                 },
                 credentials: 'include',
                 body: JSON.stringify({ qr_code: qrCode })

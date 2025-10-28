@@ -86,14 +86,20 @@ const AdminWorkshopRegistrations = () => {
             });
 
             const data = await response.json();
+            console.log('Workshop response data:', data);
+            console.log('Data success value:', data.success);
+            console.log('Data success type:', typeof data.success);
             
             if (data.success) {
+                console.log('Workshop status updated successfully');
                 setShowStatusModal(false);
                 setSelectedRegistration(null);
                 setNewStatus('');
                 setRejectionReason('');
                 fetchRegistrations();
             } else {
+                console.error('Workshop update failed:', data.message);
+                console.error('Full data object:', data);
                 setError(data.message);
             }
         } catch (err) {

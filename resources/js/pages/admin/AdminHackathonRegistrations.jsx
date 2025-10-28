@@ -159,15 +159,27 @@ const AdminHackathonRegistrations = () => {
             
             let data;
             if (contentType && contentType.includes('application/json')) {
-                data = await response.json();
+                try {
+                    data = await response.json();
+                    console.log('Successfully parsed JSON response');
+                } catch (jsonError) {
+                    console.error('Failed to parse JSON:', jsonError);
+                    const text = await response.text();
+                    console.log('Raw response text:', text);
+                    throw new Error('فشل في تحليل استجابة الخادم');
+                }
             } else {
                 // إذا لم تكن JSON، احصل على النص
                 const text = await response.text();
                 console.log('Non-JSON response:', text);
+                console.log('Response status:', response.status);
+                console.log('Response headers:', Object.fromEntries(response.headers.entries()));
                 throw new Error('الخادم لم يعد استجابة JSON صحيحة');
             }
             
             console.log('Response data:', data);
+            console.log('Data success value:', data.success);
+            console.log('Data success type:', typeof data.success);
             
             if (data.success) {
                 console.log('Status updated successfully');
@@ -178,10 +190,13 @@ const AdminHackathonRegistrations = () => {
                 fetchRegistrations();
             } else {
                 console.error('Update failed:', data.message);
+                console.error('Full data object:', data);
                 setError(data.message || 'فشل في تحديث حالة التسجيل');
             }
         } catch (err) {
             console.error('Error updating status:', err);
+            console.error('Error message:', err.message);
+            console.error('Error stack:', err.stack);
             if (err.message.includes('JSON')) {
                 setError('خطأ في استجابة الخادم - يرجى المحاولة مرة أخرى');
             } else if (err.message.includes('Network')) {
