@@ -17,15 +17,6 @@ export const AuthProvider = ({ children }) => {
 
     useEffect(() => {
         const initAuth = async () => {
-            // Check if user was logged out (no token in localStorage)
-            const storedToken = localStorage.getItem('token');
-            if (!storedToken) {
-                setUser(null);
-                setToken(null);
-                setLoading(false);
-                return;
-            }
-
             try {
                 const response = await fetch('/api/auth/me', {
                     method: 'GET',
@@ -41,6 +32,7 @@ export const AuthProvider = ({ children }) => {
                     const data = await response.json();
                     setUser(data.data.user);
                     setToken('session');
+                    localStorage.setItem('token', 'session');
                 } else {
                     setUser(null);
                     setToken(null);
@@ -97,6 +89,7 @@ export const AuthProvider = ({ children }) => {
             // Auto login after registration
             setToken('session');
             setUser(data.data.user);
+            localStorage.setItem('token', 'session');
             
             return data;
         } catch (error) {
@@ -135,6 +128,7 @@ export const AuthProvider = ({ children }) => {
 
             setToken('session');
             setUser(data.data.user);
+            localStorage.setItem('token', 'session');
             
             return data;
         } catch (error) {
@@ -144,12 +138,19 @@ export const AuthProvider = ({ children }) => {
 
     const logout = async () => {
         try {
+            // Get CSRF token for logout request
+            const csrfResponse = await fetch('/api/csrf-token', {
+                credentials: 'include',
+            });
+            const csrfData = await csrfResponse.json();
+            
             await fetch('/api/auth/logout', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                     'X-Requested-With': 'XMLHttpRequest',
                     'Accept': 'application/json',
+                    'X-CSRF-TOKEN': csrfData.csrf_token,
                 },
                 credentials: 'include',
             });
@@ -176,7 +177,7 @@ export const AuthProvider = ({ children }) => {
     };
 
     const isAuthenticated = () => {
-        return !!user && (!!token || token === 'session');
+        return !!user && !!token;
     };
 
     const value = {

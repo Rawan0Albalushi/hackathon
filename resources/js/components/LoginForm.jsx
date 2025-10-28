@@ -17,12 +17,25 @@ const LoginForm = () => {
     const [showEmailVerification, setShowEmailVerification] = useState(false);
     const [unverifiedEmail, setUnverifiedEmail] = useState('');
 
-    const { login } = useAuth();
+    const { login, isAuthenticated, user } = useAuth();
     const { language, t } = useLanguage();
     const navigate = useNavigate();
     const location = useLocation();
 
     const from = location.state?.from?.pathname || '/';
+
+    // Redirect if already authenticated
+    React.useEffect(() => {
+        if (isAuthenticated()) {
+            if (user?.role === 'admin') {
+                navigate('/admin', { replace: true });
+            } else if (user?.role === 'scanner') {
+                navigate('/scanner', { replace: true });
+            } else {
+                navigate(from === '/' ? '/' : from, { replace: true });
+            }
+        }
+    }, [isAuthenticated, user, navigate, from]);
 
     const handleChange = (e) => {
         setFormData({

@@ -20,9 +20,22 @@ const RegisterForm = () => {
     const [showEmailVerification, setShowEmailVerification] = useState(false);
     const [registeredEmail, setRegisteredEmail] = useState('');
 
-    const { register } = useAuth();
+    const { register, isAuthenticated, user } = useAuth();
     const { language, t } = useLanguage();
     const navigate = useNavigate();
+
+    // Redirect if already authenticated
+    React.useEffect(() => {
+        if (isAuthenticated()) {
+            if (user?.role === 'admin') {
+                navigate('/admin', { replace: true });
+            } else if (user?.role === 'scanner') {
+                navigate('/scanner', { replace: true });
+            } else {
+                navigate('/', { replace: true });
+            }
+        }
+    }, [isAuthenticated, user, navigate]);
 
     const handleChange = (e) => {
         setFormData({

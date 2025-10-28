@@ -25,7 +25,7 @@ const Home = () => {
 
     // Check for all registrations
     useEffect(() => {
-        if (isAuthenticated) {
+        if (isAuthenticated()) {
             fetchAllRegistrations();
         }
     }, [isAuthenticated]);
@@ -585,7 +585,7 @@ const Home = () => {
                         }
                     </p>
                     <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center animate-fade-in-up animate-delay-400 px-2">
-                        {isAuthenticated ? (
+                        {isAuthenticated() ? (
                             <>
                                 <Link
                                     to="/hackathon-info"
