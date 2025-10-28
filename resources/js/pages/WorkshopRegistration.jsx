@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useLanguage } from '../contexts/LanguageContext';
 import { useAuth } from '../contexts/AuthContext';
@@ -636,24 +637,24 @@ const WorkshopRegistration = () => {
                 </div>
 
                 {/* QR Modal */}
-                {showQR && qrRegistration && (
-                    <div className="fixed inset-0 z-50 grid place-items-center p-3 sm:p-4">
-                        <div className="absolute inset-0 bg-transparent" onClick={() => { setShowQR(false); setQrRegistration(null); }}></div>
-                        <div className="relative z-10 w-full max-w-2xl md:max-w-3xl">
+                {showQR && qrRegistration && createPortal(
+                    <div className="fixed inset-0 z-[1000] grid place-items-center p-1.5 sm:p-3">
+                        <div className="absolute inset-0 bg-black/50" onClick={() => { setShowQR(false); setQrRegistration(null); }}></div>
+                        <div className="relative z-10 w-full max-w-[19rem] sm:max-w-md">
                             <div
                                 role="dialog"
                                 aria-modal="true"
-                                className="bg-white rounded-3xl shadow-2xl overflow-auto animate-fade-in-up w-[96%] sm:w-[85%] md:w-[80%] max-h-[92vh] mx-auto"
+                                className="bg-white rounded-2xl shadow-2xl overflow-hidden animate-fade-in-up w-full max-h-[88vh] mx-auto"
                             >
-                                <div className="flex items-center justify-between px-4 sm:px-5 py-3" style={{background: 'linear-gradient(135deg, #0ea5e9 0%, #22d3ee 100%)'}}>
-                                    <h3 className="text-white font-bold text-sm sm:text-lg">
+                                <div className="flex items-center justify-between px-3 py-2" style={{background: 'linear-gradient(135deg, #0ea5e9 0%, #22d3ee 100%)'}}>
+                                    <h3 className="text-white font-bold text-sm">
                                         {language === 'ar' ? 'عرض رمز QR' : 'Show QR Code'}
                                     </h3>
-                                    <button type="button" onClick={() => { setShowQR(false); setQrRegistration(null); }} className="text-white/90 hover:text-white text-xl leading-none">
+                                    <button type="button" onClick={() => { setShowQR(false); setQrRegistration(null); }} className="text-white/90 hover:text-white text-lg leading-none">
                                         ×
                                     </button>
                                 </div>
-                                <div className="p-4 sm:p-6">
+                                <div className="p-3">
                                     <QRCodeDisplay 
                                         qrCode={qrRegistration.qr_code}
                                         registrationId={qrRegistration.id}
@@ -664,7 +665,8 @@ const WorkshopRegistration = () => {
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </div>,
+                    document.body
                 )}
             </div>
         </div>
