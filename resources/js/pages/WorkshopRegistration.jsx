@@ -4,6 +4,7 @@ import { useLanguage } from '../contexts/LanguageContext';
 import { useAuth } from '../contexts/AuthContext';
 import Form from '../components/Form';
 import WorkshopStatus from '../components/WorkshopStatus';
+import QRCodeDisplay from '../components/QRCodeDisplay';
 import { submitWorkshopRegistration, handleApiErrorWithToast } from '../utils/api';
 import { showRegistrationSuccess, showFormLoading, showFormError, showValidationError, clearAllMessages } from '../utils/messageUtils';
 
@@ -16,6 +17,27 @@ const WorkshopRegistration = () => {
     const [workshops, setWorkshops] = useState([]);
     const [selectedWorkshops, setSelectedWorkshops] = useState([]);
     const [existingRegistration, setExistingRegistration] = useState(null);
+    const [showQR, setShowQR] = useState(false);
+    const [qrRegistration, setQrRegistration] = useState(null);
+
+    // Improve popup UX: lock background scroll and close on ESC
+    useEffect(() => {
+        if (showQR) {
+            const originalOverflow = document.body.style.overflow;
+            document.body.style.overflow = 'hidden';
+            const handleKey = (e) => {
+                if (e.key === 'Escape') {
+                    setShowQR(false);
+                    setQrRegistration(null);
+                }
+            };
+            window.addEventListener('keydown', handleKey);
+            return () => {
+                document.body.style.overflow = originalOverflow;
+                window.removeEventListener('keydown', handleKey);
+            };
+        }
+    }, [showQR]);
     const [loadingRegistration, setLoadingRegistration] = useState(true);
     const [userRegistrations, setUserRegistrations] = useState([]);
     const [workshopsWithStatus, setWorkshopsWithStatus] = useState([]);
@@ -438,7 +460,7 @@ const WorkshopRegistration = () => {
                                                                     {info.icon} {info.text}
                                                                 </span>
                                                                 {w.registration?.status === 'approved' && w.registration?.qr_code && (
-                                                                    <button type="button" onClick={() => setExistingRegistration(w.registration)} className="inline-flex items-center gap-1 text-blue-600 hover:text-blue-700 text-xs lg:text-sm font-medium">
+                                                                    <button type="button" onClick={() => { setQrRegistration(w.registration); setShowQR(true); }} className="inline-flex items-center gap-1 text-blue-600 hover:text-blue-700 text-xs lg:text-sm font-medium">
                                                                         <span>📱</span>
                                                                         <span>{language === 'ar' ? 'عرض QR' : 'View QR'}</span>
                                                                     </button>
@@ -612,6 +634,38 @@ const WorkshopRegistration = () => {
                             </p>
                     </div>
                 </div>
+
+                {/* QR Modal */}
+                {showQR && qrRegistration && (
+                    <div className="fixed inset-0 z-50 grid place-items-center p-4">
+                        <div className="absolute inset-0 bg-transparent" onClick={() => { setShowQR(false); setQrRegistration(null); }}></div>
+                        <div className="relative z-10 w-full max-w-2xl md:max-w-3xl">
+                            <div
+                                role="dialog"
+                                aria-modal="true"
+                                className="bg-white rounded-3xl shadow-2xl overflow-auto animate-fade-in-up w-[95%] sm:w-[85%] md:w-[80%] max-h-[92vh] mx-auto"
+                            >
+                                <div className="flex items-center justify-between px-5 py-3" style={{background: 'linear-gradient(135deg, #0ea5e9 0%, #22d3ee 100%)'}}>
+                                    <h3 className="text-white font-bold text-base sm:text-lg">
+                                        {language === 'ar' ? 'عرض رمز QR' : 'Show QR Code'}
+                                    </h3>
+                                    <button type="button" onClick={() => { setShowQR(false); setQrRegistration(null); }} className="text-white/90 hover:text-white text-xl leading-none">
+                                        ×
+                                    </button>
+                                </div>
+                                <div className="p-4 sm:p-6">
+                                    <QRCodeDisplay 
+                                        qrCode={qrRegistration.qr_code}
+                                        registrationId={qrRegistration.id}
+                                        type="workshop"
+                                        isCheckedIn={qrRegistration.is_checked_in}
+                                        checkedInAt={qrRegistration.checked_in_at}
+                                    />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                )}
             </div>
         </div>
         </div>

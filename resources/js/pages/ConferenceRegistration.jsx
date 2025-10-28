@@ -5,7 +5,7 @@ import { useAuth } from '../contexts/AuthContext';
 import Form from '../components/Form';
 import ConferenceStatus from '../components/ConferenceStatus';
 import { submitConferenceRegistration, handleApiErrorWithToast } from '../utils/api';
-import { showRegistrationSuccess, showFormLoading, showFormError, showValidationError } from '../utils/messageUtils';
+import { showRegistrationSuccess, showFormLoading, showFormError, showValidationError, clearAllMessages } from '../utils/messageUtils';
 
 const ConferenceRegistration = () => {
     const { t, language } = useLanguage();
@@ -110,9 +110,10 @@ const ConferenceRegistration = () => {
         try {
             const response = await submitConferenceRegistration(formData);
             if (response.success) {
-                // Hide loading toast
+                // Hide any loading toasts and clear residual messages
                 if (window.hideToast) window.hideToast(loadingToastId);
-                
+                if (clearAllMessages) clearAllMessages();
+
                 // Show success message
                 showRegistrationSuccess('conference', 1, {
                     position: 'top-center',
@@ -128,12 +129,14 @@ const ConferenceRegistration = () => {
             } else {
                 // Hide loading toast
                 if (window.hideToast) window.hideToast(loadingToastId);
+                if (clearAllMessages) clearAllMessages();
                 showFormError(response.message || t('registrationFailed'));
             }
         } catch (error) {
             console.error('Registration error:', error);
             // Hide loading toast
             if (window.hideToast) window.hideToast(loadingToastId);
+            if (clearAllMessages) clearAllMessages();
             
             // Use enhanced error handling
             handleApiErrorWithToast(error, () => {
