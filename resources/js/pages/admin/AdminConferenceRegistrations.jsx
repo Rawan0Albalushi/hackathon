@@ -205,6 +205,25 @@ const AdminConferenceRegistrations = () => {
         });
     };
 
+    const getAttendanceBadge = (isCheckedIn, checkedInAt) => {
+        const isPresent = Boolean(isCheckedIn);
+        const classes = isPresent ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800';
+        const text = isPresent ? 'حاضر' : 'غير حاضر';
+        return (
+            <span title={isPresent && checkedInAt ? `وقت الدخول: ${formatDate(checkedInAt)}` : ''} className={`px-2 py-1 rounded-full text-xs font-medium ${classes}`}>
+                {text}
+            </span>
+        );
+    };
+
+    const formatDateOnly = (dateString) => {
+        return new Date(dateString).toLocaleDateString('en-US', {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric'
+        });
+    };
+
     if (loading) {
         return (
             <div className="admin-table-container">
@@ -217,7 +236,7 @@ const AdminConferenceRegistrations = () => {
     }
 
     return (
-        <div className="space-y-6">
+        <div className="space-y-6" dir="rtl">
             <div className="bg-white shadow rounded-lg">
                 <div className="px-6 py-4 border-b border-gray-200">
                     <h2 className="text-xl font-semibold text-gray-900">إدارة تسجيلات المؤتمر</h2>
@@ -271,13 +290,13 @@ const AdminConferenceRegistrations = () => {
                                         الهاتف
                                     </th>
                                     <th className="px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                        المؤسسة
-                                    </th>
-                                    <th className="px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">
                                         الجلسة المختارة
                                     </th>
                                     <th className="px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">
                                         الحالة
+                                    </th>
+                                    <th className="px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        الحضور
                                     </th>
                                     <th className="px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">
                                         تاريخ التسجيل
@@ -300,16 +319,16 @@ const AdminConferenceRegistrations = () => {
                                             {registration.phone}
                                         </td>
                                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                            {registration.organization || 'غير محدد'}
-                                        </td>
-                                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                                             {getSessionText(registration.session_choice)}
                                         </td>
                                         <td className="px-6 py-4 whitespace-nowrap">
                                             {getStatusBadge(registration.status)}
                                         </td>
+                                        <td className="px-6 py-4 whitespace-nowrap">
+                                            {getAttendanceBadge(registration.is_checked_in, registration.checked_in_at)}
+                                        </td>
                                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                            {formatDate(registration.created_at)}
+                                            {formatDateOnly(registration.created_at)}
                                         </td>
                                         <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                                             <div className="admin-btn-container">

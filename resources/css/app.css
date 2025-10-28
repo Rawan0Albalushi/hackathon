@@ -4826,38 +4826,85 @@ html, body {
 /* Workshop table specific styling */
 .admin-table-container[data-table="workshop"] th:nth-child(4),
 .admin-table-container[data-table="workshop"] td:nth-child(4) {
-    width: 18%;
-    min-width: 140px;
+    /* الورشة */
+    width: 20%;
+    min-width: 150px;
 }
 
 .admin-table-container[data-table="workshop"] th:nth-child(5),
 .admin-table-container[data-table="workshop"] td:nth-child(5) {
-    width: 15%;
-    min-width: 120px;
+    /* الحالة */
+    width: 12%;
+    min-width: 110px;
+    text-align: center;
 }
 
-/* Conference table specific styling */
+.admin-table-container[data-table="workshop"] th:nth-child(6),
+.admin-table-container[data-table="workshop"] td:nth-child(6) {
+    /* الحضور */
+    width: 10%;
+    min-width: 100px;
+    text-align: center;
+}
+
+.admin-table-container[data-table="workshop"] th:nth-child(7),
+.admin-table-container[data-table="workshop"] td:nth-child(7) {
+    /* تاريخ التسجيل */
+    width: 14%;
+    min-width: 120px;
+    white-space: nowrap;
+    color: #6b7280;
+}
+
+/* Conference table specific styling (after removing المؤسسة column) */
 .admin-table-container[data-table="conference"] th:nth-child(4),
 .admin-table-container[data-table="conference"] td:nth-child(4) {
+    /* الجلسة المختارة */
     width: 18%;
     min-width: 140px;
 }
 
 .admin-table-container[data-table="conference"] th:nth-child(5),
 .admin-table-container[data-table="conference"] td:nth-child(5) {
-    width: 15%;
-    min-width: 120px;
+    /* الحالة */
+    width: 12%;
+    min-width: 110px;
 }
 
-/* Status column styling */
-.admin-table-container td:nth-child(6) {
+/* Conference table: prevent header text wrapping */
+.admin-table-container[data-table="conference"] th {
+    white-space: nowrap;
+}
+
+/* Conference table: Status and Attendance centering */
+.admin-table-container[data-table="conference"] td:nth-child(5),
+.admin-table-container[data-table="conference"] td:nth-child(6) {
     text-align: center;
 }
 
-/* Date column styling */
-.admin-table-container td:nth-child(7) {
+/* Conference table: Attendance column sizing (now index 6) */
+.admin-table-container[data-table="conference"] th:nth-child(6),
+.admin-table-container[data-table="conference"] td:nth-child(6) {
+    width: 10%;
+    min-width: 100px;
+}
+
+/* Conference table: Date column (now index 7 after removal) */
+.admin-table-container[data-table="conference"] th:nth-child(7),
+.admin-table-container[data-table="conference"] td:nth-child(7) {
+    width: 14%;
+    min-width: 120px;
     font-size: 0.875rem;
     color: #6b7280;
+    white-space: nowrap;
+}
+
+/* Conference table: Ensure Actions column stays on one line and has space */
+.admin-table-container[data-table="conference"] th:last-child,
+.admin-table-container[data-table="conference"] td:last-child {
+    width: 16%;
+    min-width: 150px;
+    white-space: nowrap !important;
 }
 
 /* Responsive table adjustments */

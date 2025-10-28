@@ -248,6 +248,17 @@ const AdminHackathonRegistrations = () => {
         });
     };
 
+    const getAttendanceBadge = (isCheckedIn, checkedInAt) => {
+        const isPresent = Boolean(isCheckedIn);
+        const classes = isPresent ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800';
+        const text = isPresent ? 'حاضر' : 'غير حاضر';
+        return (
+            <span title={isPresent && checkedInAt ? `وقت الدخول: ${formatDate(checkedInAt)}` : ''} className={`px-2 py-1 rounded-full text-xs font-medium ${classes}`}>
+                {text}
+            </span>
+        );
+    };
+
     if (loading) {
         return (
             <div className="admin-table-container">
@@ -336,6 +347,9 @@ const AdminHackathonRegistrations = () => {
                                         الحالة
                                     </th>
                                     <th className="px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        الحضور
+                                    </th>
+                                    <th className="px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">
                                         تاريخ التسجيل
                                     </th>
                                     <th className="px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">
@@ -365,6 +379,9 @@ const AdminHackathonRegistrations = () => {
                                         </td>
                                         <td className="px-6 py-4 whitespace-nowrap">
                                             {getStatusBadge(registration.status)}
+                                        </td>
+                                        <td className="px-6 py-4 whitespace-nowrap">
+                                            {getAttendanceBadge(registration.is_checked_in, registration.checked_in_at)}
                                         </td>
                                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                                             {formatDate(registration.created_at)}
