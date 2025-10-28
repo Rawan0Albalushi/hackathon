@@ -14,6 +14,7 @@ const ConferenceRegistration = () => {
     const [isLoading, setIsLoading] = useState(false);
     const [existingRegistration, setExistingRegistration] = useState(null);
     const [loadingRegistration, setLoadingRegistration] = useState(true);
+    const [prefillName, setPrefillName] = useState('');
 
     // Check for existing registration
     useEffect(() => {
@@ -33,6 +34,13 @@ const ConferenceRegistration = () => {
             
             if (data.success && data.data.conference) {
                 setExistingRegistration(data.data.conference);
+                setPrefillName(data.data.conference.full_name || '');
+            } else if (data.success) {
+                const fallbackName = (data.data.workshops && data.data.workshops[0]?.full_name)
+                    || data.data.hackathon?.full_name
+                    || user?.name
+                    || '';
+                setPrefillName(fallbackName);
             }
         } catch (error) {
             console.error('Error fetching registration:', error);
@@ -53,7 +61,8 @@ const ConferenceRegistration = () => {
             label: t('fullName'),
             type: 'text',
             required: true,
-            placeholder: language === 'ar' ? 'أدخل اسمك الكامل' : 'Enter your full name'
+            placeholder: language === 'ar' ? 'أدخل اسمك الكامل' : 'Enter your full name',
+            value: prefillName || user?.name || ''
         },
         {
             name: 'email',
@@ -112,6 +121,9 @@ const ConferenceRegistration = () => {
                 
                 // Update the existing registration state
                 setExistingRegistration(response.data);
+                if (response.data?.full_name) {
+                    setPrefillName(response.data.full_name);
+                }
                 // Don't navigate to success page, show the status instead
             } else {
                 // Hide loading toast

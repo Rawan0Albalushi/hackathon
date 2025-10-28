@@ -14,6 +14,7 @@ const HackathonRegistration = () => {
     const [isLoading, setIsLoading] = useState(false);
     const [existingRegistration, setExistingRegistration] = useState(null);
     const [loadingRegistration, setLoadingRegistration] = useState(true);
+    const [prefillName, setPrefillName] = useState('');
 
     // Check for existing registration
     useEffect(() => {
@@ -33,6 +34,14 @@ const HackathonRegistration = () => {
             
             if (data.success && data.data.hackathon) {
                 setExistingRegistration(data.data.hackathon);
+                setPrefillName(data.data.hackathon.full_name || '');
+            } else if (data.success) {
+                // Fallback to any other registration name or authenticated user's name
+                const fallbackName = (data.data.workshops && data.data.workshops[0]?.full_name)
+                    || data.data.conference?.full_name
+                    || user?.name
+                    || '';
+                setPrefillName(fallbackName);
             }
         } catch (error) {
             console.error('Error fetching registration:', error);
@@ -53,7 +62,8 @@ const HackathonRegistration = () => {
             label: t('fullName'),
             type: 'text',
             required: true,
-            placeholder: language === 'ar' ? 'أدخل اسمك الكامل' : 'Enter your full name'
+            placeholder: language === 'ar' ? 'أدخل اسمك الكامل' : 'Enter your full name',
+            value: prefillName || user?.name || ''
         },
         {
             name: 'email',
@@ -126,16 +136,10 @@ const HackathonRegistration = () => {
 
     const handleSubmit = async (formData) => {
         setIsLoading(true);
-        const loadingToastId = showFormLoading(
-            language === 'ar' ? 'جاري تسجيل الهاكاثون...' : 'Registering for hackathon...'
-        );
 
         try {
             const response = await submitHackathonRegistration(formData);
             if (response.success) {
-                // Hide loading toast
-                if (window.hideToast) window.hideToast(loadingToastId);
-                
                 // Show success message
                 showRegistrationSuccess('hackathon', 1, {
                     position: 'top-center',
@@ -144,16 +148,16 @@ const HackathonRegistration = () => {
                 
                 // Update the existing registration state
                 setExistingRegistration(response.data);
+                // Remember the name the user submitted
+                if (response.data?.full_name) {
+                    setPrefillName(response.data.full_name);
+                }
                 // Don't navigate to success page, show the status instead
             } else {
-                // Hide loading toast
-                if (window.hideToast) window.hideToast(loadingToastId);
                 showFormError(response.message || t('registrationFailed'));
             }
         } catch (error) {
             console.error('Registration error:', error);
-            // Hide loading toast
-            if (window.hideToast) window.hideToast(loadingToastId);
             
             // Use enhanced error handling
             handleApiErrorWithToast(error, () => {

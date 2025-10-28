@@ -19,6 +19,7 @@ const WorkshopRegistration = () => {
     const [loadingRegistration, setLoadingRegistration] = useState(true);
     const [userRegistrations, setUserRegistrations] = useState([]);
     const [workshopsWithStatus, setWorkshopsWithStatus] = useState([]);
+    const [prefillName, setPrefillName] = useState('');
 
     useEffect(() => {
         fetchWorkshops();
@@ -65,6 +66,16 @@ const WorkshopRegistration = () => {
                 setUserRegistrations(data.data.workshops);
                 // Combine workshops with registration status
                 combineWorkshopsWithStatus(data.data.workshops);
+                // Prefill name from the most recent workshop registration if available
+                if (data.data.workshops.length > 0) {
+                    setPrefillName(data.data.workshops[0].full_name || '');
+                } else if (data.data.conference?.full_name) {
+                    setPrefillName(data.data.conference.full_name);
+                } else if (data.data.hackathon?.full_name) {
+                    setPrefillName(data.data.hackathon.full_name);
+                } else if (user?.name) {
+                    setPrefillName(user.name);
+                }
             }
         } catch (error) {
             console.error('Error fetching user registrations:', error);
@@ -141,11 +152,19 @@ const WorkshopRegistration = () => {
                     const existingReg = data.data.workshops.find(reg => reg.workshop_id == workshopId);
                     if (existingReg) {
                         setExistingRegistration(existingReg);
+                        setPrefillName(existingReg.full_name || '');
                     }
                 } else {
                     // If no specific workshop selected, show the first registration
                     setExistingRegistration(data.data.workshops[0]);
+                    setPrefillName(data.data.workshops[0]?.full_name || '');
                 }
+            } else if (data.success) {
+                const fallbackName = data.data.hackathon?.full_name
+                    || data.data.conference?.full_name
+                    || user?.name
+                    || '';
+                setPrefillName(fallbackName);
             }
         } catch (error) {
             console.error('Error fetching registration:', error);
@@ -209,7 +228,8 @@ const WorkshopRegistration = () => {
             label: t('fullName'),
             type: 'text',
             required: true,
-            placeholder: language === 'ar' ? 'أدخل اسمك الكامل' : 'Enter your full name'
+            placeholder: language === 'ar' ? 'أدخل اسمك الكامل' : 'Enter your full name',
+            value: prefillName || user?.name || ''
         },
         {
             name: 'email',
@@ -302,6 +322,10 @@ const WorkshopRegistration = () => {
                 await fetchUserRegistrations();
                 // Clear selected workshops
                 setSelectedWorkshops([]);
+                // Remember submitted name
+                if (formData?.full_name) {
+                    setPrefillName(formData.full_name);
+                }
                 // Don't navigate to success page, show the status instead
             } else {
                 // Hide loading toast
