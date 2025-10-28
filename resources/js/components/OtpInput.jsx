@@ -99,12 +99,13 @@ const OtpInput = ({ length = 6, onComplete, disabled = false, error = false }) =
     };
 
     return (
-        <div className="flex justify-center gap-2 sm:gap-3 max-w-full px-4">
+        <div className="flex justify-center gap-2 sm:gap-3 max-w-full px-4" style={{direction: 'ltr'}}>
             {otp.map((digit, index) => (
                 <input
                     key={index}
                     ref={(el) => (inputRefs.current[index] = el)}
                     type="text"
+                    dir="ltr"
                     inputMode="numeric"
                     maxLength="1"
                     value={digit}

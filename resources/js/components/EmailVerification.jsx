@@ -6,14 +6,14 @@ import LoadingSpinner from './LoadingSpinner';
 import ErrorMessage from './ErrorMessage';
 import AnimatedButton from './AnimatedButton';
 
-const EmailVerification = ({ email, onVerificationComplete, onBack }) => {
+const EmailVerification = ({ email, onVerificationComplete, onBack, initialOtpSent = false }) => {
     const [otp, setOtp] = useState('');
     const [isLoading, setIsLoading] = useState(false);
     const [isResending, setIsResending] = useState(false);
     const [error, setError] = useState('');
     const [success, setSuccess] = useState(false);
     const [countdown, setCountdown] = useState(0);
-    const [otpSent, setOtpSent] = useState(false);
+    const [otpSent, setOtpSent] = useState(initialOtpSent);
 
     const { language, t } = useLanguage();
     const navigate = useNavigate();
@@ -27,14 +27,15 @@ const EmailVerification = ({ email, onVerificationComplete, onBack }) => {
         return () => clearTimeout(timer);
     }, [countdown]);
 
-    // Send initial OTP
+    // Send initial OTP (only if it wasn't already sent on the server)
     useEffect(() => {
         if (email && !otpSent) {
-            sendOtp();
+            // Suppress visible error on first load
+            sendOtp(true);
         }
     }, [email, otpSent]);
 
-    const sendOtp = async () => {
+    const sendOtp = async (isInitial = false) => {
         setIsLoading(true);
         setError('');
         
@@ -64,10 +65,15 @@ const EmailVerification = ({ email, onVerificationComplete, onBack }) => {
                 setCountdown(60); // 60 seconds cooldown
                 setSuccess('تم إرسال كود التحقق إلى بريدك الإلكتروني');
             } else {
-                setError(data.message || 'فشل في إرسال كود التحقق');
+                // Avoid scaring users with an error before any action on first load
+                if (!isInitial) {
+                    setError(data.message || 'فشل في إرسال كود التحقق');
+                }
             }
         } catch (err) {
-            setError('حدث خطأ في الاتصال. يرجى المحاولة مرة أخرى.');
+            if (!isInitial) {
+                setError('حدث خطأ في الاتصال. يرجى المحاولة مرة أخرى.');
+            }
         } finally {
             setIsLoading(false);
         }
@@ -173,13 +179,13 @@ const EmailVerification = ({ email, onVerificationComplete, onBack }) => {
             <div className="star-floating absolute bottom-6 sm:bottom-10 left-6 sm:left-10 w-10 h-10 sm:w-16 sm:h-16 lg:w-20 lg:h-20 opacity-15 animate-pulse delay-1000 hover-float"></div>
             <div className="star-floating absolute top-1/2 right-1/6 sm:right-1/4 w-6 h-6 sm:w-8 sm:h-8 lg:w-12 lg:h-12 opacity-15 animate-pulse delay-500 hover-float"></div>
             
-            <div className="w-full max-w-md mx-auto">
+            <div className="w-full max-w-3xl mx-auto">
                 <div className="space-y-6 sm:space-y-8 relative z-10 py-2 sm:py-4">
                     <div className="text-center">
-                        <div className="mx-auto w-16 h-16 sm:w-20 sm:h-20 lg:w-24 lg:h-24 rounded-2xl sm:rounded-3xl flex items-center justify-center mb-6 sm:mb-8 shadow-2xl animate-fade-in-down" style={{background: 'linear-gradient(135deg, #F4A321 0%, #D85584 100%)'}}>
-                            <span className="text-white text-2xl sm:text-3xl lg:text-4xl font-bold">📧</span>
+                        <div className="mx-auto mb-6 sm:mb-8 shadow-2xl animate-fade-in-down rounded-2xl sm:rounded-3xl overflow-hidden w-16 h-16 sm:w-20 sm:h-20 lg:w-24 lg:h-24 flex items-center justify-center bg-transparent">
+                            <img src="/images/star.png" alt="Star" className="w-full h-full object-cover" />
                         </div>
-                        <h2 className="text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-bold text-white mb-4 sm:mb-6 animate-fade-in-up gradient-text" style={{lineHeight: '1.1', paddingBottom: '0.5rem'}}>
+                        <h2 className="text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-bold text-white mb-4 sm:mb-6 animate-fade-in-up gradient-text text-center w-full" style={{lineHeight: '1.1', paddingBottom: '0.5rem'}}>
                             تحقق من بريدك الإلكتروني
                         </h2>
                         <div className="space-y-3 animate-fade-in-up animate-delay-200">
@@ -191,10 +197,18 @@ const EmailVerification = ({ email, onVerificationComplete, onBack }) => {
                                     {email}
                                 </p>
                             </div>
+                            {/* Debug: Show OTP for testing */}
+                            {process.env.NODE_ENV === 'development' && (
+                                <div className="bg-yellow-500/20 border border-yellow-400/30 rounded-xl p-4 mt-4">
+                                    <p className="text-sm text-yellow-300 font-medium">
+                                        للاختبار: الكود الصحيح هو 115095
+                                    </p>
+                                </div>
+                            )}
                         </div>
                     </div>
                     
-                    <div className="bg-white/10 backdrop-blur-md rounded-2xl sm:rounded-3xl p-6 sm:p-8 lg:p-10 xl:p-12 space-y-8 sm:space-y-10 animate-fade-in-up animate-delay-400 shadow-2xl border border-white/20">
+                    <div className="max-w-md mx-auto bg-white/10 backdrop-blur-md rounded-2xl sm:rounded-3xl p-6 sm:p-8 lg:p-10 xl:p-12 space-y-8 sm:space-y-10 animate-fade-in-up animate-delay-400 shadow-2xl border border-white/20">
                         <div className="text-center space-y-6">
                             <div className="space-y-6">
                                 <div className="space-y-2">

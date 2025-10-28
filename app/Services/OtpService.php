@@ -19,6 +19,9 @@ class OtpService
             // Create OTP code
             $otpCode = OtpCode::createForEmailVerification($email);
             
+            // Add delay to avoid Mailtrap rate limiting
+            sleep(2);
+            
             // Send email
             Mail::to($email)->send(new OtpVerificationMail($otpCode->code, $userName));
             
@@ -51,9 +54,28 @@ class OtpService
     public function verifyOtp(string $email, string $code): array
     {
         try {
+            // Log the verification attempt
+            Log::info('OTP verification attempt', [
+                'email' => $email,
+                'code' => $code,
+                'code_length' => strlen($code)
+            ]);
+            
             $otp = OtpCode::verifyCode($email, $code, 'email_verification');
             
             if (!$otp) {
+                // Log what OTPs exist for this email
+                $existingOtps = OtpCode::where('email', $email)
+                    ->where('type', 'email_verification')
+                    ->orderBy('created_at', 'desc')
+                    ->get(['code', 'used', 'expires_at', 'created_at']);
+                
+                Log::info('OTP verification failed - no valid OTP found', [
+                    'email' => $email,
+                    'attempted_code' => $code,
+                    'existing_otps' => $existingOtps->toArray()
+                ]);
+                
                 return [
                     'success' => false,
                     'message' => 'كود التحقق غير صحيح أو منتهي الصلاحية'

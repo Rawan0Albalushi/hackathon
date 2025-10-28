@@ -90,6 +90,7 @@ const RegisterForm = () => {
                 email={registeredEmail}
                 onVerificationComplete={handleVerificationComplete}
                 onBack={handleBackToRegister}
+                initialOtpSent={true}
             />
         );
     }
