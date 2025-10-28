@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect, useRef } from 'react';
 import { useLanguage } from '../contexts/LanguageContext';
 import { useAuth } from '../contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
@@ -17,7 +17,59 @@ const ScannerDashboard = () => {
     const [cameraError, setCameraError] = useState(null);
     const [scanCount, setScanCount] = useState(0);
     const [lastScanTime, setLastScanTime] = useState(null);
-    const [cameraFacing, setCameraFacing] = useState('environment'); // 'environment' for back camera, 'user' for front camera
+    const [cameraFacing, setCameraFacing] = useState('user'); // default to front camera on laptops
+    const [cameraPermission, setCameraPermission] = useState(null);
+    const [cameraStream, setCameraStream] = useState(null);
+    const [cameraBooting, setCameraBooting] = useState(false);
+    const videoRef = useRef(null);
+    const [videoInputs, setVideoInputs] = useState([]);
+    const [selectedDeviceId, setSelectedDeviceId] = useState(null);
+
+    // Check camera permissions and availability
+    useEffect(() => {
+        const checkCameraPermission = async () => {
+            try {
+                if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+                    const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+                    setCameraPermission('granted');
+                    setCameraStream(stream);
+                    // Stop the stream immediately as we just wanted to check permissions
+                    stream.getTracks().forEach(track => track.stop());
+
+                    // Enumerate cameras
+                    const devices = await navigator.mediaDevices.enumerateDevices();
+                    const cams = devices.filter(d => d.kind === 'videoinput');
+                    setVideoInputs(cams);
+                    const preferred = cams.find(d => /back|rear|environment/i.test(d.label)) || cams[0];
+                    setSelectedDeviceId(preferred ? preferred.deviceId : null);
+                } else {
+                    setCameraPermission('denied');
+                    setCameraError(language === 'ar' ? 'الكاميرا غير مدعومة في هذا المتصفح' : 'Camera not supported in this browser');
+                }
+            } catch (error) {
+                console.error('Camera permission error:', error);
+                setCameraPermission('denied');
+                if (error.name === 'NotAllowedError') {
+                    setCameraError(language === 'ar' ? 'تم رفض إذن الكاميرا. يرجى السماح بالوصول للكاميرا' : 'Camera permission denied. Please allow camera access');
+                } else if (error.name === 'NotFoundError') {
+                    setCameraError(language === 'ar' ? 'لم يتم العثور على كاميرا' : 'No camera found');
+                } else {
+                    setCameraError(language === 'ar' ? 'خطأ في الوصول للكاميرا' : 'Camera access error');
+                }
+            }
+        };
+
+        checkCameraPermission();
+    }, [cameraFacing, language]);
+
+    // Cleanup camera stream on unmount
+    useEffect(() => {
+        return () => {
+            if (cameraStream) {
+                cameraStream.getTracks().forEach(track => track.stop());
+            }
+        };
+    }, [cameraStream]);
 
     const handleQRCodeChange = (e) => {
         setQrCode(e.target.value);
@@ -65,23 +117,75 @@ const ScannerDashboard = () => {
 
     const handleCameraError = useCallback((error) => {
         console.error('Camera error:', error);
-        const errorMessage = error?.message || error?.toString() || 'Camera access failed';
+        let errorMessage = 'Camera access failed';
+        
+        if (error?.name === 'NotAllowedError') {
+            errorMessage = language === 'ar' ? 'تم رفض إذن الكاميرا. يرجى السماح بالوصول للكاميرا' : 'Camera permission denied. Please allow camera access';
+        } else if (error?.name === 'NotFoundError') {
+            errorMessage = language === 'ar' ? 'لم يتم العثور على كاميرا' : 'No camera found';
+        } else if (error?.name === 'NotReadableError') {
+            errorMessage = language === 'ar' ? 'الكاميرا مستخدمة من قبل تطبيق آخر' : 'Camera is being used by another application';
+        } else if (error?.name === 'OverconstrainedError') {
+            errorMessage = language === 'ar' ? 'إعدادات الكاميرا غير مدعومة' : 'Camera settings not supported';
+        } else if (error?.message) {
+            errorMessage = error.message;
+        } else if (typeof error === 'string') {
+            errorMessage = error;
+        }
+        
         setCameraError(errorMessage);
-    }, []);
+        setCameraPermission('denied');
+    }, [language]);
 
-    const toggleCameraMode = () => {
-        setCameraMode(!cameraMode);
-        setCameraError(null);
+    const toggleCameraMode = async () => {
         if (!cameraMode) {
+            // Starting camera (let Scanner component manage the stream)
+            if (cameraPermission === 'denied') {
+                setCameraError(language === 'ar' ? 'يرجى السماح بالوصول للكاميرا أولاً' : 'Please allow camera access first');
+                return;
+            }
+            setCameraBooting(true);
+            setTimeout(() => setCameraBooting(false), 1500);
+            setCameraMode(true);
+            setCameraError(null);
             setQrCode('');
             setError(null);
             setSuccess(false);
             setScanResult(null);
+        } else {
+            // Stopping camera
+            if (cameraStream) {
+                cameraStream.getTracks().forEach(track => track.stop());
+                setCameraStream(null);
+            }
+            setCameraMode(false);
+            setCameraBooting(false);
+            setCameraError(null);
         }
     };
 
-    const toggleCameraFacing = () => {
-        setCameraFacing(prev => prev === 'environment' ? 'user' : 'environment');
+    const toggleCameraFacing = async () => {
+        if (videoInputs.length > 1) {
+            const currentIndex = videoInputs.findIndex(d => d.deviceId === selectedDeviceId);
+            const next = videoInputs[(currentIndex + 1) % videoInputs.length];
+            setSelectedDeviceId(next?.deviceId || null);
+        } else {
+            const newFacing = cameraFacing === 'environment' ? 'user' : 'environment';
+            setCameraFacing(newFacing);
+        }
+
+        if (cameraMode && cameraStream) {
+            try {
+                cameraStream.getTracks().forEach(track => track.stop());
+                const opts = selectedDeviceId ? { video: { deviceId: { exact: selectedDeviceId } } } : { video: { facingMode: cameraFacing } };
+                const stream = await navigator.mediaDevices.getUserMedia(opts);
+                setCameraStream(stream);
+                setCameraError(null);
+            } catch (error) {
+                console.error('Camera switch error:', error);
+                setCameraError(language === 'ar' ? 'فشل في تبديل الكاميرا' : 'Failed to switch camera');
+            }
+        }
     };
 
     const scanQRCode = async (qrData = null) => {
@@ -229,32 +333,32 @@ const ScannerDashboard = () => {
                 <div className="absolute inset-0 bg-black opacity-20"></div>
                 <div className="relative max-w-7xl mx-auto px-3 sm:px-4 lg:px-8 py-4 sm:py-6 lg:py-8">
                     <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center space-y-4 sm:space-y-0">
-                        <div className="flex items-center space-x-3 sm:space-x-4 rtl:space-x-reverse">
+                        <div className="flex items-center space-x-4 sm:space-x-6 rtl:space-x-reverse">
                             <div className="relative">
-                                <div className="p-2 sm:p-3 rounded-xl sm:rounded-2xl bg-white/20 backdrop-blur-sm shadow-lg">
-                                    <span className="text-white text-xl sm:text-2xl">📱</span>
+                                <div className="p-3 sm:p-4 rounded-xl sm:rounded-2xl bg-white/20 backdrop-blur-sm shadow-lg">
+                                    <span className="text-white text-2xl sm:text-3xl">📱</span>
                                 </div>
                                 <div className="absolute -top-1 -right-1 w-3 h-3 sm:w-4 sm:h-4 bg-green-400 rounded-full border-2 border-white animate-pulse"></div>
                             </div>
-                            <div>
-                                <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold text-white">
+                            <div className="space-y-2">
+                                <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white">
                                     {language === 'ar' ? 'مسح QR Code' : 'QR Code Scanner'}
                                 </h1>
-                                <p className="text-white/80 text-xs sm:text-sm mt-1">
+                                <p className="text-white/80 text-sm sm:text-base">
                                     {language === 'ar' ? 'نظام مسح متقدم للمشاركين' : 'Advanced participant scanning system'}
                                 </p>
                             </div>
                         </div>
-                        <div className="flex items-center space-x-2 sm:space-x-3 rtl:space-x-reverse">
+                        <div className="flex items-center space-x-3 sm:space-x-4 rtl:space-x-reverse">
                             <button
                                 onClick={toggleLanguage}
-                                className="px-3 py-2 sm:px-4 sm:py-2 text-xs sm:text-sm font-medium text-white bg-white/20 backdrop-blur-sm border border-white/30 rounded-lg sm:rounded-xl hover:bg-white/30 hover:shadow-md transition-all duration-200"
+                                className="px-4 py-2 sm:px-5 sm:py-3 text-sm sm:text-base font-medium text-white bg-white/20 backdrop-blur-sm border border-white/30 rounded-lg sm:rounded-xl hover:bg-white/30 hover:shadow-md transition-all duration-200"
                             >
                                 {language === 'ar' ? 'English' : 'العربية'}
                             </button>
                             <button
                                 onClick={handleLogout}
-                                className="px-3 py-2 sm:px-4 sm:py-2 text-xs sm:text-sm font-medium text-white bg-red-500/80 backdrop-blur-sm rounded-lg sm:rounded-xl hover:bg-red-600/80 shadow-lg hover:shadow-xl transition-all duration-200"
+                                className="px-4 py-2 sm:px-5 sm:py-3 text-sm sm:text-base font-medium text-white bg-red-500/80 backdrop-blur-sm rounded-lg sm:rounded-xl hover:bg-red-600/80 shadow-lg hover:shadow-xl transition-all duration-200"
                             >
                                 {language === 'ar' ? 'تسجيل خروج' : 'Logout'}
                             </button>
@@ -266,47 +370,58 @@ const ScannerDashboard = () => {
             <main className="relative max-w-7xl mx-auto px-3 sm:px-4 lg:px-8 py-4 sm:py-6 lg:py-8">
                 <div className="space-y-4 sm:space-y-6 lg:space-y-8">
                     {/* Stats Cards */}
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 lg:gap-6">
-                        <div className="group bg-white/90 backdrop-blur-sm rounded-xl sm:rounded-2xl shadow-lg sm:shadow-xl border border-white/20 p-4 sm:p-6 hover:shadow-2xl transition-all duration-300 hover:-translate-y-1">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8">
+                        <div className="group bg-white/90 backdrop-blur-sm rounded-xl sm:rounded-2xl shadow-lg sm:shadow-xl border border-white/20 p-5 sm:p-7 hover:shadow-2xl transition-all duration-300 hover:-translate-y-1">
                             <div className="flex items-center justify-between">
-                                <div className="flex items-center">
-                                    <div className="p-2 sm:p-3 rounded-lg sm:rounded-xl bg-gradient-to-r from-blue-500 to-blue-600 shadow-lg group-hover:scale-110 transition-transform duration-300">
-                                        <span className="text-white text-lg sm:text-2xl">📱</span>
+                                <div className="flex items-center gap-4 sm:gap-5">
+                                    <div className="p-3 sm:p-4 rounded-lg sm:rounded-xl bg-gradient-to-r from-blue-500 to-blue-600 shadow-lg group-hover:scale-110 transition-transform duration-300">
+                                        <span className="text-white text-xl sm:text-3xl">📱</span>
                                     </div>
-                                    <div className="ml-3 sm:ml-4">
-                                        <p className="text-xs sm:text-sm font-medium text-gray-600">
+                                    <div className="space-y-1">
+                                        <p className="text-sm sm:text-base font-medium text-gray-600">
                                             {language === 'ar' ? 'إجمالي المسح' : 'Total Scans'}
                                         </p>
-                                        <p className="text-xl sm:text-2xl lg:text-3xl font-bold bg-gradient-to-r from-blue-600 to-blue-800 bg-clip-text text-transparent">{scanCount}</p>
+                                        <p className="text-2xl sm:text-3xl lg:text-4xl font-bold bg-gradient-to-r from-blue-600 to-blue-800 bg-clip-text text-transparent">{scanCount}</p>
                                     </div>
                                 </div>
                                 <button
                                     onClick={() => setScanCount(0)}
-                                    className="px-2 py-1 sm:px-3 sm:py-1.5 text-xs font-medium bg-gray-100 text-gray-600 rounded-lg hover:bg-gray-200 hover:shadow-md transition-all duration-200"
+                                    className="px-3 py-2 sm:px-4 sm:py-2.5 text-sm font-medium bg-gray-100 text-gray-600 rounded-lg hover:bg-gray-200 hover:shadow-md transition-all duration-200"
                                 >
                                     {language === 'ar' ? 'إعادة تعيين' : 'Reset'}
                                 </button>
                             </div>
                         </div>
                         
-                        <div className="group bg-white/90 backdrop-blur-sm rounded-xl sm:rounded-2xl shadow-lg sm:shadow-xl border border-white/20 p-4 sm:p-6 hover:shadow-2xl transition-all duration-300 hover:-translate-y-1">
-                            <div className="flex items-center">
-                                <div className="p-2 sm:p-3 rounded-lg sm:rounded-xl bg-gradient-to-r from-green-500 to-green-600 shadow-lg group-hover:scale-110 transition-transform duration-300">
-                                    <span className="text-white text-lg sm:text-2xl">✅</span>
+                        <div className="group bg-white/90 backdrop-blur-sm rounded-xl sm:rounded-2xl shadow-lg sm:shadow-xl border border-white/20 p-5 sm:p-7 hover:shadow-2xl transition-all duration-300 hover:-translate-y-1">
+                            <div className="flex items-center gap-4 sm:gap-5">
+                                <div className="p-3 sm:p-4 rounded-lg sm:rounded-xl bg-gradient-to-r from-green-500 to-green-600 shadow-lg group-hover:scale-110 transition-transform duration-300">
+                                    <span className="text-white text-xl sm:text-3xl">✅</span>
                                 </div>
-                                <div className="ml-3 sm:ml-4">
-                                    <p className="text-xs sm:text-sm font-medium text-gray-600">
+                                <div className="space-y-1">
+                                    <p className="text-sm sm:text-base font-medium text-gray-600">
                                         {language === 'ar' ? 'حالة الكاميرا' : 'Camera Status'}
                                     </p>
-                                    <p className="text-sm sm:text-lg font-bold text-gray-900">
+                                    <p className="text-base sm:text-xl font-bold text-gray-900">
                                         {cameraMode ? (
-                                            <span className="text-green-600 flex items-center">
-                                                <span className="w-2 h-2 bg-green-500 rounded-full mr-2 animate-pulse"></span>
-                                                {language === 'ar' ? 'نشطة' : 'Active'}
+                                            <span className="text-green-600 flex items-center space-x-2 rtl:space-x-reverse">
+                                                <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
+                                                <span>{language === 'ar' ? 'نشطة' : 'Active'}</span>
+                                            </span>
+                                        ) : cameraPermission === 'denied' ? (
+                                            <span className="text-red-500 flex items-center space-x-2 rtl:space-x-reverse">
+                                                <span className="w-2 h-2 bg-red-500 rounded-full"></span>
+                                                <span>{language === 'ar' ? 'مرفوضة' : 'Denied'}</span>
+                                            </span>
+                                        ) : cameraPermission === 'granted' ? (
+                                            <span className="text-blue-500 flex items-center space-x-2 rtl:space-x-reverse">
+                                                <span className="w-2 h-2 bg-blue-500 rounded-full"></span>
+                                                <span>{language === 'ar' ? 'جاهزة' : 'Ready'}</span>
                                             </span>
                                         ) : (
-                                            <span className="text-gray-500">
-                                                {language === 'ar' ? 'معطلة' : 'Inactive'}
+                                            <span className="text-yellow-500 flex items-center space-x-2 rtl:space-x-reverse">
+                                                <span className="w-2 h-2 bg-yellow-500 rounded-full animate-pulse"></span>
+                                                <span>{language === 'ar' ? 'جاري التحقق...' : 'Checking...'}</span>
                                             </span>
                                         )}
                                     </p>
@@ -314,39 +429,39 @@ const ScannerDashboard = () => {
                             </div>
                         </div>
                         
-                        <div className="group bg-white/90 backdrop-blur-sm rounded-xl sm:rounded-2xl shadow-lg sm:shadow-xl border border-white/20 p-4 sm:p-6 hover:shadow-2xl transition-all duration-300 hover:-translate-y-1 sm:col-span-2 lg:col-span-1">
-                            <div className="flex items-center">
-                                <div className="p-2 sm:p-3 rounded-lg sm:rounded-xl bg-gradient-to-r from-purple-500 to-purple-600 shadow-lg group-hover:scale-110 transition-transform duration-300">
-                                    <span className="text-white text-lg sm:text-2xl">👤</span>
+                        <div className="group bg-white/90 backdrop-blur-sm rounded-xl sm:rounded-2xl shadow-lg sm:shadow-xl border border-white/20 p-5 sm:p-7 hover:shadow-2xl transition-all duration-300 hover:-translate-y-1 sm:col-span-2 lg:col-span-1">
+                            <div className="flex items-center gap-4 sm:gap-5">
+                                <div className="p-3 sm:p-4 rounded-lg sm:rounded-xl bg-gradient-to-r from-purple-500 to-purple-600 shadow-lg group-hover:scale-110 transition-transform duration-300">
+                                    <span className="text-white text-xl sm:text-3xl">👤</span>
                                 </div>
-                                <div className="ml-3 sm:ml-4">
-                                    <p className="text-xs sm:text-sm font-medium text-gray-600">
+                                <div className="space-y-1">
+                                    <p className="text-sm sm:text-base font-medium text-gray-600">
                                         {language === 'ar' ? 'المساح' : 'Scanner'}
                                     </p>
-                                    <p className="text-sm sm:text-lg font-bold bg-gradient-to-r from-purple-600 to-purple-800 bg-clip-text text-transparent">{user?.name}</p>
+                                    <p className="text-base sm:text-xl font-bold bg-gradient-to-r from-purple-600 to-purple-800 bg-clip-text text-transparent">{user?.name}</p>
                                 </div>
                             </div>
                         </div>
                     </div>
 
                     {/* Scanner Controls */}
-                    <div className="bg-white/90 backdrop-blur-sm rounded-2xl sm:rounded-3xl shadow-xl sm:shadow-2xl border border-white/20 p-4 sm:p-6 lg:p-8">
-                        <div className="flex flex-col lg:flex-row gap-4 sm:gap-6 lg:gap-8">
+                    <div className="bg-white/90 backdrop-blur-sm rounded-2xl sm:rounded-3xl shadow-xl sm:shadow-2xl border border-white/20 p-5 sm:p-7 lg:p-9">
+                        <div className="flex flex-col lg:flex-row gap-6 sm:gap-8 lg:gap-10">
                             {/* Camera Scanner */}
                             <div className="flex-1">
-                                <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-4 sm:mb-6 space-y-3 sm:space-y-0">
-                                    <div className="flex items-center space-x-3 rtl:space-x-reverse">
-                                        <div className="p-2 rounded-xl bg-gradient-to-r from-green-500 to-emerald-600 shadow-lg">
-                                            <span className="text-white text-lg sm:text-xl">📷</span>
+                                <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-6 sm:mb-8 space-y-4 sm:space-y-0">
+                                    <div className="flex items-center space-x-4 rtl:space-x-reverse">
+                                        <div className="p-3 rounded-xl bg-gradient-to-r from-green-500 to-emerald-600 shadow-lg">
+                                            <span className="text-white text-xl sm:text-2xl">📷</span>
                                         </div>
-                                        <h3 className="text-lg sm:text-xl font-bold text-gray-900">
+                                        <h3 className="text-xl sm:text-2xl font-bold text-gray-900">
                                             {language === 'ar' ? 'مسح بالكاميرا' : 'Camera Scanner'}
                                         </h3>
                                     </div>
-                                    <div className="flex flex-col sm:flex-row gap-2 sm:gap-3">
+                                    <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
                                         <button
                                             onClick={toggleCameraFacing}
-                                            className="px-3 py-2 sm:px-4 sm:py-2 text-xs sm:text-sm font-medium text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200 transition-all duration-200"
+                                            className="px-4 py-2 sm:px-5 sm:py-3 text-sm sm:text-base font-medium text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200 transition-all duration-200"
                                         >
                                             {cameraFacing === 'environment' 
                                                 ? (language === 'ar' ? '🔄 الكاميرا الخلفية' : '🔄 Back Camera')
@@ -355,7 +470,7 @@ const ScannerDashboard = () => {
                                         </button>
                                         <button
                                             onClick={toggleCameraMode}
-                                            className={`px-4 py-2 sm:px-6 sm:py-3 rounded-lg sm:rounded-xl font-semibold transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105 text-sm sm:text-base ${
+                                            className={`px-5 py-3 sm:px-7 sm:py-4 rounded-lg sm:rounded-xl font-semibold transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105 text-base sm:text-lg ${
                                                 cameraMode 
                                                     ? 'bg-gradient-to-r from-red-500 to-red-600 text-white hover:from-red-600 hover:to-red-700' 
                                                     : 'bg-gradient-to-r from-green-500 to-emerald-600 text-white hover:from-green-600 hover:to-emerald-700'
@@ -370,59 +485,181 @@ const ScannerDashboard = () => {
                                 </div>
                                 
                                 {cameraMode ? (
-                                    <div className="relative rounded-2xl overflow-hidden shadow-2xl">
+                                    <div className="relative rounded-2xl overflow-hidden shadow-2xl bg-black">
+                                        {/* Camera Loading State */}
+                                        {cameraBooting && (
+                                            <div className="absolute inset-0 bg-gradient-to-br from-gray-800 to-gray-900 flex items-center justify-center z-10">
+                                                <div className="text-center text-white">
+                                                    <div className="animate-spin rounded-full h-12 w-12 border-4 border-white border-t-transparent mx-auto mb-4"></div>
+                                                    <p className="text-lg font-semibold">
+                                                        {language === 'ar' ? 'جاري تشغيل الكاميرا...' : 'Starting camera...'}
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        )}
+                                        
                                         <Scanner
                                             onScan={handleCameraScan}
                                             onError={handleCameraError}
                                             constraints={{
-                                                facingMode: cameraFacing
+                                                ...(selectedDeviceId ? { deviceId: { exact: selectedDeviceId } } : { facingMode: cameraFacing }),
+                                                width: { ideal: 1280, min: 640 },
+                                                height: { ideal: 720, min: 480 },
+                                                frameRate: { ideal: 30, max: 60 }
                                             }}
                                             styles={{
                                                 container: {
                                                     width: '100%',
-                                                    height: '300px',
+                                                    height: '400px',
                                                     borderRadius: '16px',
-                                                    overflow: 'hidden'
+                                                    overflow: 'hidden',
+                                                    backgroundColor: '#000',
+                                                    position: 'relative'
                                                 },
                                                 video: {
                                                     width: '100%',
                                                     height: '100%',
-                                                    objectFit: 'cover'
+                                                    objectFit: 'cover',
+                                                    backgroundColor: '#000',
+                                                    transform: 'scaleX(-1)' // Mirror the video for better UX
                                                 }
                                             }}
+                                            components={{
+                                                audio: false,
+                                                finder: false,
+                                                torch: false
+                                            }}
                                         />
+                                        
+                                        {/* Enhanced Scanning Overlay */}
                                         <div className="absolute inset-0 pointer-events-none">
-                                            <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-48 sm:w-64 h-48 sm:h-64 border-2 sm:border-4 border-white rounded-xl sm:rounded-2xl opacity-90 shadow-2xl"></div>
-                                            <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-4 sm:w-6 h-4 sm:h-6 bg-white rounded-full shadow-lg"></div>
-                                            <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-1.5 sm:w-2 h-1.5 sm:h-2 bg-green-500 rounded-full animate-pulse"></div>
+                                            {/* Corner markers */}
+                                            <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-64 h-64">
+                                                {/* Top-left corner */}
+                                                <div className="absolute -top-2 -left-2 w-8 h-8 border-t-4 border-l-4 border-green-400 rounded-tl-lg corner-pulse"></div>
+                                                {/* Top-right corner */}
+                                                <div className="absolute -top-2 -right-2 w-8 h-8 border-t-4 border-r-4 border-green-400 rounded-tr-lg corner-pulse" style={{animationDelay: '0.2s'}}></div>
+                                                {/* Bottom-left corner */}
+                                                <div className="absolute -bottom-2 -left-2 w-8 h-8 border-b-4 border-l-4 border-green-400 rounded-bl-lg corner-pulse" style={{animationDelay: '0.4s'}}></div>
+                                                {/* Bottom-right corner */}
+                                                <div className="absolute -bottom-2 -right-2 w-8 h-8 border-b-4 border-r-4 border-green-400 rounded-br-lg corner-pulse" style={{animationDelay: '0.6s'}}></div>
+                                                
+                                                {/* Scanning line animation */}
+                                                <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-green-400 to-transparent scan-line"></div>
+                                                <div className="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-green-400 to-transparent scan-line" style={{animationDelay: '1s'}}></div>
+                                            </div>
+                                            
+                                            {/* Center dot */}
+                                            <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-3 h-3 bg-green-400 rounded-full shadow-lg center-dot"></div>
+                                            
+                                            {/* Scanning grid */}
+                                            <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-64 h-64 opacity-20">
+                                                <div className="grid grid-cols-3 grid-rows-3 h-full w-full">
+                                                    {Array.from({length: 9}).map((_, i) => (
+                                                        <div key={i} className="border border-green-400"></div>
+                                                    ))}
+                                                </div>
+                                            </div>
                                         </div>
-                                        <div className="absolute bottom-2 sm:bottom-4 left-1/2 transform -translate-x-1/2 bg-black/50 text-white px-2 py-1 sm:px-4 sm:py-2 rounded-full text-xs sm:text-sm font-medium">
-                                            {language === 'ar' ? 'وجه الكاميرا نحو QR Code' : 'Point camera at QR Code'}
+                                        
+                                        {/* Instructions */}
+                                        <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 bg-black/70 backdrop-blur-sm text-white px-4 py-2 rounded-full text-sm font-medium">
+                                            <div className="flex items-center space-x-2 rtl:space-x-reverse">
+                                                <span className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></span>
+                                                <span>{language === 'ar' ? 'وجه الكاميرا نحو QR Code' : 'Point camera at QR Code'}</span>
+                                            </div>
+                                        </div>
+                                        
+                                        {/* Camera info */}
+                                        <div className="absolute top-4 left-4 bg-black/70 backdrop-blur-sm text-white px-3 py-1 rounded-full text-xs">
+                                            {selectedDeviceId
+                                                ? (videoInputs.find(d => d.deviceId === selectedDeviceId)?.label || (language === 'ar' ? 'كاميرا متاحة' : 'Available Camera'))
+                                                : (cameraFacing === 'environment' 
+                                                    ? (language === 'ar' ? 'كاميرا خلفية' : 'Back Camera')
+                                                    : (language === 'ar' ? 'كاميرا أمامية' : 'Front Camera'))}
                                         </div>
                                     </div>
                                 ) : (
-                                    <div className="h-64 sm:h-80 lg:h-96 bg-gradient-to-br from-gray-100 to-gray-200 rounded-xl sm:rounded-2xl flex items-center justify-center shadow-inner">
-                                        <div className="text-center px-4">
-                                            <div className="w-16 h-16 sm:w-20 sm:h-20 bg-gradient-to-r from-gray-300 to-gray-400 rounded-xl sm:rounded-2xl flex items-center justify-center mx-auto mb-3 sm:mb-4 shadow-lg">
-                                                <span className="text-2xl sm:text-4xl">📷</span>
+                                    <div className="h-64 sm:h-80 lg:h-96 bg-gradient-to-br from-gray-100 to-gray-200 rounded-xl sm:rounded-2xl flex items-center justify-center shadow-inner relative overflow-hidden">
+                                        {/* Background pattern */}
+                                        <div className="absolute inset-0 opacity-5">
+                                            <div className="grid grid-cols-8 grid-rows-6 h-full w-full">
+                                                {Array.from({length: 48}).map((_, i) => (
+                                                    <div key={i} className="border border-gray-300"></div>
+                                                ))}
                                             </div>
-                                            <h4 className="text-base sm:text-lg font-semibold text-gray-700 mb-2">
+                                        </div>
+                                        
+                                        <div className="text-center px-4 relative z-10">
+                                            <div className="w-20 h-20 sm:w-24 sm:h-24 bg-gradient-to-r from-gray-300 to-gray-400 rounded-xl sm:rounded-2xl flex items-center justify-center mx-auto mb-4 sm:mb-6 shadow-lg camera-loading">
+                                                <span className="text-3xl sm:text-5xl">📷</span>
+                                            </div>
+                                            <h4 className="text-lg sm:text-xl font-bold text-gray-700 mb-3">
                                                 {language === 'ar' ? 'الكاميرا معطلة' : 'Camera Inactive'}
                                             </h4>
-                                            <p className="text-gray-500 text-sm sm:text-base max-w-sm">
+                                            <p className="text-gray-500 text-sm sm:text-base max-w-sm mb-4">
                                                 {language === 'ar' ? 'اضغط على "تشغيل" لبدء مسح QR Code تلقائياً' : 'Click "Start" to begin automatic QR Code scanning'}
                                             </p>
+                                            
+                                            {/* Camera status indicator */}
+                                            <div className="flex items-center justify-center space-x-2 rtl:space-x-reverse">
+                                                <div className={`w-3 h-3 rounded-full ${cameraPermission === 'granted' ? 'bg-green-400' : cameraPermission === 'denied' ? 'bg-red-400' : 'bg-yellow-400'}`}></div>
+                                                <span className="text-xs text-gray-600">
+                                                    {cameraPermission === 'granted' 
+                                                        ? (language === 'ar' ? 'الكاميرا جاهزة' : 'Camera Ready')
+                                                        : cameraPermission === 'denied' 
+                                                        ? (language === 'ar' ? 'مشكلة في الكاميرا' : 'Camera Issue')
+                                                        : (language === 'ar' ? 'جاري التحقق...' : 'Checking...')
+                                                    }
+                                                </span>
+                                            </div>
                                         </div>
                                     </div>
                                 )}
                                 
                                 {cameraError && (
-                                    <div className="mt-4 sm:mt-6 p-3 sm:p-4 bg-gradient-to-r from-red-50 to-red-100 border border-red-200 rounded-xl sm:rounded-2xl shadow-lg">
-                                        <div className="flex items-center space-x-3 rtl:space-x-reverse">
-                                            <div className="p-2 bg-red-500 rounded-full">
-                                                <span className="text-white text-sm sm:text-lg">⚠️</span>
+                                    <div className="mt-4 sm:mt-6 p-4 sm:p-6 bg-gradient-to-r from-red-50 to-red-100 border border-red-200 rounded-xl sm:rounded-2xl shadow-lg">
+                                        <div className="flex items-start space-x-3 rtl:space-x-reverse">
+                                            <div className="p-2 bg-red-500 rounded-full flex-shrink-0">
+                                                <span className="text-white text-lg">⚠️</span>
                                             </div>
-                                            <p className="text-red-700 font-medium text-sm sm:text-base">{cameraError}</p>
+                                            <div className="flex-1">
+                                                <h4 className="text-red-800 font-bold text-sm sm:text-base mb-2">
+                                                    {language === 'ar' ? 'خطأ في الكاميرا' : 'Camera Error'}
+                                                </h4>
+                                                <p className="text-red-700 font-medium text-sm sm:text-base mb-3">{cameraError}</p>
+                                                
+                                                {/* Retry button for permission errors */}
+                                                {cameraError.includes('permission') || cameraError.includes('إذن') ? (
+                                                    <button
+                                                        onClick={async () => {
+                                                            setCameraError(null);
+                                                            setCameraPermission(null);
+                                                            try {
+                                                                const stream = await navigator.mediaDevices.getUserMedia({ 
+                                                                    video: { 
+                                                                        facingMode: cameraFacing,
+                                                                        width: { ideal: 1280 },
+                                                                        height: { ideal: 720 }
+                                                                    } 
+                                                                });
+                                                                setCameraPermission('granted');
+                                                                stream.getTracks().forEach(track => track.stop());
+                                                            } catch (error) {
+                                                                setCameraPermission('denied');
+                                                                setCameraError(language === 'ar' ? 'لا يزال هناك مشكلة في الوصول للكاميرا' : 'Still having camera access issues');
+                                                            }
+                                                        }}
+                                                        className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors duration-200 text-sm font-medium"
+                                                    >
+                                                        {language === 'ar' ? '🔄 إعادة المحاولة' : '🔄 Retry'}
+                                                    </button>
+                                                ) : (
+                                                    <div className="text-xs text-red-600">
+                                                        {language === 'ar' ? 'تأكد من أن الكاميرا متصلة وليست مستخدمة من قبل تطبيق آخر' : 'Make sure camera is connected and not used by another application'}
+                                                    </div>
+                                                )}
+                                            </div>
                                         </div>
                                     </div>
                                 )}
@@ -430,41 +667,41 @@ const ScannerDashboard = () => {
 
                             {/* Manual Input */}
                             <div className="flex-1">
-                                <div className="flex items-center space-x-3 rtl:space-x-reverse mb-4 sm:mb-6">
-                                    <div className="p-2 rounded-xl bg-gradient-to-r from-blue-500 to-blue-600 shadow-lg">
-                                        <span className="text-white text-lg sm:text-xl">⌨️</span>
+                                <div className="flex items-center space-x-4 rtl:space-x-reverse mb-6 sm:mb-8">
+                                    <div className="p-3 rounded-xl bg-gradient-to-r from-blue-500 to-blue-600 shadow-lg">
+                                        <span className="text-white text-xl sm:text-2xl">⌨️</span>
                                     </div>
-                                    <h3 className="text-lg sm:text-xl font-bold text-gray-900">
+                                    <h3 className="text-xl sm:text-2xl font-bold text-gray-900">
                                         {language === 'ar' ? 'إدخال يدوي' : 'Manual Input'}
                                     </h3>
                                 </div>
                                 
-                                <div className="space-y-4 sm:space-y-6">
+                                <div className="space-y-6 sm:space-y-8">
                                     <div>
-                                        <label className="block text-sm font-semibold text-gray-700 mb-2 sm:mb-3">
+                                        <label className="block text-base font-semibold text-gray-700 mb-3 sm:mb-4">
                                             {language === 'ar' ? 'QR Code' : 'QR Code'}
                                         </label>
-                                        <div className="flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-4 rtl:space-x-reverse">
+                                        <div className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-5 rtl:space-x-reverse">
                                             <input
                                                 type="text"
                                                 value={qrCode}
                                                 onChange={handleQRCodeChange}
                                                 placeholder={language === 'ar' ? 'أدخل QR Code هنا...' : 'Enter QR Code here...'}
-                                                className="flex-1 px-4 py-3 sm:px-6 sm:py-4 border-2 border-gray-200 rounded-xl sm:rounded-2xl focus:ring-4 focus:ring-blue-500/20 focus:border-blue-500 transition-all duration-300 text-base sm:text-lg shadow-lg hover:shadow-xl"
+                                                className="flex-1 px-5 py-4 sm:px-7 sm:py-5 border-2 border-gray-200 rounded-xl sm:rounded-2xl focus:ring-4 focus:ring-blue-500/20 focus:border-blue-500 transition-all duration-300 text-lg sm:text-xl shadow-lg hover:shadow-xl"
                                                 disabled={loading}
                                             />
                                             <button
                                                 onClick={() => scanQRCode()}
                                                 disabled={loading || !qrCode.trim()}
-                                                className="px-6 py-3 sm:px-8 sm:py-4 bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-xl sm:rounded-2xl font-semibold hover:from-blue-700 hover:to-blue-800 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105 text-sm sm:text-base"
+                                                className="px-7 py-4 sm:px-9 sm:py-5 bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-xl sm:rounded-2xl font-semibold hover:from-blue-700 hover:to-blue-800 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105 text-base sm:text-lg"
                                             >
                                                 {loading ? (
-                                                    <div className="flex items-center justify-center space-x-2 rtl:space-x-reverse">
-                                                        <div className="animate-spin rounded-full h-4 w-4 sm:h-5 sm:w-5 border-2 border-white border-t-transparent"></div>
+                                                    <div className="flex items-center justify-center space-x-3 rtl:space-x-reverse">
+                                                        <div className="animate-spin rounded-full h-5 w-5 sm:h-6 sm:w-6 border-2 border-white border-t-transparent"></div>
                                                         <span>{language === 'ar' ? 'جاري المسح...' : 'Scanning...'}</span>
                                                     </div>
                                                 ) : (
-                                                    <div className="flex items-center justify-center space-x-2 rtl:space-x-reverse">
+                                                    <div className="flex items-center justify-center space-x-3 rtl:space-x-reverse">
                                                         <span>🔍</span>
                                                         <span>{language === 'ar' ? 'مسح' : 'Scan'}</span>
                                                     </div>
@@ -477,9 +714,9 @@ const ScannerDashboard = () => {
                                         <button
                                             onClick={getQRCodeInfo}
                                             disabled={loading || !qrCode.trim()}
-                                            className="px-4 py-2 sm:px-6 sm:py-3 bg-gradient-to-r from-gray-600 to-gray-700 text-white rounded-lg sm:rounded-xl font-semibold hover:from-gray-700 hover:to-gray-800 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105 text-sm sm:text-base"
+                                            className="px-6 py-3 sm:px-8 sm:py-4 bg-gradient-to-r from-gray-600 to-gray-700 text-white rounded-lg sm:rounded-xl font-semibold hover:from-gray-700 hover:to-gray-800 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105 text-base sm:text-lg"
                                         >
-                                            <div className="flex items-center space-x-2 rtl:space-x-reverse">
+                                            <div className="flex items-center space-x-3 rtl:space-x-reverse">
                                                 <span>ℹ️</span>
                                                 <span>{language === 'ar' ? 'معلومات فقط' : 'Info Only'}</span>
                                             </div>

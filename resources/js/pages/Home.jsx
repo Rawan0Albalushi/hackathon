@@ -303,7 +303,7 @@ const Home = () => {
                         </div>
                         
                         <div className="relative animate-fade-in-right mt-8 lg:mt-0">
-                            <div className="modern-card card-glow bg-white rounded-xl sm:rounded-2xl lg:rounded-3xl p-3 sm:p-4 lg:p-6 xl:p-8 mobile-card sm:transform sm:rotate-1 lg:rotate-3 hover:rotate-0 transition-all duration-500 hover-float relative overflow-visible sm:overflow-hidden w-full max-w-md mx-auto shadow-lg">
+                            <div className="modern-card card-glow bg-white rounded-2xl sm:rounded-3xl p-4 sm:p-6 lg:p-8 mobile-card sm:transform sm:rotate-1 lg:rotate-3 hover:rotate-0 transition-all duration-500 hover-float relative overflow-visible sm:overflow-hidden w-full max-w-md mx-auto shadow-lg">
                                 {/* Card Image */}
                                 <div className="hidden sm:block absolute top-4 right-4 w-16 h-16 sm:w-20 sm:h-20 lg:w-28 lg:h-28 opacity-5 hover:opacity-20 transition-opacity duration-300">
                                     <img 
@@ -315,7 +315,7 @@ const Home = () => {
                                 {/* Floating Elements - Mobile Optimized - Circles removed for cleaner design */}
                                 
                                 <div className="card-content">
-                                    <div className="rounded-lg sm:rounded-xl lg:rounded-2xl p-3 sm:p-4 lg:p-6 text-white animate-gradient relative overflow-visible min-h-[220px] sm:min-h-[260px] flex flex-col justify-between" style={{background: 'linear-gradient(135deg, #F4A321 0%, #D85584 100%)'}}>
+                                    <div className="rounded-xl sm:rounded-2xl p-4 sm:p-6 text-white animate-gradient relative overflow-visible min-h-[220px] sm:min-h-[260px] flex flex-col justify-between" style={{background: 'linear-gradient(135deg, #F4A321 0%, #D85584 100%)'}}>
                                         {/* Background Pattern - Mobile Optimized - Circles removed - Updated */}
                                         
                                         <div className="relative z-10">
