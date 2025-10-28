@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { useLanguage } from '../contexts/LanguageContext';
 import { useAuth } from '../contexts/AuthContext';
 import { initScrollAnimations, staggerAnimation, typeWriter } from '../utils/scrollAnimations';
+import { useNavigate } from 'react-router-dom';
 
 const Home = () => {
     const { t, language } = useLanguage();
@@ -13,6 +14,20 @@ const Home = () => {
         conference: null,
         workshops: []
     });
+    const navigate = useNavigate();
+
+    // Redirect authenticated users to their role home
+    useEffect(() => {
+        if (isAuthenticated()) {
+            if (user?.role === 'admin') {
+                navigate('/admin', { replace: true });
+            } else if (user?.role === 'scanner') {
+                navigate('/scanner', { replace: true });
+            } else {
+                navigate('/dashboard', { replace: true });
+            }
+        }
+    }, [isAuthenticated, user, navigate]);
 
     useEffect(() => {
         // Initialize scroll animations
