@@ -5261,3 +5261,42 @@ html, body {
     justify-content: center;
     color: #9ca3af;
 }
+
+/* Mobile Menu Animations */
+@keyframes fadeInDown {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.animate-fadeInDown {
+    animation: fadeInDown 0.3s ease-out;
+}
+
+/* Enhanced Mobile Menu Styles */
+.mobile-menu-enter {
+    opacity: 0;
+    transform: translateY(-20px);
+}
+
+.mobile-menu-enter-active {
+    opacity: 1;
+    transform: translateY(0);
+    transition: opacity 300ms ease-out, transform 300ms ease-out;
+}
+
+.mobile-menu-exit {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.mobile-menu-exit-active {
+    opacity: 0;
+    transform: translateY(-20px);
+    transition: opacity 300ms ease-in, transform 300ms ease-in;
+}

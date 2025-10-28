@@ -181,9 +181,20 @@ class AuthController extends Controller
     public function logout(Request $request): JsonResponse
     {
         try {
+            // Logout the user
             Auth::logout();
+            
+            // Invalidate the session
             $request->session()->invalidate();
+            
+            // Regenerate CSRF token
             $request->session()->regenerateToken();
+            
+            // Clear all session data
+            $request->session()->flush();
+            
+            // Forget the session cookie
+            $request->session()->forget('login_web_' . sha1('App\Models\User'));
 
             return response()->json([
                 'success' => true,

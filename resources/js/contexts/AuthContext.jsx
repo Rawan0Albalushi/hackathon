@@ -17,6 +17,15 @@ export const AuthProvider = ({ children }) => {
 
     useEffect(() => {
         const initAuth = async () => {
+            // Check if user was logged out (no token in localStorage)
+            const storedToken = localStorage.getItem('token');
+            if (!storedToken) {
+                setUser(null);
+                setToken(null);
+                setLoading(false);
+                return;
+            }
+
             try {
                 const response = await fetch('/api/auth/me', {
                     method: 'GET',
@@ -147,9 +156,14 @@ export const AuthProvider = ({ children }) => {
         } catch (error) {
             console.error('Logout error:', error);
         } finally {
+            // Clear all auth state immediately
             setToken(null);
             setUser(null);
             localStorage.removeItem('token');
+            
+            // Clear any other stored data
+            localStorage.removeItem('user');
+            sessionStorage.clear();
         }
     };
 
