@@ -303,7 +303,7 @@ const Home = () => {
                         </div>
                         
                         <div className="relative animate-fade-in-right mt-8 lg:mt-0">
-                            <div className="modern-card card-glow bg-white rounded-xl sm:rounded-2xl lg:rounded-3xl p-3 sm:p-4 lg:p-6 xl:p-8 mobile-card sm:transform sm:rotate-1 lg:rotate-3 hover:rotate-0 transition-all duration-500 hover-float overflow-hidden relative">
+                            <div className="modern-card card-glow bg-white rounded-xl sm:rounded-2xl lg:rounded-3xl p-3 sm:p-4 lg:p-6 xl:p-8 mobile-card sm:transform sm:rotate-1 lg:rotate-3 hover:rotate-0 transition-all duration-500 hover-float relative overflow-visible sm:overflow-hidden w-full max-w-md mx-auto shadow-lg">
                                 {/* Card Image */}
                                 <div className="hidden sm:block absolute top-4 right-4 w-16 h-16 sm:w-20 sm:h-20 lg:w-28 lg:h-28 opacity-5 hover:opacity-20 transition-opacity duration-300">
                                     <img 
@@ -315,7 +315,7 @@ const Home = () => {
                                 {/* Floating Elements - Mobile Optimized - Circles removed for cleaner design */}
                                 
                                 <div className="card-content">
-                                    <div className="rounded-lg sm:rounded-xl lg:rounded-2xl p-3 sm:p-4 lg:p-6 text-white animate-gradient relative overflow-hidden" style={{background: 'linear-gradient(135deg, #F4A321 0%, #D85584 100%)'}}>
+                                    <div className="rounded-lg sm:rounded-xl lg:rounded-2xl p-3 sm:p-4 lg:p-6 text-white animate-gradient relative overflow-visible min-h-[220px] sm:min-h-[260px] flex flex-col justify-between" style={{background: 'linear-gradient(135deg, #F4A321 0%, #D85584 100%)'}}>
                                         {/* Background Pattern - Mobile Optimized - Circles removed - Updated */}
                                         
                                         <div className="relative z-10">
@@ -365,7 +365,7 @@ const Home = () => {
                 <div className="max-w-7xl mx-auto px-3 sm:px-4 lg:px-8">
                     <div className="grid lg:grid-cols-2 gap-8 sm:gap-10 lg:gap-12 items-center">
                         <div className="relative order-2 lg:order-1 animate-fade-in-left">
-                            <div className="modern-card card-glow bg-white rounded-2xl sm:rounded-3xl p-4 sm:p-6 lg:p-8 mobile-card sm:transform sm:-rotate-1 lg:-rotate-3 hover:rotate-0 transition-all duration-500 overflow-hidden relative">
+                            <div className="modern-card card-glow bg-white rounded-2xl sm:rounded-3xl p-4 sm:p-6 lg:p-8 mobile-card sm:transform sm:-rotate-1 lg:-rotate-3 hover:rotate-0 transition-all duration-500 relative overflow-visible sm:overflow-hidden w-full max-w-md mx-auto shadow-lg">
                                 {/* Card Image */}
                                 <div className="hidden sm:block absolute bottom-4 left-4 w-16 h-16 sm:w-20 sm:h-20 lg:w-28 lg:h-28 opacity-5 hover:opacity-20 transition-opacity duration-300">
                                     <img 
@@ -377,7 +377,7 @@ const Home = () => {
                                 {/* Floating Elements - Removed circles */}
                                 
                                 <div className="card-content">
-                                    <div className="rounded-xl sm:rounded-2xl p-4 sm:p-6 text-white animate-gradient relative overflow-hidden" style={{background: 'linear-gradient(135deg, #096289 0%, #003C72 100%)'}}>
+                                    <div className="rounded-xl sm:rounded-2xl p-4 sm:p-6 text-white animate-gradient relative overflow-visible min-h-[220px] sm:min-h-[260px] flex flex-col justify-between" style={{background: 'linear-gradient(135deg, #096289 0%, #003C72 100%)'}}>
                                         {/* Background Pattern - Circles removed */}
                                         
                                         <div className="relative z-10">
@@ -515,7 +515,7 @@ const Home = () => {
                         </div>
                         
                         <div className="relative animate-fade-in-right mt-8 lg:mt-0">
-                            <div className="modern-card card-glow bg-white rounded-2xl sm:rounded-3xl p-4 sm:p-6 lg:p-8 mobile-card sm:transform sm:rotate-1 lg:rotate-3 hover:rotate-0 transition-all duration-500 overflow-hidden relative">
+                            <div className="modern-card card-glow bg-white rounded-2xl sm:rounded-3xl p-4 sm:p-6 lg:p-8 mobile-card sm:transform sm:rotate-1 lg:rotate-3 hover:rotate-0 transition-all duration-500 relative overflow-visible sm:overflow-hidden w-full max-w-md mx-auto shadow-lg">
                                 {/* Card Image */}
                                 <div className="hidden sm:block absolute top-4 left-4 w-16 h-16 sm:w-20 sm:h-20 lg:w-28 lg:h-28 opacity-5 hover:opacity-20 transition-opacity duration-300">
                                     <img 
@@ -527,12 +527,12 @@ const Home = () => {
                                 {/* Floating Elements - Removed circles */}
                                 
                                 <div className="card-content">
-                                    <div className="rounded-xl sm:rounded-2xl p-4 sm:p-6 text-white animate-gradient relative overflow-hidden" style={{background: 'linear-gradient(135deg, #003C72 0%, #096289 100%)'}}>
+                                    <div className="rounded-xl sm:rounded-2xl p-4 sm:p-6 text-white animate-gradient relative overflow-visible min-h-[220px] sm:min-h-[260px] flex flex-col justify-between" style={{background: 'linear-gradient(135deg, #003C72 0%, #096289 100%)'}}>
                                         {/* Background Pattern - Circles removed */}
                                         
                                         <div className="relative z-10">
                                             <div className="flex items-center justify-between mb-4 sm:mb-6">
-                                                <h3 className="text-lg sm:text-xl lg:text-2xl font-bold animate-fade-in-down">
+                                                <h3 className="text-lg sm:text-xl lg:text-2xl font-bold sm:animate-fade-in-down opacity-100">
                                                     {language === 'ar' ? 'ملتقى الابتكار' : 'Innovation Forum'}
                                                 </h3>
                                                 <div className="card-icon text-2xl sm:text-3xl animate-bounce">
@@ -541,15 +541,15 @@ const Home = () => {
                                             </div>
                                             
                                             <div className="space-y-3 sm:space-y-4">
-                                                <div className="flex items-center gap-3 rtl:space-x-reverse animate-fade-in-left animate-delay-200">
+                                                <div className="flex items-center gap-3 rtl:space-x-reverse sm:animate-fade-in-left sm:animate-delay-200 opacity-100">
                                                     <span className="star-bullet"></span>
                                                     <span className="font-medium text-xs sm:text-base">{language === 'ar' ? 'مؤسسات حكومية وخاصة' : 'Government & Private Institutions'}</span>
                                                 </div>
-                                                <div className="flex items-center gap-3 rtl:space-x-reverse animate-fade-in-left animate-delay-300">
+                                                <div className="flex items-center gap-3 rtl:space-x-reverse sm:animate-fade-in-left sm:animate-delay-300 opacity-100">
                                                     <span className="star-bullet"></span>
                                                     <span className="font-medium text-xs sm:text-base">{language === 'ar' ? 'تحفيز العقول الشابة' : 'Stimulating Young Minds'}</span>
                                                 </div>
-                                                <div className="flex items-center gap-3 rtl:space-x-reverse animate-fade-in-left animate-delay-400">
+                                                <div className="flex items-center gap-3 rtl:space-x-reverse sm:animate-fade-in-left sm:animate-delay-400 opacity-100">
                                                     <span className="star-bullet"></span>
                                                     <span className="font-medium text-xs sm:text-base">{language === 'ar' ? 'تحويل الأفكار إلى مشاريع' : 'Transforming Ideas into Projects'}</span>
                                                 </div>
