@@ -4,6 +4,8 @@ import { useLanguage } from '../contexts/LanguageContext';
 const QRCodeDisplay = ({ qrCode, qrCodeData, qrCodeImage, type, registrationId, isCheckedIn, checkedInAt }) => {
     const { language } = useLanguage();
     const [qrCodeUrl, setQrCodeUrl] = useState('');
+    const [copyButtonText, setCopyButtonText] = useState('');
+    const [isCopying, setIsCopying] = useState(false);
 
     useEffect(() => {
         // Use qrCodeImage if available, otherwise generate from qrCode or qrCodeData
@@ -16,6 +18,11 @@ const QRCodeDisplay = ({ qrCode, qrCodeData, qrCodeImage, type, registrationId, 
             setQrCodeUrl(qrCodeDataUrl);
         }
     }, [qrCode, qrCodeData, qrCodeImage]);
+
+    useEffect(() => {
+        // Set initial copy button text
+        setCopyButtonText(language === 'ar' ? 'نسخ' : 'Copy');
+    }, [language]);
 
     const handleDownload = () => {
         if (!qrCodeUrl) return;
@@ -46,6 +53,45 @@ const QRCodeDisplay = ({ qrCode, qrCodeData, qrCodeImage, type, registrationId, 
             }
         } catch (_) {
             // no-op
+        }
+    };
+
+    const handleCopyText = async () => {
+        if (isCopying) return;
+        
+        const textToCopy = qrCode || qrCodeData;
+        if (!textToCopy) return;
+
+        setIsCopying(true);
+        setCopyButtonText(language === 'ar' ? 'جاري النسخ...' : 'Copying...');
+
+        try {
+            await navigator.clipboard.writeText(String(textToCopy));
+            
+            // Show success feedback
+            setCopyButtonText(language === 'ar' ? 'تم النسخ!' : 'Copied!');
+            
+            // Reset button text after 2 seconds
+            setTimeout(() => {
+                setCopyButtonText(language === 'ar' ? 'نسخ' : 'Copy');
+                setIsCopying(false);
+            }, 2000);
+            
+        } catch (error) {
+            // Fallback for older browsers
+            const textArea = document.createElement('textarea');
+            textArea.value = String(textToCopy);
+            document.body.appendChild(textArea);
+            textArea.select();
+            document.execCommand('copy');
+            document.body.removeChild(textArea);
+            
+            setCopyButtonText(language === 'ar' ? 'تم النسخ!' : 'Copied!');
+            
+            setTimeout(() => {
+                setCopyButtonText(language === 'ar' ? 'نسخ' : 'Copy');
+                setIsCopying(false);
+            }, 2000);
         }
     };
 
@@ -183,11 +229,16 @@ const QRCodeDisplay = ({ qrCode, qrCodeData, qrCodeImage, type, registrationId, 
                         />
                         <button
                             type="button"
-                            onClick={() => navigator.clipboard.writeText(qrCode || qrCodeData)}
-                            className="px-2 py-1 rounded-lg text-white font-semibold text-[11px] sm:text-xs"
+                            onClick={handleCopyText}
+                            disabled={isCopying}
+                            className={`px-2 py-1 rounded-lg text-white font-semibold text-[11px] sm:text-xs transition-all duration-300 transform ${
+                                isCopying 
+                                    ? 'scale-95 opacity-80' 
+                                    : 'hover:scale-105 active:scale-95'
+                            } ${isCopying ? 'cursor-not-allowed' : 'cursor-pointer'}`}
                             style={{background: 'linear-gradient(135deg, #F4A321 0%, #D85584 100%)'}}
                         >
-                            {language === 'ar' ? 'نسخ' : 'Copy'}
+                            {copyButtonText}
                         </button>
                     </div>
                 </div>
@@ -209,6 +260,7 @@ const QRCodeDisplay = ({ qrCode, qrCodeData, qrCodeImage, type, registrationId, 
                     </div>
                 </div>
             )}
+
         </div>
     );
 };
