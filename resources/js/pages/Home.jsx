@@ -303,7 +303,15 @@ const Home = () => {
                         </div>
                         
                         <div className="relative animate-fade-in-right mt-8 lg:mt-0">
-                            <div className="modern-card card-glow bg-white rounded-2xl sm:rounded-3xl p-4 sm:p-6 lg:p-8 mobile-card sm:transform sm:rotate-1 lg:rotate-3 hover:rotate-0 transition-all duration-500 hover-float relative overflow-visible sm:overflow-hidden w-full max-w-md mx-auto shadow-lg">
+                            <div className="modern-card card-glow bg-white rounded-2xl sm:rounded-3xl p-4 sm:p-6 lg:p-8 mobile-card sm:transform sm:rotate-1 lg:rotate-3 hover:rotate-0 transition-all duration-500 hover-float relative overflow-hidden w-full max-w-md mx-auto shadow-lg">
+                                {/* Matching Header Pattern Background */}
+                                <div className="absolute inset-0 opacity-20 pointer-events-none rounded-2xl sm:rounded-3xl z-0">
+                                    <img 
+                                        src="/images/Occasional pattern.png" 
+                                        alt="Pattern" 
+                                        className="w-full h-full object-cover"
+                                    />
+                                </div>
                                 {/* Card Image */}
                                 <div className="hidden sm:block absolute top-4 right-4 w-16 h-16 sm:w-20 sm:h-20 lg:w-28 lg:h-28 opacity-5 hover:opacity-20 transition-opacity duration-300">
                                     <img 
@@ -314,7 +322,7 @@ const Home = () => {
                                 </div>
                                 {/* Floating Elements - Mobile Optimized - Circles removed for cleaner design */}
                                 
-                                <div className="card-content">
+                                <div className="card-content relative z-10">
                                     <div className="rounded-xl sm:rounded-2xl p-4 sm:p-6 text-white animate-gradient relative overflow-visible min-h-[220px] sm:min-h-[260px] flex flex-col justify-between" style={{background: 'linear-gradient(135deg, #F4A321 0%, #D85584 100%)'}}>
                                         {/* Background Pattern - Mobile Optimized - Circles removed - Updated */}
                                         
@@ -365,7 +373,15 @@ const Home = () => {
                 <div className="max-w-7xl mx-auto px-3 sm:px-4 lg:px-8">
                     <div className="grid lg:grid-cols-2 gap-8 sm:gap-10 lg:gap-12 items-center">
                         <div className="relative order-2 lg:order-1 animate-fade-in-left">
-                            <div className="modern-card card-glow bg-white rounded-2xl sm:rounded-3xl p-4 sm:p-6 lg:p-8 mobile-card sm:transform sm:-rotate-1 lg:-rotate-3 hover:rotate-0 transition-all duration-500 relative overflow-visible sm:overflow-hidden w-full max-w-md mx-auto shadow-lg">
+                            <div className="modern-card card-glow bg-white rounded-2xl sm:rounded-3xl p-4 sm:p-6 lg:p-8 mobile-card sm:transform sm:-rotate-1 lg:-rotate-3 hover:rotate-0 transition-all duration-500 relative overflow-hidden w-full max-w-md mx-auto shadow-lg">
+                                {/* Matching Header Pattern Background */}
+                                <div className="absolute inset-0 opacity-20 pointer-events-none rounded-2xl sm:rounded-3xl z-0">
+                                    <img 
+                                        src="/images/Occasional pattern.png" 
+                                        alt="Pattern" 
+                                        className="w-full h-full object-cover"
+                                    />
+                                </div>
                                 {/* Card Image */}
                                 <div className="hidden sm:block absolute bottom-4 left-4 w-16 h-16 sm:w-20 sm:h-20 lg:w-28 lg:h-28 opacity-5 hover:opacity-20 transition-opacity duration-300">
                                     <img 
@@ -376,7 +392,7 @@ const Home = () => {
                                 </div>
                                 {/* Floating Elements - Removed circles */}
                                 
-                                <div className="card-content">
+                                <div className="card-content relative z-10">
                                     <div className="rounded-xl sm:rounded-2xl p-4 sm:p-6 text-white animate-gradient relative overflow-visible min-h-[220px] sm:min-h-[260px] flex flex-col justify-between" style={{background: 'linear-gradient(135deg, #096289 0%, #003C72 100%)'}}>
                                         {/* Background Pattern - Circles removed */}
                                         
@@ -515,7 +531,15 @@ const Home = () => {
                         </div>
                         
                         <div className="relative animate-fade-in-right mt-8 lg:mt-0">
-                            <div className="modern-card card-glow bg-white rounded-2xl sm:rounded-3xl p-4 sm:p-6 lg:p-8 mobile-card sm:transform sm:rotate-1 lg:rotate-3 hover:rotate-0 transition-all duration-500 relative overflow-visible sm:overflow-hidden w-full max-w-md mx-auto shadow-lg">
+                            <div className="modern-card card-glow bg-white rounded-2xl sm:rounded-3xl p-4 sm:p-6 lg:p-8 mobile-card sm:transform sm:rotate-1 lg:rotate-3 hover:rotate-0 transition-all duration-500 relative overflow-hidden w-full max-w-md mx-auto shadow-lg">
+                                {/* Matching Header Pattern Background */}
+                                <div className="absolute inset-0 opacity-20 pointer-events-none rounded-2xl sm:rounded-3xl z-0">
+                                    <img 
+                                        src="/images/Occasional pattern.png" 
+                                        alt="Pattern" 
+                                        className="w-full h-full object-cover"
+                                    />
+                                </div>
                                 {/* Card Image */}
                                 <div className="hidden sm:block absolute top-4 left-4 w-16 h-16 sm:w-20 sm:h-20 lg:w-28 lg:h-28 opacity-5 hover:opacity-20 transition-opacity duration-300">
                                     <img 
@@ -526,7 +550,7 @@ const Home = () => {
                                 </div>
                                 {/* Floating Elements - Removed circles */}
                                 
-                                <div className="card-content">
+                                <div className="card-content relative z-10">
                                     <div className="rounded-xl sm:rounded-2xl p-4 sm:p-6 text-white animate-gradient relative overflow-visible min-h-[220px] sm:min-h-[260px] flex flex-col justify-between" style={{background: 'linear-gradient(135deg, #003C72 0%, #096289 100%)'}}>
                                         {/* Background Pattern - Circles removed */}
                                         

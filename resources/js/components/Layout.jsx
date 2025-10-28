@@ -69,7 +69,7 @@ const Layout = ({ children }) => {
             {!location.pathname.startsWith('/admin') && (
                 <nav className="bg-white/95 backdrop-blur-md shadow-lg sticky top-0 z-50 border-b border-gray-200/50 relative overflow-hidden">
                     {/* Occasional Pattern Background */}
-                    <div className="absolute inset-0 opacity-5 pointer-events-none">
+                    <div className="absolute inset-0 opacity-20 pointer-events-none">
                         <img 
                             src="/images/Occasional pattern.png" 
                             alt="Pattern" 
@@ -78,14 +78,14 @@ const Layout = ({ children }) => {
                     </div>
                     
                     {/* Decorative Pattern Elements */}
-                    <div className="absolute top-0 right-0 w-32 h-20 opacity-10 pointer-events-none">
+                    <div className="absolute top-0 right-0 w-32 h-20 opacity-25 pointer-events-none">
                         <img 
                             src="/images/Occasional pattern.png" 
                             alt="Pattern" 
                             className="w-full h-full object-cover transform rotate-12"
                         />
                     </div>
-                    <div className="absolute bottom-0 left-0 w-24 h-16 opacity-8 pointer-events-none">
+                    <div className="absolute bottom-0 left-0 w-24 h-16 opacity-20 pointer-events-none">
                         <img 
                             src="/images/Occasional pattern.png" 
                             alt="Pattern" 
@@ -98,7 +98,7 @@ const Layout = ({ children }) => {
                             {/* Logo with gradient bar design - Positioned at start */}
                             <div className="flex items-center relative flex-shrink-0">
                                 {/* Decorative Pattern behind Logo */}
-                                <div className="absolute -left-4 top-1/2 transform -translate-y-1/2 w-16 h-12 opacity-15 pointer-events-none">
+                                <div className="absolute -left-4 top-1/2 transform -translate-y-1/2 w-16 h-12 opacity-25 pointer-events-none">
                                     <img 
                                         src="/images/Occasional pattern.png" 
                                         alt="Pattern" 
@@ -132,7 +132,7 @@ const Layout = ({ children }) => {
                             {/* Desktop Navigation */}
                             <div className="hidden lg:flex items-center space-x-2 rtl:space-x-reverse relative">
                                 {/* Decorative Pattern behind Navigation */}
-                                <div className="absolute -right-8 top-1/2 transform -translate-y-1/2 w-20 h-16 opacity-8 pointer-events-none">
+                                <div className="absolute -right-8 top-1/2 transform -translate-y-1/2 w-20 h-16 opacity-15 pointer-events-none">
                                     <img 
                                         src="/images/Occasional pattern.png" 
                                         alt="Pattern" 
@@ -299,10 +299,10 @@ const Layout = ({ children }) => {
                         </div>
 
                             {/* Mobile Navigation Menu - Enhanced */}
-                        <div className={`${isMobileMenuOpen ? 'block animate-fadeInDown' : 'hidden'} md:hidden transition-all duration-300`}>
+                            <div className={`${isMobileMenuOpen ? 'block animate-fadeInDown' : 'hidden'} md:hidden transition-all duration-300`}>
                             <div className="px-3 pt-4 pb-6 space-y-2 bg-white rounded-xl mt-4 mb-4 shadow-xl border border-gray-100 relative overflow-hidden backdrop-blur-sm">
                                 {/* Enhanced Pattern Background */}
-                                <div className="absolute inset-0 opacity-5 pointer-events-none">
+                                    <div className="absolute inset-0 opacity-10 pointer-events-none">
                                     <img 
                                         src="/images/Occasional pattern.png" 
                                         alt="Pattern" 
@@ -311,14 +311,14 @@ const Layout = ({ children }) => {
                                 </div>
                                 
                                 {/* Decorative Pattern Elements - Enhanced */}
-                                <div className="absolute top-0 right-0 w-20 h-16 opacity-10 pointer-events-none">
+                                    <div className="absolute top-0 right-0 w-20 h-16 opacity-20 pointer-events-none">
                                     <img 
                                         src="/images/Occasional pattern.png" 
                                         alt="Pattern" 
                                         className="w-full h-full object-cover transform rotate-45"
                                     />
                                 </div>
-                                <div className="absolute bottom-0 left-0 w-16 h-12 opacity-8 pointer-events-none">
+                                    <div className="absolute bottom-0 left-0 w-16 h-12 opacity-15 pointer-events-none">
                                     <img 
                                         src="/images/Occasional pattern.png" 
                                         alt="Pattern" 
