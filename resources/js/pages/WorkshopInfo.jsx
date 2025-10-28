@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useLanguage } from '../contexts/LanguageContext';
 import { useAuth } from '../contexts/AuthContext';
@@ -7,6 +7,9 @@ import { initScrollAnimations } from '../utils/scrollAnimations';
 const WorkshopInfo = () => {
     const { t, language } = useLanguage();
     const { isAuthenticated } = useAuth();
+    const [workshops, setWorkshops] = useState([]);
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState(null);
 
     useEffect(() => {
         const observer = initScrollAnimations();
@@ -14,6 +17,32 @@ const WorkshopInfo = () => {
             if (observer) observer.disconnect();
         };
     }, [language]);
+
+    useEffect(() => {
+        const fetchWorkshops = async () => {
+            if (!isAuthenticated) {
+                setWorkshops([]);
+                return;
+            }
+            setLoading(true);
+            setError(null);
+            try {
+                const response = await fetch('/api/user/workshops', { credentials: 'include' });
+                const data = await response.json();
+                if (data?.success) {
+                    setWorkshops(Array.isArray(data.data) ? data.data : []);
+                } else {
+                    setError(data?.message || 'فشل في تحميل الورش');
+                }
+            } catch (e) {
+                setError('فشل في تحميل الورش');
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchWorkshops();
+    }, [isAuthenticated]);
 
     const workshopData = {
         title: language === 'ar' ? 'الورش التدريبية' : 'Training Workshops',
@@ -204,40 +233,114 @@ const WorkshopInfo = () => {
                     <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 mb-8 sm:mb-12 text-center">
                         {language === 'ar' ? 'الورش المتاحة' : 'Available Workshops'}
                     </h2>
-                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8">
-                        {workshopData.workshops.map((workshop, index) => (
-                            <div key={index} className="bg-white rounded-xl sm:rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 animate-fade-in-up" style={{animationDelay: `${index * 100}ms`}}>
-                                <div className="flex items-start space-x-4 rtl:space-x-reverse mb-4">
-                                    <div className="text-4xl sm:text-5xl animate-bounce">{workshop.icon}</div>
-                                    <div className="flex-1">
-                                        <h3 className="text-xl sm:text-2xl font-bold text-gray-900 mb-2">{workshop.title}</h3>
-                                        <p className="text-sm sm:text-base text-gray-600 mb-4">{workshop.description}</p>
-                                        <div className="flex flex-wrap gap-2 mb-4">
-                                            <span className="inline-block bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-xs font-semibold">
-                                                {workshop.duration}
-                                            </span>
-                                            <span className="inline-block bg-green-100 text-green-800 px-3 py-1 rounded-full text-xs font-semibold">
-                                                {workshop.level}
-                                            </span>
+                    {loading && (
+                        <div className="text-center text-gray-600">{language === 'ar' ? 'جارٍ التحميل...' : 'Loading...'}</div>
+                    )}
+                    {!loading && error && (
+                        <div className="text-center text-red-600">{error}</div>
+                    )}
+                    {!loading && !error && !isAuthenticated && (
+                        <div className="text-center text-gray-700">
+                            {language === 'ar' ? 'سجّل دخولك لعرض الورش المتاحة' : 'Please sign in to view available workshops'}
+                        </div>
+                    )}
+                    {!loading && !error && isAuthenticated && (
+                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8">
+                            {workshops.length === 0 && (
+                                <div className="col-span-full text-center text-gray-600">
+                                    {language === 'ar' ? 'لا توجد ورش متاحة حالياً' : 'No workshops available right now'}
+                                </div>
+                            )}
+                            {workshops.map((workshop, index) => {
+                                const start = workshop.start_time ? new Date(workshop.start_time) : null;
+                                const end = workshop.end_time ? new Date(workshop.end_time) : null;
+                                const dateStr = start ? start.toLocaleDateString() : '';
+                                const timeWindow = start && end
+                                    ? `${start.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })} - ${end.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`
+                                    : null;
+
+                                return (
+                                    <div
+                                        key={workshop.id || index}
+                                        className="group relative animate-fade-in-up"
+                                        style={{animationDelay: `${index * 100}ms`}}
+                                    >
+                                        <div className="absolute -inset-0.5 rounded-2xl bg-gradient-to-br from-blue-500/20 via-cyan-400/20 to-indigo-500/20 opacity-0 group-hover:opacity-100 blur transition duration-500"></div>
+                                        <div className="relative bg-white rounded-2xl p-6 shadow-lg hover:shadow-2xl transition-all duration-300 transform group-hover:-translate-y-2">
+                                            <div className="flex items-start justify-between mb-4">
+                                                <div className="flex items-start space-x-3 rtl:space-x-reverse">
+                                                    <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-blue-500 to-cyan-500 text-white shadow">
+                                                        <span className="text-2xl">🎓</span>
+                                                    </div>
+                                                    <div>
+                                                        <h3 className="text-xl sm:text-2xl font-bold text-gray-900 leading-snug">{workshop.title}</h3>
+                                                        {workshop.instructor && (
+                                                            <div className="mt-1 text-xs sm:text-sm text-gray-500">
+                                                                {language === 'ar' ? `المدرب: ${workshop.instructor}` : `Instructor: ${workshop.instructor}`}
+                                                            </div>
+                                                        )}
+                                                    </div>
+                                                </div>
+                                                {(dateStr || timeWindow) && (
+                                                    <div className="flex flex-col items-end text-right">
+                                                        {dateStr && (
+                                                            <span className="inline-flex items-center rounded-full bg-blue-50 text-blue-700 px-3 py-1 text-xs font-semibold">
+                                                                {dateStr}
+                                                            </span>
+                                                        )}
+                                                        {timeWindow && (
+                                                            <span className="mt-1 inline-flex items-center rounded-full bg-emerald-50 text-emerald-700 px-3 py-1 text-[11px] font-semibold">
+                                                                {timeWindow}
+                                                            </span>
+                                                        )}
+                                                    </div>
+                                                )}
+                                            </div>
+
+                                            {workshop.description && (
+                                                <p className="text-sm sm:text-base text-gray-600 mb-4 line-clamp-3">
+                                                    {workshop.description}
+                                                </p>
+                                            )}
+
+                                            <div className="flex flex-wrap gap-2 mb-4">
+                                                {typeof workshop.max_participants === 'number' && (
+                                                    <span className="inline-flex items-center gap-1 rounded-full bg-purple-50 text-purple-700 px-3 py-1 text-xs font-semibold">
+                                                        <span>👥</span>
+                                                        {language === 'ar' ? `الحد الأقصى: ${workshop.max_participants}` : `Max: ${workshop.max_participants}`}
+                                                    </span>
+                                                )}
+                                                {workshop.requirements && (
+                                                    <span className="inline-flex items-center gap-1 rounded-full bg-amber-50 text-amber-700 px-3 py-1 text-[11px] font-semibold">
+                                                        <span>📋</span>
+                                                        {language === 'ar' ? 'متطلبات' : 'Requirements'}
+                                                    </span>
+                                                )}
+                                                {workshop.is_active === false && (
+                                                    <span className="inline-flex items-center gap-1 rounded-full bg-gray-100 text-gray-600 px-3 py-1 text-[11px] font-semibold">
+                                                        {language === 'ar' ? 'غير متاح' : 'Inactive'}
+                                                    </span>
+                                                )}
+                                            </div>
+
+                                            <div className="flex items-center justify-between">
+                                                <div className="text-[11px] sm:text-xs text-gray-500">
+                                                    {language === 'ar' ? 'اضغط للتسجيل أو لمعرفة المزيد' : 'Tap to register or learn more'}
+                                                </div>
+                                                <Link
+                                                    to="/workshop"
+                                                    className="ripple-effect button-press inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-[#096289] to-[#003C72] text-white px-4 py-2 text-xs sm:text-sm font-semibold shadow hover:shadow-lg transform hover:scale-[1.02] transition"
+                                                >
+                                                    {language === 'ar' ? 'سجل الآن' : 'Register'}
+                                                    <span className="transition-transform group-hover:translate-x-0.5">→</span>
+                                                </Link>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                                <div>
-                                    <h4 className="text-sm sm:text-base font-semibold text-gray-900 mb-2">
-                                        {language === 'ar' ? 'المواضيع المشمولة:' : 'Topics Covered:'}
-                                    </h4>
-                                    <div className="grid grid-cols-2 gap-2">
-                                        {workshop.topics.map((topic, topicIndex) => (
-                                            <div key={topicIndex} className="flex items-center text-xs sm:text-sm text-gray-600">
-                                                <div className="w-2 h-2 bg-blue-500 rounded-full mr-2 rtl:mr-0 rtl:ml-2 flex-shrink-0"></div>
-                                                {topic}
-                                            </div>
-                                        ))}
-                                    </div>
-                                </div>
-                            </div>
-                        ))}
-                    </div>
+                                );
+                            })}
+                        </div>
+                    )}
                 </div>
             </section>
 

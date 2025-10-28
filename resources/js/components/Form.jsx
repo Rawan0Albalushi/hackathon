@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useLanguage } from '../contexts/LanguageContext';
 
-const Form = ({ onSubmit, fields, title, submitText, isLoading = false }) => {
+const Form = ({ onSubmit, fields, title, submitText, isLoading = false, noContainer = false }) => {
     const { t, language } = useLanguage();
     const [formData, setFormData] = useState({});
     const [errors, setErrors] = useState({});
@@ -296,6 +296,36 @@ const Form = ({ onSubmit, fields, title, submitText, isLoading = false }) => {
                 );
         }
     };
+
+    if (noContainer) {
+        return (
+            <form onSubmit={handleSubmit} className="space-y-3 lg:space-y-4">
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 lg:gap-4">
+                    {fields.map(renderField)}
+                </div>
+                <div className="mt-6 lg:mt-8">
+                    <button
+                        type="submit"
+                        disabled={isLoading}
+                        className={`w-full lg:w-auto lg:min-w-[200px] py-2.5 lg:py-3 px-4 lg:px-6 rounded-lg font-semibold text-sm lg:text-base text-white transition-all duration-300 ${
+                            isLoading 
+                                ? 'bg-gray-400 cursor-not-allowed' 
+                                : 'bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 hover:shadow-lg'
+                        }`}
+                    >
+                        {isLoading ? (
+                            <div className="flex items-center justify-center">
+                                <div className="animate-spin rounded-full h-4 w-4 lg:h-5 lg:w-5 border-b-2 border-white mr-2"></div>
+                                <span className="text-sm lg:text-base">{language === 'ar' ? 'جاري الإرسال...' : 'Submitting...'}</span>
+                            </div>
+                        ) : (
+                            submitText
+                        )}
+                    </button>
+                </div>
+            </form>
+        );
+    }
 
     return (
         <div className="max-w-2xl lg:max-w-4xl xl:max-w-5xl mx-auto">

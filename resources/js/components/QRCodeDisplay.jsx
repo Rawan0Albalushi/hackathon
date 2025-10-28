@@ -122,6 +122,31 @@ const QRCodeDisplay = ({ qrCode, qrCodeData, qrCodeImage, type, registrationId, 
                 </div>
             </div>
 
+            {/* QR Code Text (copyable) */}
+            {(qrCode || qrCodeData) && (
+                <div className="mb-4">
+                    <label className="block text-sm text-gray-600 mb-2">
+                        {language === 'ar' ? 'نص الكود' : 'QR Code Text'}
+                    </label>
+                    <div className="flex items-center gap-2">
+                        <input
+                            type="text"
+                            readOnly
+                            value={qrCode || qrCodeData}
+                            className="flex-1 border border-gray-200 rounded-xl px-3 py-2 text-gray-900 bg-gray-50 focus:outline-none"
+                        />
+                        <button
+                            type="button"
+                            onClick={() => navigator.clipboard.writeText(qrCode || qrCodeData)}
+                            className="px-4 py-2 rounded-xl text-white font-semibold"
+                            style={{background: 'linear-gradient(135deg, #F4A321 0%, #D85584 100%)'}}
+                        >
+                            {language === 'ar' ? 'نسخ' : 'Copy'}
+                        </button>
+                    </div>
+                </div>
+            )}
+
             {/* Check-in Status - Only show if checked in */}
             {isCheckedIn && (
                 <div className="text-center">

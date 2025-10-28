@@ -16,11 +16,12 @@ class QRCodeService
     public static function generateQRCode(string $type, int $registrationId): string
     {
         $prefix = self::getTypePrefix($type);
-        // $timestamp = now()->format('YmdHis');
-        $randomNumber = rand(12345, 98769);
-        // $randomString = Str::random(8);
-        
-        return $prefix . $randomNumber . $registrationId;
+        $timestamp = now()->format('YmdHis');
+        $randomString = Str::upper(Str::random(8));
+
+        // New format: <2-char prefix><14-digit timestamp><8-char random><registration id>
+        // Keep legacy support in parser for previously generated short codes
+        return $prefix . $timestamp . $randomString . $registrationId;
     }
 
     /**
@@ -55,20 +56,36 @@ class QRCodeService
             return null;
         }
 
-        // Extract timestamp (next 14 characters)
-        $timestamp = substr($qrCode, 2, 14);
-        
-        // Extract random string (next 8 characters)
-        $randomString = substr($qrCode, 16, 8);
-        
-        // Extract registration ID (remaining characters)
-        $registrationId = substr($qrCode, 24);
+        // If it matches the new long format (at least 24 chars total), parse accordingly
+        if (strlen($qrCode) >= 24) {
+            // Extract timestamp (next 14 characters)
+            $timestamp = substr($qrCode, 2, 14);
+            
+            // Extract random string (next 8 characters)
+            $randomString = substr($qrCode, 16, 8);
+            
+            // Extract registration ID (remaining characters)
+            $registrationId = substr($qrCode, 24);
+
+            return [
+                'type' => $type,
+                'prefix' => $prefix,
+                'timestamp' => $timestamp,
+                'random_string' => $randomString,
+                'registration_id' => (int) $registrationId,
+                'original_qr_code' => $qrCode
+            ];
+        }
+
+        // Legacy short format: <2-char prefix><5-digit random><registration id>
+        // We generated 5-digit numbers via rand(12345, 98769)
+        $registrationId = substr($qrCode, 7);
 
         return [
             'type' => $type,
             'prefix' => $prefix,
-            'timestamp' => $timestamp,
-            'random_string' => $randomString,
+            'timestamp' => null,
+            'random_string' => null,
             'registration_id' => (int) $registrationId,
             'original_qr_code' => $qrCode
         ];
@@ -99,6 +116,6 @@ class QRCodeService
     public static function validateQRCode(string $qrCode): bool
     {
         $parsed = self::parseQRCode($qrCode);
-        return $parsed !== null && is_numeric($parsed['registration_id']);
+        return $parsed !== null && isset($parsed['registration_id']) && is_numeric($parsed['registration_id']);
     }
 }

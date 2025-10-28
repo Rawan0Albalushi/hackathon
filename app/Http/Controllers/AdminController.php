@@ -7,6 +7,7 @@ use App\Models\WorkshopRegistration;
 use App\Models\ConferenceRegistration;
 use App\Models\Workshop;
 use App\Models\User;
+use App\Services\QRCodeService;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use Carbon\Carbon;
@@ -412,6 +413,18 @@ class AdminController extends Controller
                 $model->rejection_reason = $rejection_reason;
             } else {
                 $model->rejection_reason = null;
+            }
+
+            // Ensure a QR code exists when approving a registration
+            if ($status === 'approved' && empty($model->qr_code)) {
+                $typeForQR = match ($type) {
+                    'hackathon' => 'hackathon',
+                    'conference' => 'conference',
+                    'workshop' => 'workshop',
+                    default => 'hackathon'
+                };
+                // Generate and assign QR code
+                $model->qr_code = QRCodeService::generateQRCode($typeForQR, $model->id);
             }
             if (!$model->save()) {
                 \Log::error('Failed to save model', ['model_id' => $model->id]);
