@@ -220,18 +220,18 @@ const QRCodeDisplay = ({ qrCode, qrCodeData, qrCodeImage, type, registrationId, 
                     <label className="block text-[11px] sm:text-xs text-gray-600 mb-0.5 sm:mb-1">
                         {language === 'ar' ? 'نص الكود' : 'QR Code Text'}
                     </label>
-                    <div className="flex items-center gap-1">
+                    <div className="flex items-center gap-1 w-full overflow-hidden">
                         <input
                             type="text"
                             readOnly
                             value={qrCode || qrCodeData}
-                            className="flex-1 border border-gray-200 rounded-lg px-2 py-1 text-gray-900 bg-gray-50 focus:outline-none text-[11px] sm:text-xs"
+                            className="flex-1 min-w-0 border border-gray-200 rounded-lg px-2 py-1 text-gray-900 bg-gray-50 focus:outline-none text-[11px] sm:text-xs truncate"
                         />
                         <button
                             type="button"
                             onClick={handleCopyText}
                             disabled={isCopying}
-                            className={`px-2 py-1 rounded-lg text-white font-semibold text-[11px] sm:text-xs transition-all duration-300 transform ${
+                            className={`px-2 py-1 rounded-lg text-white font-semibold text-[11px] sm:text-xs transition-all duration-300 transform shrink-0 ${
                                 isCopying 
                                     ? 'scale-95 opacity-80' 
                                     : 'hover:scale-105 active:scale-95'
