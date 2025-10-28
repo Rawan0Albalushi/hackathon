@@ -270,8 +270,8 @@ const Home = () => {
                             
                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                                 {hackathonInfo.features.map((feature, index) => (
-                                    <div key={index} className="flex items-center space-x-4 sm:space-x-5 rtl:space-x-reverse animate-fade-in-up hover-float" style={{animationDelay: `${400 + index * 100}ms`}}>
-                                        <div className="w-2 h-2 sm:w-3 sm:h-3 flex-shrink-0 animate-pulse" style={{background: '#D85584', clipPath: 'polygon(50% 0%, 70% 30%, 100% 50%, 70% 70%, 50% 100%, 30% 70%, 0% 50%, 30% 30%)'}}></div>
+                                    <div key={index} className="flex items-center gap-3 rtl:space-x-reverse animate-fade-in-up hover-float" style={{animationDelay: `${400 + index * 100}ms`}}>
+                                        <span className="star-bullet" style={{color:'#D85584'}}></span>
                                         <span className="text-xs sm:text-sm lg:text-base text-gray-700 font-medium">{feature}</span>
                                     </div>
                                 ))}
@@ -303,9 +303,9 @@ const Home = () => {
                         </div>
                         
                         <div className="relative animate-fade-in-right mt-8 lg:mt-0">
-                            <div className="modern-card card-glow bg-white rounded-xl sm:rounded-2xl lg:rounded-3xl p-3 sm:p-4 lg:p-6 xl:p-8 transform rotate-1 sm:rotate-2 lg:rotate-3 hover:rotate-0 transition-all duration-500 hover-float overflow-hidden relative">
+                            <div className="modern-card card-glow bg-white rounded-xl sm:rounded-2xl lg:rounded-3xl p-3 sm:p-4 lg:p-6 xl:p-8 mobile-card sm:transform sm:rotate-1 lg:rotate-3 hover:rotate-0 transition-all duration-500 hover-float overflow-hidden relative">
                                 {/* Card Image */}
-                                <div className="absolute top-4 right-4 w-16 h-16 sm:w-20 sm:h-20 lg:w-28 lg:h-28 opacity-5 hover:opacity-20 transition-opacity duration-300">
+                                <div className="hidden sm:block absolute top-4 right-4 w-16 h-16 sm:w-20 sm:h-20 lg:w-28 lg:h-28 opacity-5 hover:opacity-20 transition-opacity duration-300">
                                     <img 
                                         src="/images/logo_horizontal_white.png" 
                                         alt="Hackathon" 
@@ -329,22 +329,22 @@ const Home = () => {
                                             </div>
                                             
                                             <div className="space-y-2 sm:space-y-3 lg:space-y-4">
-                                                <div className="feature-item flex items-center space-x-4 sm:space-x-5 rtl:space-x-reverse animate-fade-in-left animate-delay-200 hover-float">
-                                                    <div className="w-2 h-2 sm:w-3 sm:h-3 lg:w-4 lg:h-4 bg-white animate-pulse flex-shrink-0" style={{clipPath: 'polygon(50% 0%, 70% 30%, 100% 50%, 70% 70%, 50% 100%, 30% 70%, 0% 50%, 30% 30%)'}}></div>
+                                                <div className="flex items-center gap-3 sm:gap-4 rtl:space-x-reverse animate-fade-in-left animate-delay-200 hover-float">
+                                                    <span className="star-bullet"></span>
                                                     <span className="font-medium text-xs sm:text-sm lg:text-base">{language === 'ar' ? 'تحديات مفاجئة' : 'Surprise Challenges'}</span>
                                                 </div>
-                                                <div className="feature-item flex items-center space-x-4 sm:space-x-5 rtl:space-x-reverse animate-fade-in-left animate-delay-300 hover-float">
-                                                    <div className="w-2 h-2 sm:w-3 sm:h-3 lg:w-4 lg:h-4 bg-white animate-pulse flex-shrink-0" style={{clipPath: 'polygon(50% 0%, 70% 30%, 100% 50%, 70% 70%, 50% 100%, 30% 70%, 0% 50%, 30% 30%)'}}></div>
+                                                <div className="flex items-center gap-3 sm:gap-4 rtl:space-x-reverse animate-fade-in-left animate-delay-300 hover-float">
+                                                    <span className="star-bullet"></span>
                                                     <span className="font-medium text-xs sm:text-sm lg:text-base">{language === 'ar' ? 'ذكاء اصطناعي' : 'Artificial Intelligence'}</span>
                                                 </div>
-                                                <div className="feature-item flex items-center space-x-4 sm:space-x-5 rtl:space-x-reverse animate-fade-in-left animate-delay-400 hover-float">
-                                                    <div className="w-2 h-2 sm:w-3 sm:h-3 lg:w-4 lg:h-4 bg-white animate-pulse flex-shrink-0" style={{clipPath: 'polygon(50% 0%, 70% 30%, 100% 50%, 70% 70%, 50% 100%, 30% 70%, 0% 50%, 30% 30%)'}}></div>
+                                                <div className="flex items-center gap-3 sm:gap-4 rtl:space-x-reverse animate-fade-in-left animate-delay-400 hover-float">
+                                                    <span className="star-bullet"></span>
                                                     <span className="font-medium text-xs sm:text-sm lg:text-base">{language === 'ar' ? 'حلول قابلة للتطبيق' : 'Practical Solutions'}</span>
                                                 </div>
                                             </div>
                                             
                                             {/* Occasional Pattern */}
-                                            <div className="mt-3 sm:mt-4 lg:mt-6 relative overflow-hidden rounded-lg">
+                                            <div className="hidden sm:block mt-3 sm:mt-4 lg:mt-6 relative overflow-hidden rounded-lg">
                                                 <img 
                                                     src="/images/Occasional pattern.png" 
                                                     alt="Pattern" 
@@ -365,9 +365,9 @@ const Home = () => {
                 <div className="max-w-7xl mx-auto px-3 sm:px-4 lg:px-8">
                     <div className="grid lg:grid-cols-2 gap-8 sm:gap-10 lg:gap-12 items-center">
                         <div className="relative order-2 lg:order-1 animate-fade-in-left">
-                            <div className="modern-card card-glow bg-white rounded-2xl sm:rounded-3xl p-4 sm:p-6 lg:p-8 transform -rotate-1 sm:-rotate-3 hover:rotate-0 transition-all duration-500 overflow-hidden relative">
+                            <div className="modern-card card-glow bg-white rounded-2xl sm:rounded-3xl p-4 sm:p-6 lg:p-8 mobile-card sm:transform sm:-rotate-1 lg:-rotate-3 hover:rotate-0 transition-all duration-500 overflow-hidden relative">
                                 {/* Card Image */}
-                                <div className="absolute bottom-4 left-4 w-16 h-16 sm:w-20 sm:h-20 lg:w-28 lg:h-28 opacity-5 hover:opacity-20 transition-opacity duration-300">
+                                <div className="hidden sm:block absolute bottom-4 left-4 w-16 h-16 sm:w-20 sm:h-20 lg:w-28 lg:h-28 opacity-5 hover:opacity-20 transition-opacity duration-300">
                                     <img 
                                         src="/images/logo_horizontal_white.png" 
                                         alt="Workshop" 
@@ -391,22 +391,22 @@ const Home = () => {
                                             </div>
                                             
                                             <div className="space-y-3 sm:space-y-4">
-                                                <div className="feature-item flex items-center space-x-5 rtl:space-x-reverse animate-fade-in-right animate-delay-200">
-                                                    <div className="w-2 h-2 sm:w-3 sm:h-3 lg:w-4 lg:h-4 bg-white animate-pulse flex-shrink-0" style={{clipPath: 'polygon(50% 0%, 70% 30%, 100% 50%, 70% 70%, 50% 100%, 30% 70%, 0% 50%, 30% 30%)'}}></div>
-                                                    <span className="font-medium text-sm sm:text-base">{language === 'ar' ? 'تحليل المشكلات' : 'Problem Analysis'}</span>
+                                                <div className="flex items-center gap-3 rtl:space-x-reverse animate-fade-in-right animate-delay-200">
+                                                    <span className="star-bullet"></span>
+                                                    <span className="font-medium text-xs sm:text-base">{language === 'ar' ? 'تحليل المشكلات' : 'Problem Analysis'}</span>
                                                 </div>
-                                                <div className="feature-item flex items-center space-x-5 rtl:space-x-reverse animate-fade-in-right animate-delay-300">
-                                                    <div className="w-2 h-2 sm:w-3 sm:h-3 lg:w-4 lg:h-4 bg-white animate-pulse flex-shrink-0" style={{clipPath: 'polygon(50% 0%, 70% 30%, 100% 50%, 70% 70%, 50% 100%, 30% 70%, 0% 50%, 30% 30%)'}}></div>
-                                                    <span className="font-medium text-sm sm:text-base">{language === 'ar' ? 'تطوير الحلول' : 'Solution Development'}</span>
+                                                <div className="flex items-center gap-3 rtl:space-x-reverse animate-fade-in-right animate-delay-300">
+                                                    <span className="star-bullet"></span>
+                                                    <span className="font-medium text-xs sm:text-base">{language === 'ar' ? 'تطوير الحلول' : 'Solution Development'}</span>
                                                 </div>
-                                                <div className="feature-item flex items-center space-x-5 rtl:space-x-reverse animate-fade-in-right animate-delay-400">
-                                                    <div className="w-2 h-2 sm:w-3 sm:h-3 lg:w-4 lg:h-4 bg-white animate-pulse flex-shrink-0" style={{clipPath: 'polygon(50% 0%, 70% 30%, 100% 50%, 70% 70%, 50% 100%, 30% 70%, 0% 50%, 30% 30%)'}}></div>
-                                                    <span className="font-medium text-sm sm:text-base">{language === 'ar' ? 'العمل الجماعي' : 'Teamwork'}</span>
+                                                <div className="flex items-center gap-3 rtl:space-x-reverse animate-fade-in-right animate-delay-400">
+                                                    <span className="star-bullet"></span>
+                                                    <span className="font-medium text-xs sm:text-base">{language === 'ar' ? 'العمل الجماعي' : 'Teamwork'}</span>
                                                 </div>
                                             </div>
                                             
                                             {/* Occasional Pattern */}
-                                            <div className="mt-4 sm:mt-6 relative overflow-hidden rounded-lg">
+                                            <div className="hidden sm:block mt-4 sm:mt-6 relative overflow-hidden rounded-lg">
                                                 <img 
                                                     src="/images/Occasional pattern.png" 
                                                     alt="Pattern" 
@@ -434,8 +434,8 @@ const Home = () => {
                             
                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                                 {workshopInfo.features.map((feature, index) => (
-                                    <div key={index} className="flex items-center space-x-5 rtl:space-x-reverse animate-fade-in-up" style={{animationDelay: `${400 + index * 100}ms`}}>
-                                        <div className="w-2 h-2 sm:w-3 sm:h-3 flex-shrink-0 animate-pulse" style={{background: '#096289', clipPath: 'polygon(50% 0%, 70% 30%, 100% 50%, 70% 70%, 50% 100%, 30% 70%, 0% 50%, 30% 30%)'}}></div>
+                                    <div key={index} className="flex items-center gap-3 rtl:space-x-reverse animate-fade-in-up" style={{animationDelay: `${400 + index * 100}ms`}}>
+                                        <span className="star-bullet" style={{color:'#096289'}}></span>
                                         <span className="text-sm sm:text-base text-gray-700 font-medium">{feature}</span>
                                     </div>
                                 ))}
@@ -485,8 +485,8 @@ const Home = () => {
                             
                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                                 {conferenceInfo.features.map((feature, index) => (
-                                    <div key={index} className="flex items-center space-x-5 rtl:space-x-reverse animate-fade-in-up" style={{animationDelay: `${400 + index * 100}ms`}}>
-                                        <div className="w-2 h-2 sm:w-3 sm:h-3 flex-shrink-0 animate-pulse" style={{background: '#003C72', clipPath: 'polygon(50% 0%, 70% 30%, 100% 50%, 70% 70%, 50% 100%, 30% 70%, 0% 50%, 30% 30%)'}}></div>
+                                    <div key={index} className="flex items-center gap-3 rtl:space-x-reverse animate-fade-in-up" style={{animationDelay: `${400 + index * 100}ms`}}>
+                                        <span className="star-bullet" style={{color:'#003C72'}}></span>
                                         <span className="text-sm sm:text-base text-gray-700 font-medium">{feature}</span>
                                     </div>
                                 ))}
@@ -515,9 +515,9 @@ const Home = () => {
                         </div>
                         
                         <div className="relative animate-fade-in-right mt-8 lg:mt-0">
-                            <div className="modern-card card-glow bg-white rounded-2xl sm:rounded-3xl p-4 sm:p-6 lg:p-8 transform rotate-1 sm:rotate-3 hover:rotate-0 transition-all duration-500 overflow-hidden relative">
+                            <div className="modern-card card-glow bg-white rounded-2xl sm:rounded-3xl p-4 sm:p-6 lg:p-8 mobile-card sm:transform sm:rotate-1 lg:rotate-3 hover:rotate-0 transition-all duration-500 overflow-hidden relative">
                                 {/* Card Image */}
-                                <div className="absolute top-4 left-4 w-16 h-16 sm:w-20 sm:h-20 lg:w-28 lg:h-28 opacity-5 hover:opacity-20 transition-opacity duration-300">
+                                <div className="hidden sm:block absolute top-4 left-4 w-16 h-16 sm:w-20 sm:h-20 lg:w-28 lg:h-28 opacity-5 hover:opacity-20 transition-opacity duration-300">
                                     <img 
                                         src="/images/logo_horizontal_white_1.png" 
                                         alt="Conference" 
@@ -541,22 +541,22 @@ const Home = () => {
                                             </div>
                                             
                                             <div className="space-y-3 sm:space-y-4">
-                                                <div className="feature-item flex items-center space-x-5 rtl:space-x-reverse animate-fade-in-left animate-delay-200">
-                                                    <div className="w-2 h-2 sm:w-3 sm:h-3 lg:w-4 lg:h-4 bg-white animate-pulse flex-shrink-0" style={{clipPath: 'polygon(50% 0%, 70% 30%, 100% 50%, 70% 70%, 50% 100%, 30% 70%, 0% 50%, 30% 30%)'}}></div>
-                                                    <span className="font-medium text-sm sm:text-base">{language === 'ar' ? 'مؤسسات حكومية وخاصة' : 'Government & Private Institutions'}</span>
+                                                <div className="flex items-center gap-3 rtl:space-x-reverse animate-fade-in-left animate-delay-200">
+                                                    <span className="star-bullet"></span>
+                                                    <span className="font-medium text-xs sm:text-base">{language === 'ar' ? 'مؤسسات حكومية وخاصة' : 'Government & Private Institutions'}</span>
                                                 </div>
-                                                <div className="feature-item flex items-center space-x-5 rtl:space-x-reverse animate-fade-in-left animate-delay-300">
-                                                    <div className="w-2 h-2 sm:w-3 sm:h-3 lg:w-4 lg:h-4 bg-white animate-pulse flex-shrink-0" style={{clipPath: 'polygon(50% 0%, 70% 30%, 100% 50%, 70% 70%, 50% 100%, 30% 70%, 0% 50%, 30% 30%)'}}></div>
-                                                    <span className="font-medium text-sm sm:text-base">{language === 'ar' ? 'تحفيز العقول الشابة' : 'Stimulating Young Minds'}</span>
+                                                <div className="flex items-center gap-3 rtl:space-x-reverse animate-fade-in-left animate-delay-300">
+                                                    <span className="star-bullet"></span>
+                                                    <span className="font-medium text-xs sm:text-base">{language === 'ar' ? 'تحفيز العقول الشابة' : 'Stimulating Young Minds'}</span>
                                                 </div>
-                                                <div className="feature-item flex items-center space-x-5 rtl:space-x-reverse animate-fade-in-left animate-delay-400">
-                                                    <div className="w-2 h-2 sm:w-3 sm:h-3 lg:w-4 lg:h-4 bg-white animate-pulse flex-shrink-0" style={{clipPath: 'polygon(50% 0%, 70% 30%, 100% 50%, 70% 70%, 50% 100%, 30% 70%, 0% 50%, 30% 30%)'}}></div>
-                                                    <span className="font-medium text-sm sm:text-base">{language === 'ar' ? 'تحويل الأفكار إلى مشاريع' : 'Transforming Ideas into Projects'}</span>
+                                                <div className="flex items-center gap-3 rtl:space-x-reverse animate-fade-in-left animate-delay-400">
+                                                    <span className="star-bullet"></span>
+                                                    <span className="font-medium text-xs sm:text-base">{language === 'ar' ? 'تحويل الأفكار إلى مشاريع' : 'Transforming Ideas into Projects'}</span>
                                                 </div>
                                             </div>
                                             
                                             {/* Occasional Pattern */}
-                                            <div className="mt-4 sm:mt-6 relative overflow-hidden rounded-lg">
+                                            <div className="hidden sm:block mt-4 sm:mt-6 relative overflow-hidden rounded-lg">
                                                 <img 
                                                     src="/images/Occasional pattern.png" 
                                                     alt="Pattern" 
