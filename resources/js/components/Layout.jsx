@@ -98,7 +98,7 @@ const Layout = ({ children }) => {
                             {/* Logo with gradient bar design - Positioned at start */}
                             <div className="flex items-center relative flex-shrink-0">
                                 {/* Decorative Pattern behind Logo */}
-                                <div className="absolute -left-4 top-1/2 transform -translate-y-1/2 w-16 h-12 opacity-25 pointer-events-none">
+                                <div className="absolute -left-4 top-1/2 transform -translate-y-1/2 w-16 h-12 opacity-10 pointer-events-none">
                                     <img 
                                         src="/images/Occasional pattern.png" 
                                         alt="Pattern" 
@@ -110,14 +110,14 @@ const Layout = ({ children }) => {
                                     <div className="flex items-center">
                                         {/* Logo Image - Responsive */}
                                         <div className="w-40 h-20 sm:w-48 sm:h-24 md:w-56 md:h-28 lg:w-64 lg:h-36 flex items-center justify-center relative">
-                                            {/* Subtle pattern overlay on logo */}
-                                            <div className="absolute inset-0 opacity-5 pointer-events-none">
-                                                <img 
-                                                    src="/images/Occasional pattern.png" 
-                                                    alt="Pattern" 
-                                                    className="w-full h-full object-cover"
-                                                />
-                                            </div>
+                                        {/* Subtle pattern overlay on logo (reduced) */}
+                                        <div className="absolute inset-0 opacity-0 pointer-events-none">
+                                            <img 
+                                                src="/images/Occasional pattern.png" 
+                                                alt="Pattern" 
+                                                className="w-full h-full object-cover"
+                                            />
+                                        </div>
                                             <img 
                                                 src="/images/logo_horizontal_colored.png" 
                                                 alt={language === 'ar' ? 'ملتقى الابتكار' : 'Innovation Forum'} 

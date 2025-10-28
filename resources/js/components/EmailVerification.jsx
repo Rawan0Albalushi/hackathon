@@ -190,7 +190,7 @@ const EmailVerification = ({ email, onVerificationComplete, onBack, initialOtpSe
                         <div className="mx-auto mb-6 sm:mb-8 shadow-2xl animate-fade-in-down rounded-2xl sm:rounded-3xl overflow-hidden w-16 h-16 sm:w-20 sm:h-20 lg:w-24 lg:h-24 flex items-center justify-center bg-transparent">
                             <img src="/images/star.png" alt="Star" className="w-full h-full object-cover" />
                         </div>
-                        <h2 className="text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-bold text-white mb-4 sm:mb-6 animate-fade-in-up gradient-text text-center w-full" style={{lineHeight: '1.1', paddingBottom: '0.5rem'}}>
+                        <h2 className="text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-bold text-white mb-4 sm:mb-6 animate-fade-in-up gradient-text text-center w-full break-words" style={{lineHeight: '1.15'}}>
                             تحقق من بريدك الإلكتروني
                         </h2>
                         <div className="space-y-3 animate-fade-in-up animate-delay-200">
@@ -202,14 +202,6 @@ const EmailVerification = ({ email, onVerificationComplete, onBack, initialOtpSe
                                     {email}
                                 </p>
                             </div>
-                            {/* Debug: Show OTP for testing */}
-                            {process.env.NODE_ENV === 'development' && (
-                                <div className="bg-yellow-500/20 border border-yellow-400/30 rounded-xl p-4 mt-4">
-                                    <p className="text-sm text-yellow-300 font-medium">
-                                        للاختبار: الكود الصحيح هو 115095
-                                    </p>
-                                </div>
-                            )}
                         </div>
                     </div>
                     

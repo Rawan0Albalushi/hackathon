@@ -1877,6 +1877,15 @@
     white-space: nowrap;
 }
 
+/* Mobile override: allow long Arabic titles to wrap to multiple lines */
+@media (max-width: 640px) {
+    .text-center h1, .text-center h2, .text-center h3, .gradient-text {
+        white-space: normal; /* enable wrapping on phones */
+        word-break: break-word;
+        overflow: visible;
+    }
+}
+
 /* Container fixes to prevent clipping */
 .hero-section, .login-container, .registration-hero {
     overflow: visible;

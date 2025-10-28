@@ -177,7 +177,7 @@ const Home = () => {
                         </div>
                     </div>
                     <div className="text-center">
-                        <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center animate-fade-in-up animate-delay-500 px-2 mt-2">
+                        <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 lg:gap-4 justify-center animate-fade-in-up animate-delay-500 px-2 mt-2">
                             {!isAuthenticated() ? (
                                 <>
                                     <Link
@@ -251,11 +251,11 @@ const Home = () => {
                 <div className="hero-star bottom-1/4 right-1/2 w-3 h-3 sm:w-5 sm:h-5 opacity-25 sm:opacity-35 animate-bounce delay-900" style={{background: '#F4A321'}}></div>
             </div>
 
-            {/* Hackathon Section */}
-            <section className="py-12 sm:py-16 lg:py-20 relative scroll-animate">
+            {/* Hackathon Section - تحسين المسافة من القسم الأول */}
+            <section className="py-8 sm:py-12 lg:py-16 relative scroll-animate">
                 <div className="max-w-7xl mx-auto px-3 sm:px-4 lg:px-8">
-                    <div className="grid lg:grid-cols-2 gap-8 sm:gap-10 lg:gap-12 items-center">
-                        <div className="space-y-4 sm:space-y-6 animate-fade-in-left">
+                    <div className="grid lg:grid-cols-2 gap-4 sm:gap-6 lg:gap-8 items-center">
+                        <div className="space-y-3 sm:space-y-4 lg:space-y-6 animate-fade-in-left">
                             <div className="flex flex-col sm:flex-row items-center sm:items-start space-y-3 sm:space-y-0 sm:space-x-4 rtl:space-x-reverse hover-float">
                                 <div className="text-3xl sm:text-4xl lg:text-5xl xl:text-6xl animate-bounce hover-bounce-in">{hackathonInfo.icon}</div>
                                 <div className="text-center sm:text-left">
@@ -268,7 +268,7 @@ const Home = () => {
                                 {hackathonInfo.description}
                             </p>
                             
-                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-3 lg:gap-4">
                                 {hackathonInfo.features.map((feature, index) => (
                                     <div key={index} className="flex items-center gap-3 rtl:space-x-reverse animate-fade-in-up hover-float" style={{animationDelay: `${400 + index * 100}ms`}}>
                                         <span className="star-bullet" style={{color:'#D85584'}}></span>
@@ -277,7 +277,7 @@ const Home = () => {
                                 ))}
                             </div>
                             
-                            <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 animate-fade-in-up animate-delay-700">
+                            <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 lg:gap-4 animate-fade-in-up animate-delay-700">
                                 <Link
                                     to="/hackathon-info"
                                     className="ripple-effect button-press inline-block bg-white text-gray-700 px-4 sm:px-6 lg:px-8 py-3 sm:py-4 rounded-full text-sm sm:text-base lg:text-lg font-semibold hover:shadow-xl transition-all duration-300 transform hover:scale-105 w-full sm:w-auto text-center border-2 border-gray-200"
@@ -302,7 +302,7 @@ const Home = () => {
                             </div>
                         </div>
                         
-                        <div className="relative animate-fade-in-right mt-8 lg:mt-0">
+                        <div className="relative animate-fade-in-right mt-6 sm:mt-8 lg:mt-0">
                             <div className="modern-card card-glow bg-white rounded-2xl sm:rounded-3xl p-4 sm:p-6 lg:p-8 mobile-card sm:transform sm:rotate-1 lg:rotate-3 hover:rotate-0 transition-all duration-500 hover-float relative overflow-hidden w-full max-w-md mx-auto shadow-lg">
                                 {/* Matching Header Pattern Background */}
                                 <div className="absolute inset-0 opacity-20 pointer-events-none rounded-2xl sm:rounded-3xl z-0">
@@ -368,11 +368,11 @@ const Home = () => {
                 </div>
             </section>
 
-            {/* Workshop Section */}
-            <section className="py-12 sm:py-16 lg:py-20 relative scroll-animate">
+            {/* Workshop Section - توحيد المسافات */}
+            <section className="py-8 sm:py-12 lg:py-16 relative scroll-animate">
                 <div className="max-w-7xl mx-auto px-3 sm:px-4 lg:px-8">
-                    <div className="grid lg:grid-cols-2 gap-8 sm:gap-10 lg:gap-12 items-center">
-                        <div className="relative order-2 lg:order-1 animate-fade-in-left">
+                    <div className="grid lg:grid-cols-2 gap-4 sm:gap-6 lg:gap-8 items-center">
+                        <div className="relative order-2 lg:order-1 animate-fade-in-left mt-6 sm:mt-8 lg:mt-0">
                             <div className="modern-card card-glow bg-white rounded-2xl sm:rounded-3xl p-4 sm:p-6 lg:p-8 mobile-card sm:transform sm:-rotate-1 lg:-rotate-3 hover:rotate-0 transition-all duration-500 relative overflow-hidden w-full max-w-md mx-auto shadow-lg">
                                 {/* Matching Header Pattern Background */}
                                 <div className="absolute inset-0 opacity-20 pointer-events-none rounded-2xl sm:rounded-3xl z-0">
@@ -435,7 +435,7 @@ const Home = () => {
                             </div>
                         </div>
                         
-                        <div className="space-y-4 sm:space-y-6 order-1 lg:order-2 animate-fade-in-right mt-8 lg:mt-0">
+                        <div className="space-y-3 sm:space-y-4 lg:space-y-6 order-1 lg:order-2 animate-fade-in-right mt-8 lg:mt-0">
                             <div className="flex flex-col sm:flex-row items-center sm:items-start space-y-3 sm:space-y-0 sm:space-x-4 rtl:space-x-reverse hover-float">
                                 <div className="text-4xl sm:text-5xl lg:text-6xl animate-bounce">{workshopInfo.icon}</div>
                                 <div className="text-center sm:text-left">
@@ -448,7 +448,7 @@ const Home = () => {
                                 {workshopInfo.description}
                             </p>
                             
-                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-3 lg:gap-4">
                                 {workshopInfo.features.map((feature, index) => (
                                     <div key={index} className="flex items-center gap-3 rtl:space-x-reverse animate-fade-in-up" style={{animationDelay: `${400 + index * 100}ms`}}>
                                         <span className="star-bullet" style={{color:'#096289'}}></span>
@@ -457,7 +457,7 @@ const Home = () => {
                                 ))}
                             </div>
                             
-                            <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 animate-fade-in-up animate-delay-700">
+                            <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 lg:gap-4 animate-fade-in-up animate-delay-700">
                                 <Link
                                     to="/workshop-info"
                                     className="ripple-effect button-press inline-block bg-white text-gray-700 px-4 sm:px-6 lg:px-8 py-3 sm:py-4 rounded-full text-sm sm:text-base lg:text-lg font-semibold hover:shadow-xl transition-all duration-300 transform hover:scale-105 w-full sm:w-auto text-center border-2 border-gray-200"
@@ -482,11 +482,11 @@ const Home = () => {
                 </div>
             </section>
 
-            {/* Conference Section */}
-            <section className="py-12 sm:py-16 lg:py-20 relative scroll-animate">
+            {/* Conference Section - توحيد المسافات */}
+            <section className="py-8 sm:py-12 lg:py-16 relative scroll-animate">
                 <div className="max-w-7xl mx-auto px-3 sm:px-4 lg:px-8">
-                    <div className="grid lg:grid-cols-2 gap-8 sm:gap-10 lg:gap-12 items-center">
-                        <div className="space-y-4 sm:space-y-6 animate-fade-in-left">
+                    <div className="grid lg:grid-cols-2 gap-4 sm:gap-6 lg:gap-8 items-center">
+                        <div className="space-y-3 sm:space-y-4 lg:space-y-6 animate-fade-in-left">
                             <div className="flex flex-col sm:flex-row items-center sm:items-start space-y-3 sm:space-y-0 sm:space-x-4 rtl:space-x-reverse hover-float">
                                 <div className="text-4xl sm:text-5xl lg:text-6xl animate-bounce">{conferenceInfo.icon}</div>
                                 <div className="text-center sm:text-left">
@@ -499,7 +499,7 @@ const Home = () => {
                                 {conferenceInfo.description}
                             </p>
                             
-                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-3 lg:gap-4">
                                 {conferenceInfo.features.map((feature, index) => (
                                     <div key={index} className="flex items-center gap-3 rtl:space-x-reverse animate-fade-in-up" style={{animationDelay: `${400 + index * 100}ms`}}>
                                         <span className="star-bullet" style={{color:'#003C72'}}></span>
@@ -508,7 +508,7 @@ const Home = () => {
                                 ))}
                             </div>
                             
-                            <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 animate-fade-in-up animate-delay-700">
+                            <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 lg:gap-4 animate-fade-in-up animate-delay-700">
                                 <Link
                                     to="/conference-info"
                                     className="ripple-effect button-press inline-block bg-white text-gray-700 px-4 sm:px-6 lg:px-8 py-3 sm:py-4 rounded-full text-sm sm:text-base lg:text-lg font-semibold hover:shadow-xl transition-all duration-300 transform hover:scale-105 w-full sm:w-auto text-center border-2 border-gray-200"
@@ -530,7 +530,7 @@ const Home = () => {
                             </div>
                         </div>
                         
-                        <div className="relative animate-fade-in-right mt-8 lg:mt-0">
+                        <div className="relative animate-fade-in-right mt-6 sm:mt-8 lg:mt-0">
                             <div className="modern-card card-glow bg-white rounded-2xl sm:rounded-3xl p-4 sm:p-6 lg:p-8 mobile-card sm:transform sm:rotate-1 lg:rotate-3 hover:rotate-0 transition-all duration-500 relative overflow-hidden w-full max-w-md mx-auto shadow-lg">
                                 {/* Matching Header Pattern Background */}
                                 <div className="absolute inset-0 opacity-20 pointer-events-none rounded-2xl sm:rounded-3xl z-0">
@@ -596,8 +596,8 @@ const Home = () => {
                 </div>
             </section>
 
-            {/* Call to Action */}
-            <section className="py-12 sm:py-16 lg:py-20 text-white relative scroll-animate rounded-2xl sm:rounded-3xl mx-2 sm:mx-4 mb-2 sm:mb-4" style={{background: 'linear-gradient(135deg, #003C72 0%, #096289 50%, #D85584 100%)'}}>
+            {/* Call to Action - تحسين المسافة النهائية */}
+            <section className="py-8 sm:py-12 lg:py-16 text-white relative scroll-animate rounded-2xl sm:rounded-3xl mx-2 sm:mx-4 mb-2 sm:mb-4" style={{background: 'linear-gradient(135deg, #003C72 0%, #096289 50%, #D85584 100%)'}}>
                 <div className="absolute inset-0 bg-black opacity-20"></div>
                 <div className="relative max-w-4xl mx-auto text-center px-3 sm:px-4 lg:px-8">
                     <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-4 sm:mb-6 animate-fade-in-down gradient-text">
@@ -609,7 +609,7 @@ const Home = () => {
                             : 'Perfect opportunity to showcase creativity, enhance teamwork, and transform ideas into practical projects'
                         }
                     </p>
-                    <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center animate-fade-in-up animate-delay-400 px-2">
+                    <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 lg:gap-4 justify-center animate-fade-in-up animate-delay-400 px-2">
                         {isAuthenticated() ? (
                             <>
                                 <Link
