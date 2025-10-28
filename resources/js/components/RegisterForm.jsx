@@ -5,6 +5,7 @@ import { useLanguage } from '../contexts/LanguageContext';
 import LoadingSpinner from './LoadingSpinner';
 import ErrorMessage from './ErrorMessage';
 import AnimatedButton from './AnimatedButton';
+import EmailVerification from './EmailVerification';
 
 const RegisterForm = () => {
     const [formData, setFormData] = useState({
@@ -16,6 +17,8 @@ const RegisterForm = () => {
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState('');
     const [fieldErrors, setFieldErrors] = useState({});
+    const [showEmailVerification, setShowEmailVerification] = useState(false);
+    const [registeredEmail, setRegisteredEmail] = useState('');
 
     const { register } = useAuth();
     const { language, t } = useLanguage();
@@ -36,6 +39,18 @@ const RegisterForm = () => {
         }
     };
 
+    const handleVerificationComplete = () => {
+        setShowEmailVerification(false);
+        setRegisteredEmail('');
+        navigate('/');
+    };
+
+    const handleBackToRegister = () => {
+        setShowEmailVerification(false);
+        setRegisteredEmail('');
+        setError('');
+    };
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         
@@ -44,21 +59,40 @@ const RegisterForm = () => {
         setFieldErrors({});
 
         try {
-            await register(formData.name, formData.email, formData.password, formData.password_confirmation);
-            // Auto-login is already handled in AuthContext, so navigate to home
-            navigate('/');
+            const response = await register(formData.name, formData.email, formData.password, formData.password_confirmation);
+            
+            // Check if OTP was sent
+            if (response.data && response.data.otp_sent) {
+                setRegisteredEmail(formData.email);
+                setShowEmailVerification(true);
+                setError('');
+            } else {
+                // Auto-login is already handled in AuthContext, so navigate to home
+                navigate('/');
+            }
         } catch (err) {
             // Check if it's a validation error with field details
             if (err.response && err.response.data && err.response.data.errors) {
                 setFieldErrors(err.response.data.errors);
                 setError('يرجى تصحيح الأخطاء أدناه');
             } else {
-                setError(err.message || 'Registration failed');
+                setError(err.message || 'فشل في التسجيل');
             }
         } finally {
             setIsLoading(false);
         }
     };
+
+    // Show email verification if required
+    if (showEmailVerification) {
+        return (
+            <EmailVerification
+                email={registeredEmail}
+                onVerificationComplete={handleVerificationComplete}
+                onBack={handleBackToRegister}
+            />
+        );
+    }
 
     return (
         <div className="min-h-screen flex items-center justify-center py-8 sm:py-12 px-3 sm:px-4 lg:px-8 relative overflow-hidden" style={{background: 'linear-gradient(135deg, #003C72 0%, #096289 50%, #D85584 100%)'}}>

@@ -5,6 +5,7 @@ import { useLanguage } from '../contexts/LanguageContext';
 import LoadingSpinner from './LoadingSpinner';
 import ErrorMessage from './ErrorMessage';
 import AnimatedButton from './AnimatedButton';
+import EmailVerification from './EmailVerification';
 
 const LoginForm = () => {
     const [formData, setFormData] = useState({
@@ -13,6 +14,8 @@ const LoginForm = () => {
     });
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState('');
+    const [showEmailVerification, setShowEmailVerification] = useState(false);
+    const [unverifiedEmail, setUnverifiedEmail] = useState('');
 
     const { login } = useAuth();
     const { language, t } = useLanguage();
@@ -26,6 +29,19 @@ const LoginForm = () => {
             ...formData,
             [e.target.name]: e.target.value
         });
+        setError('');
+    };
+
+    const handleVerificationComplete = () => {
+        setShowEmailVerification(false);
+        setUnverifiedEmail('');
+        // Redirect to home page after verification
+        navigate('/', { replace: true });
+    };
+
+    const handleBackToLogin = () => {
+        setShowEmailVerification(false);
+        setUnverifiedEmail('');
         setError('');
     };
 
@@ -44,15 +60,33 @@ const LoginForm = () => {
             } else if (user.role === 'scanner') {
                 navigate('/scanner', { replace: true });
             } else {
-                // For regular users, go to intended destination or dashboard
-                navigate(from === '/' ? '/dashboard' : from, { replace: true });
+                // For regular users, go to intended destination or home page
+                navigate(from === '/' ? '/' : from, { replace: true });
             }
         } catch (err) {
-            setError(err.message || 'Login failed');
+            // Check if email verification is required
+            if (err.response && err.response.data && err.response.data.requires_email_verification) {
+                setUnverifiedEmail(err.response.data.email);
+                setShowEmailVerification(true);
+                setError('');
+            } else {
+                setError(err.message || 'فشل في تسجيل الدخول');
+            }
         } finally {
             setIsLoading(false);
         }
     };
+
+    // Show email verification if required
+    if (showEmailVerification) {
+        return (
+            <EmailVerification
+                email={unverifiedEmail}
+                onVerificationComplete={handleVerificationComplete}
+                onBack={handleBackToLogin}
+            />
+        );
+    }
 
     return (
         <div className="min-h-screen flex items-center justify-center py-8 sm:py-12 lg:py-16 px-3 sm:px-4 lg:px-8 relative overflow-visible" style={{background: 'linear-gradient(135deg, #003C72 0%, #096289 50%, #D85584 100%)'}}>

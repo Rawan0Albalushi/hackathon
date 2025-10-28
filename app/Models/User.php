@@ -23,6 +23,7 @@ class User extends Authenticatable
         'password',
         'role',
         'status',
+        'email_verified',
     ];
 
     /**
@@ -44,6 +45,7 @@ class User extends Authenticatable
     {
         return [
             'email_verified_at' => 'datetime',
+            'email_verified' => 'boolean',
             'password' => 'hashed',
         ];
     }
@@ -94,5 +96,24 @@ class User extends Authenticatable
     public function conferenceRegistrations()
     {
         return $this->hasMany(ConferenceRegistration::class);
+    }
+
+    /**
+     * Check if user's email is verified
+     */
+    public function isEmailVerified(): bool
+    {
+        return $this->email_verified;
+    }
+
+    /**
+     * Mark email as verified
+     */
+    public function markEmailAsVerified(): void
+    {
+        $this->update([
+            'email_verified' => true,
+            'email_verified_at' => now()
+        ]);
     }
 }

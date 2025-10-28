@@ -21,6 +21,9 @@ Route::middleware(['web'])->withoutMiddleware([\App\Http\Middleware\VerifyCsrfTo
 Route::middleware(['web'])->withoutMiddleware([\App\Http\Middleware\VerifyCsrfToken::class])->group(function () {
     Route::post('/auth/register', [AuthController::class, 'register']);
     Route::post('/auth/login', [AuthController::class, 'login']);
+    Route::post('/auth/send-otp', [AuthController::class, 'sendOtp']);
+    Route::post('/auth/verify-otp', [AuthController::class, 'verifyOtp']);
+    Route::post('/auth/resend-otp', [AuthController::class, 'resendOtp']);
 });
 
 // Protected routes

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Services\OtpService;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Validator;
@@ -12,6 +13,13 @@ use Illuminate\Support\Facades\Auth;
 
 class AuthController extends Controller
 {
+    protected $otpService;
+
+    public function __construct(OtpService $otpService)
+    {
+        $this->otpService = $otpService;
+    }
+
     /**
      * Register a new user
      */
@@ -65,22 +73,36 @@ class AuthController extends Controller
                 'name' => $request->name,
                 'email' => $request->email,
                 'password' => Hash::make($request->password),
-                'role' => $request->role ?? 'user'
+                'role' => $request->role ?? 'user',
+                'email_verified' => false
             ]);
+
+            // Send OTP verification email
+            $otpResult = $this->otpService->sendVerificationEmail($user->email, $user->name);
+            
+            if (!$otpResult['success']) {
+                return response()->json([
+                    'success' => false,
+                    'message' => $otpResult['message']
+                ], 500);
+            }
 
             // Login the user automatically after registration
             Auth::login($user);
 
             return response()->json([
                 'success' => true,
-                'message' => 'User registered successfully',
+                'message' => 'تم إنشاء الحساب بنجاح. يرجى التحقق من بريدك الإلكتروني لإكمال التسجيل.',
                 'data' => [
                     'user' => [
                         'id' => $user->id,
                         'name' => $user->name,
                         'email' => $user->email,
-                        'role' => $user->role
-                    ]
+                        'role' => $user->role,
+                        'email_verified' => $user->email_verified
+                    ],
+                    'otp_sent' => true,
+                    'otp_expires_in' => $otpResult['expires_in']
                 ]
             ], 201);
         } catch (\Exception $e) {
@@ -114,21 +136,33 @@ class AuthController extends Controller
             if (!Auth::attempt($request->only('email', 'password'))) {
                 return response()->json([
                     'success' => false,
-                    'message' => 'Invalid credentials'
+                    'message' => 'بيانات الدخول غير صحيحة'
                 ], 401);
             }
 
             $user = Auth::user();
 
+            // Check if email is verified
+            if (!$user->isEmailVerified()) {
+                Auth::logout();
+                return response()->json([
+                    'success' => false,
+                    'message' => 'يرجى التحقق من بريدك الإلكتروني أولاً',
+                    'requires_email_verification' => true,
+                    'email' => $user->email
+                ], 403);
+            }
+
             return response()->json([
                 'success' => true,
-                'message' => 'Login successful',
+                'message' => 'تم تسجيل الدخول بنجاح',
                 'data' => [
                     'user' => [
                         'id' => $user->id,
                         'name' => $user->name,
                         'email' => $user->email,
-                        'role' => $user->role
+                        'role' => $user->role,
+                        'email_verified' => $user->email_verified
                     ]
                 ]
             ]);
@@ -186,7 +220,8 @@ class AuthController extends Controller
                         'id' => $user->id,
                         'name' => $user->name,
                         'email' => $user->email,
-                        'role' => $user->role
+                        'role' => $user->role,
+                        'email_verified' => $user->email_verified
                     ]
                 ]
             ]);
@@ -197,5 +232,88 @@ class AuthController extends Controller
                 'error' => $e->getMessage()
             ], 500);
         }
+    }
+
+    /**
+     * Send OTP verification email
+     */
+    public function sendOtp(Request $request): JsonResponse
+    {
+        $validator = Validator::make($request->all(), [
+            'email' => 'required|email|exists:users,email'
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'البريد الإلكتروني غير صحيح أو غير مسجل',
+                'errors' => $validator->errors()
+            ], 422);
+        }
+
+        $user = User::where('email', $request->email)->first();
+        
+        if ($user->isEmailVerified()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'البريد الإلكتروني محقق بالفعل'
+            ], 400);
+        }
+
+        $result = $this->otpService->sendVerificationEmail($request->email, $user->name);
+        
+        return response()->json($result, $result['success'] ? 200 : 500);
+    }
+
+    /**
+     * Verify OTP code
+     */
+    public function verifyOtp(Request $request): JsonResponse
+    {
+        $validator = Validator::make($request->all(), [
+            'email' => 'required|email|exists:users,email',
+            'code' => 'required|string|size:6'
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'البيانات المدخلة غير صحيحة',
+                'errors' => $validator->errors()
+            ], 422);
+        }
+
+        $result = $this->otpService->verifyOtp($request->email, $request->code);
+        
+        if ($result['success']) {
+            // Login the user after successful verification
+            $user = User::where('email', $request->email)->first();
+            Auth::login($user);
+        }
+        
+        return response()->json($result, $result['success'] ? 200 : 400);
+    }
+
+    /**
+     * Resend OTP code
+     */
+    public function resendOtp(Request $request): JsonResponse
+    {
+        $validator = Validator::make($request->all(), [
+            'email' => 'required|email|exists:users,email'
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'البريد الإلكتروني غير صحيح أو غير مسجل',
+                'errors' => $validator->errors()
+            ], 422);
+        }
+
+        $user = User::where('email', $request->email)->first();
+        $result = $this->otpService->resendOtp($request->email, $user->name);
+        
+        return response()->json($result, $result['success'] ? 200 : 500);
     }
 }
