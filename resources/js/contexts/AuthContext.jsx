@@ -157,6 +157,10 @@ export const AuthProvider = ({ children }) => {
         return user && user.role === 'admin';
     };
 
+    const isScanner = () => {
+        return user && user.role === 'scanner';
+    };
+
     const isAuthenticated = () => {
         return !!user && (!!token || token === 'session');
     };
@@ -169,6 +173,7 @@ export const AuthProvider = ({ children }) => {
         login,
         logout,
         isAdmin,
+        isScanner,
         isAuthenticated,
     };
 

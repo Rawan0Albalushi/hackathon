@@ -35,9 +35,18 @@ const LoginForm = () => {
         setError('');
 
         try {
-            await login(formData.email, formData.password);
-            // Redirect based on user role or intended destination
-            navigate(from, { replace: true });
+            const response = await login(formData.email, formData.password);
+            const user = response.data.user;
+            
+            // Redirect based on user role
+            if (user.role === 'admin') {
+                navigate('/admin', { replace: true });
+            } else if (user.role === 'scanner') {
+                navigate('/scanner', { replace: true });
+            } else {
+                // For regular users, go to intended destination or dashboard
+                navigate(from === '/' ? '/dashboard' : from, { replace: true });
+            }
         } catch (err) {
             setError(err.message || 'Login failed');
         } finally {

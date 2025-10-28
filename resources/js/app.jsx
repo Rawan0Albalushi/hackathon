@@ -11,6 +11,7 @@ import ConferenceRegistration from './pages/ConferenceRegistration.jsx';
 import Success from './pages/Success.jsx';
 import UserDashboard from './pages/UserDashboard.jsx';
 import AdminDashboardMain from './pages/admin/AdminDashboardMain.jsx';
+import ScannerDashboard from './pages/ScannerDashboard.jsx';
 import Login from './pages/Login.jsx';
 import Register from './pages/Register.jsx';
 import AdminPortal from './pages/AdminPortal.jsx';
@@ -104,6 +105,13 @@ const App = () => {
                         <Route path="/admin-portal" element={
                             <ProtectedRoute requireAdmin={true}>
                                 <AdminPortal />
+                            </ProtectedRoute>
+                        } />
+                        
+                        {/* Scanner routes */}
+                        <Route path="/scanner" element={
+                            <ProtectedRoute requireScanner={true}>
+                                <ScannerDashboard />
                             </ProtectedRoute>
                         } />
                     </Routes>

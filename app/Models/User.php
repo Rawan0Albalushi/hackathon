@@ -65,6 +65,14 @@ class User extends Authenticatable
     }
 
     /**
+     * Check if user is a scanner
+     */
+    public function isScanner(): bool
+    {
+        return $this->role === 'scanner';
+    }
+
+    /**
      * Get user's hackathon registrations
      */
     public function hackathonRegistrations()

@@ -3,7 +3,7 @@ import { Navigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import LoadingSpinner from './LoadingSpinner';
 
-const ProtectedRoute = ({ children, requireAdmin = false }) => {
+const ProtectedRoute = ({ children, requireAdmin = false, requireScanner = false }) => {
     const { user, loading, isAuthenticated, isAdmin } = useAuth();
     const location = useLocation();
 
@@ -20,6 +20,10 @@ const ProtectedRoute = ({ children, requireAdmin = false }) => {
     }
 
     if (requireAdmin && !isAdmin()) {
+        return <Navigate to="/" replace />;
+    }
+
+    if (requireScanner && user?.role !== 'scanner') {
         return <Navigate to="/" replace />;
     }
 

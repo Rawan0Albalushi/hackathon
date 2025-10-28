@@ -87,4 +87,11 @@ Route::middleware(['web', 'auth:web'])->group(function () {
         // QR Code admin routes
         Route::get('/admin/qr/stats', [QRCodeController::class, 'getCheckInStats']);
     });
+    
+    // Scanner API routes (scanner only)
+    Route::middleware(['web', 'auth:web', 'scanner'])->group(function () {
+        // QR Code scanner routes
+        Route::post('/scanner/qr/scan', [QRCodeController::class, 'scanQRCode']);
+        Route::post('/scanner/qr/info', [QRCodeController::class, 'getQRCodeInfo']);
+    });
 });
